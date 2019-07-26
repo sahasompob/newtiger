@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+    <RelativeLayout
+            android:id="@+id/layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorWhite">
+
+        <TextView
+                android:id="@+id/name_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="42dp"
+                android:gravity="right"
+                android:text="@string/branch"
+                android:textColor="@color/colorBlack"
+                android:textSize="30dp" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/testlayout1"
+            android:layout_below="@+id/layout_title"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="600dp"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/text_deposit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/manage_user"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="24dp" />
+
+
+        <LinearLayout
+                android:id="@+id/table1"
+                android:layout_width="570dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/text_deposit"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.3"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/id_text"
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="2"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/id"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.4"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/name_text"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.5"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/name"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+            </TableRow>
+
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.2"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/role_tx"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.5"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/role"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.3"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/action_icon"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.5"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="Action"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+            </TableRow>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/user_list"
+                android:layout_marginTop="10dp"
+                android:layout_width="570dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+    <Button
+            android:id="@+id/add_btn"
+            android:layout_width="120dp"
+            android:layout_height="70dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginBottom="117dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/add"
+            android:textSize="20dp" />
+
+
+    <Button
+            android:id="@+id/edit_btn"
+            android:layout_width="120dp"
+            android:layout_height="70dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="220dp"
+            android:layout_marginBottom="117dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/edit"
+            android:textSize="20dp" />
+
+</RelativeLayout>

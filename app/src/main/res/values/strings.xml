@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">TigerCashbox</string>
+
+    <string name="deposit">ฝากเงิน</string>
+    <string name="test_systems">ทดสอบเครื่องพิมพ์หรือระบบอื่นๆ</string>
+    <string name="reset_password">แก้ไขรหัสผ่าน</string>
+    <string name="wrong_password">ใส่รหัสผิด</string>
+    <string name="open_app">เปิดตู้</string>
+    <string name="manage_user">จัดการผู้ใช้</string>
+    <string name="bath">บาท</string>
+    <string name="previous">&lt;</string>
+    <string name="next">></string>
+
+    <string name="hello_user">สวัสดี,</string>
+    <string name="money">ธนบัตร</string>
+    <string name="qty">จำนวน</string>
+    <string name="total">รวม</string>
+    <string name="money_errors">เงินที่ใส่ไม่สำเร็จ</string>
+    <string name="money_total">รวมเงินฝากทิ้งสิ้น</string>
+    <string name="ok">ตกลง</string>
+    <string name="add">เพิ่ม</string>
+    <string name="add_user">เพิ่มผู้ใช้</string>
+    <string name="edit_user">แก้ไขผู้ใช้</string>
+
+
+    <string name="cancel">ยกเลืก</string>
+    <string name="delete">ลบ</string>
+
+
+    <string name="edit">แก้ไข</string>
+
+
+    <string name="second">วินาที</string>
+    <string name="waiting">เวลารอ</string>
+
+    <string name="id">ID</string>
+    <string name="name">Name</string>
+    <string name="role">Role</string>
+    <string name="branch">สาขา</string>
+
+
+    <string name="menu_home">หน้าหลัก</string>
+    <string name="menu_report">รายงาน</string>
+    <string name="menu_setting">ตั้งค่า</string>
+
+
+    <string name="date">วันที่</string>
+    <string name="time">เวลา</string>
+    <string name="type">ประเภท</string>
+    <string name="user">ผู้ใช้</string>
+    <string name="balance">ยอดเงิน</string>
+
+    <string name="money_box">เงินในตู่้</string>
+
+
+    <string name="deposit_check">ฝาก</string>
+
+    <string name="event">เหตุการณ์</string>
+
+
+    <string name="test_internet">ทดสอบระบบอินเตอร์เน็ต</string>
+    <string name="test_printer">ทดสอบเครื่องพิมพ์</string>
+
+
+    <string-array name="role_list">
+        <item>Admin</item>
+        <item>User</item>
+        <item>Manager</item>
+        <item>Owner</item>Manager
+
+    </string-array>
+</resources>

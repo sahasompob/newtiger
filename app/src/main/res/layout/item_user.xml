@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <EditText
+            android:id="@+id/edt_user_name_manage"
+            android:layout_weight="1"
+            android:text="user"
+            android:textColor="#505050"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    <EditText
+            android:id="@+id/edt_password_manage"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:inputType="textPassword"
+            android:textColor="#505050"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    <Spinner
+            android:id="@+id/spinner_manage"
+            android:layout_gravity="center"
+            android:layout_weight="1.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Spinner>
+
+</LinearLayout>

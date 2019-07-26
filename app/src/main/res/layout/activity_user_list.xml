@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="10dp" >
+
+    <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
+
+        <Button
+                android:id="@+id/previousButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_yellow"
+                android:text="@string/previous"
+                android:textSize="16sp"/>
+
+        <TextView
+                android:id="@+id/currentBox"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        <Button
+                android:id="@+id/nextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_yellow"
+                android:text="@string/next"
+                android:textSize="16sp"/>
+    </LinearLayout>
+
+    <!--
+    <EditText
+        android:id="@+id/searchBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter invoice ID here." >
+    </EditText>
+    -->
+
+    <RelativeLayout
+                  android:layout_marginTop="5dp"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp">
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="DE = ฝาก ,"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="70dp"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="OP = เปิดตู้ ,"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="150dp"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="OPF = ยกเลิกการเปิดตู้"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="240dp"/>
+    </RelativeLayout>
+
+    <LinearLayout
+            android:baselineAligned="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+        <TableRow
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.18"
+                android:background="#FFFFFF"
+                android:paddingBottom="1dip"
+                android:paddingLeft="1dip"
+                android:paddingTop="1dip" >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2"
+                    android:background="#33B5E5"
+                    android:gravity="center"
+                    android:paddingRight="3dp"
+                    android:text="@string/id"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.2"
+                android:background="#FFFFFF"
+                android:paddingBottom="1dip"
+                android:paddingLeft="1dip"
+                android:paddingTop="1dip" >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.5"
+                    android:background="#33B5E5"
+                    android:gravity="center"
+                    android:paddingRight="3dp"
+                    android:text="@string/date"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.07"
+                android:background="#FFFFFF"
+                android:paddingBottom="1dip"
+                android:paddingLeft="1dip"
+                android:paddingRight="1dip"
+                android:paddingTop="1dip" >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.75"
+                    android:background="#33B5E5"
+                    android:gravity="center"
+                    android:paddingRight="3dp"
+                    android:text="สถานะ"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.1"
+                android:background="#FFFFFF"
+                android:paddingBottom="1dip"
+                android:paddingLeft="1dip"
+                android:paddingRight="1dip"
+                android:paddingTop="1dip" >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.75"
+                    android:background="#33B5E5"
+                    android:gravity="center"
+                    android:paddingRight="3dp"
+                    android:text="ฝากได้"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.1"
+                android:background="#FFFFFF"
+                android:paddingBottom="1dip"
+                android:paddingLeft="1dip"
+                android:paddingRight="1dip"
+                android:paddingTop="1dip" >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.75"
+                    android:background="#33B5E5"
+                    android:gravity="center"
+                    android:paddingRight="3dp"
+                    android:text="ดรอป"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+        </TableRow>
+
+
+
+        <TableRow
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.1"
+                android:background="#FFFFFF"
+                android:paddingBottom="1dip"
+                android:paddingLeft="1dip"
+                android:paddingRight="1dip"
+                android:paddingTop="1dip" >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.75"
+                    android:background="#33B5E5"
+                    android:gravity="center"
+                    android:paddingRight="3dp"
+                    android:text="รวม"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+        </TableRow>
+
+
+        <TableRow
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.1"
+                android:background="#FFFFFF"
+                android:paddingBottom="1dip"
+                android:paddingLeft="1dip"
+                android:paddingRight="1dip"
+                android:paddingTop="1dip" >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.75"
+                    android:background="#33B5E5"
+                    android:gravity="center"
+                    android:paddingRight="3dp"
+                    android:text="คงเหลือ"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+        </TableRow>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="4.96"
+            android:orientation="vertical" >
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerUserList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:baselineAligned="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+        <Button
+                android:id="@+id/back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="กลับ"/>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

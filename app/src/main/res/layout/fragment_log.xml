@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+    <android.support.v7.widget.Toolbar
+
+            android:id="@+id/toolbar_top"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorBlack">
+
+
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="2dp"
+                android:text="Tiger Cash Box"
+                android:textColor="@color/colorWhite"
+                android:textSize="22dp" />
+
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+            android:layout_below="@+id/toolbar_top"
+            android:id="@+id/layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorBG">
+
+        <TextView
+                android:id="@+id/branch_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="519dp"
+                android:layout_marginBottom="2dp"
+                android:gravity="left"
+                android:text="@string/branch"
+                android:textColor="@color/colorBlack"
+                android:textSize="27dp" />
+
+        <Spinner
+                android:id="@+id/branch_spinner"
+                android:layout_width="95dp"
+                android:layout_height="45dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="92dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="2dp"
+                android:gravity="left"
+                android:hint="@string/branch"
+                android:paddingLeft="20dp"
+                android:spinnerMode="dropdown"
+                android:textSize="15sp" />
+
+        <TextView
+                android:id="@+id/date_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="320dp"
+                android:layout_marginBottom="2dp"
+                android:gravity="left"
+                android:text="@string/date"
+                android:textColor="@color/colorBlack"
+                android:textSize="27dp" />
+
+
+        <Spinner
+                android:id="@+id/date_time_spinner"
+                android:layout_width="95dp"
+                android:layout_height="45dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="290dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="2dp"
+                android:gravity="left"
+                android:hint="@string/date"
+                android:paddingLeft="20dp"
+                android:spinnerMode="dropdown"
+                android:textSize="15sp" />
+
+
+        <TextView
+                android:id="@+id/branch_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="42dp"
+                android:layout_marginBottom="2dp"
+                android:gravity="right"
+                android:text="@string/branch"
+                android:textColor="@color/colorBlack"
+                android:textSize="30dp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/tabMenuLayout"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+        <CheckBox
+                android:id="@+id/deposit_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="150dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/deposit_check"
+                android:textSize="20dp" />
+
+
+        <CheckBox
+                android:id="@+id/open_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="240dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/open_app"
+                android:textSize="20dp" />
+
+
+        <CheckBox
+                android:id="@+id/wrong_pass_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="330dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/wrong_password"
+                android:textSize="20dp" />
+
+        <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="13dp"
+                android:text="@string/event"
+                android:textColor="@color/colorBlack"
+                android:textSize="22dp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/testlayout1"
+            android:layout_width="match_parent"
+            android:layout_height="610dp"
+            android:layout_below="@+id/tabMenuLayout"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+
+        <LinearLayout
+                android:id="@+id/table1"
+                android:layout_width="570dp"
+                android:layout_height="30dp"
+                android:layout_below="@+id/text_deposit"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.2"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/date_text"
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="2"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/date"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.2"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/time_text"
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="2"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/time"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.3"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/type_text"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.5"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/type"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.6"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/user_text"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.5"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/user"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+            </TableRow>
+
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.3"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/money_tx"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.5"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/balance"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+            </TableRow>
+
+
+            <TableRow
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.3"
+                    android:background="#FFFFFF"
+                    android:paddingLeft="1dip"
+                    android:paddingTop="1dip"
+                    android:paddingBottom="1dip">
+
+                <TextView
+                        android:id="@+id/money_box_tx"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.5"
+                        android:background="#33B5E5"
+                        android:gravity="center"
+                        android:paddingRight="3dp"
+                        android:text="@string/money_box"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+            </TableRow>
+
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/report_list"
+                android:layout_width="570dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <RelativeLayout
+
+            android:layout_below="@+id/testlayout1"
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_height="60dp">
+
+        <android.support.design.widget.BottomNavigationView
+
+                android:id="@+id/bottom_nav_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorBottomBar"
+                app:itemIconTint="@color/white"
+                app:itemTextColor="@color/white"
+                app:menu="@menu/bottom_menu"
+                android:layout_alignParentStart="true" android:layout_marginBottom="0dp"
+                android:layout_marginStart="0dp"/>
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="setting"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    <View
+            android:visibility="gone"
+            android:background="#909090"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
+    <TextView
+            android:visibility="gone"
+            android:id="@+id/setting_user"
+            android:padding="5dp"
+            android:textSize="20sp"
+            android:textColor="#505050"
+            android:text="User/permission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    <View
+            android:layout_margin="5dp"
+            android:background="#909090"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+                android:id="@+id/setting_tv_delay"
+                android:layout_weight="0.5"
+                android:padding="5dp"
+                android:textSize="20sp"
+                android:textColor="#505050"
+                android:text="Delay 5 sec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <EditText
+                android:id="@+id/setting_edt_delay"
+                android:visibility="gone"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <TextView
+                android:id="@+id/setting_btn_tv_delay"
+                android:paddingRight="5dp"
+                android:gravity="end"
+                android:text="edit"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <View
+            android:layout_margin="5dp"
+            android:background="#909090"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+</LinearLayout>
