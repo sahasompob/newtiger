@@ -104,9 +104,10 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             timer.cancel()
 
-            val sssss = SimpleDateFormat("MM/dd/yyyy HH:mm")
+            val sssss = SimpleDateFormat("MM/dd/yyyy")
+            val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
             val balance =
-                BalanceLog(username = user, dated = sssss.format(Date()).trim(),
+                BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
                     action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
                     balance_before = balanceBefore, balance = balanceBefore, status = "-")
 
@@ -122,9 +123,10 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             (activity as MainActivity).sendData("unlock".trim())
 //            fragmentManager?.popBackStack()
 
-            val sssss = SimpleDateFormat("MM/dd/yyyy HH:mm")
+            val sssss = SimpleDateFormat("MM/dd/yyyy")
+            val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
             val balance =
-                BalanceLog(username = user, dated = sssss.format(Date()).trim(),
+                BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
                     action = "OP", deposit = 0, drop = 0, toto_deposit = balanceBefore,
                     balance_before = balanceBefore, balance = 0, status = "-")
 

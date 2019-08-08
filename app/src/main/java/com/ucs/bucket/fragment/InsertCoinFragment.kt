@@ -121,8 +121,9 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
 
         btn.setOnClickListener {
 
-            val sssss = SimpleDateFormat("MM/dd/yyyy HH:mm")
-            log+="$user,${sssss.format(Date())},${textSum.text};"
+            val currentDate = SimpleDateFormat("MM/dd/yyyy")
+            val currentDateTime = SimpleDateFormat("MM/dd/yyyy HH:mm")
+            log+="$user,${currentDate.format(Date())},${textSum.text};"
             storage.setLog(log)
             fragmentManager?.popBackStack()
 
@@ -142,9 +143,10 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
             var drop:Int = strDropMoney.toInt()
 
             var totalDeposit = deposit + drop
+            var test = "08/09/2019"
 
             val balance =
-                BalanceLog(username = user, dated = sssss.format(Date()).trim(),
+                BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
                            action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
                            balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N")
 

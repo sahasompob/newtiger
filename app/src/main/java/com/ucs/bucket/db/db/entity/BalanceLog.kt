@@ -21,6 +21,9 @@ class BalanceLog(
         @ColumnInfo(name = "dated")
         var dated: String? = null,
 
+        @ColumnInfo(name = "datedtime")
+        var datedtime: String? = null,
+
         @ColumnInfo(name = "action")
         var action: String? = null,
 
