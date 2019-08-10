@@ -48,6 +48,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
     lateinit var btn_cancle_coin : Button
     lateinit var btn : Button
     lateinit var testsend : Button
+    lateinit var money_total_txt : TextView
 
 
     var test = 0
@@ -101,6 +102,8 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
         one_hunred_value = root.one_hunred_value
         five_hunred_value = root.five_hunred_value
         thousand_value = root.thousand_value
+
+        money_total_txt = root.money_total_txt
 
 
         name_user = root.name_user
@@ -220,18 +223,27 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
                 }
 
 
-//                one_value.text = count_coin[0].toString()
-//                two_value.text = count_coin[1].toString()
-//                five_value.text = count_coin[2].toString()
-//                ten_value.text = count_coin[3].toString()
-//                twenty_value.text = count_coin[4].toString()
-//                fifty_value.text = count_coin[5].toString()
-//                one_hunred_value.text = count_coin[6].toString()
-//                five_hunred_value.text = count_coin[7].toString()
-//                thousand_value.text = count_coin[8].toString()
-//                textSum.text = "$sum"
+                one_value.text = count_coin[0].toString()
+                two_value.text = count_coin[1].toString()
+                five_value.text = count_coin[2].toString()
+                ten_value.text = count_coin[3].toString()
+                twenty_value.text = count_coin[4].toString()
+                fifty_value.text = count_coin[5].toString()
+                one_hunred_value.text = count_coin[6].toString()
+                five_hunred_value.text = count_coin[7].toString()
+                thousand_value.text = count_coin[8].toString()
+                textSum.text = "$sum"
+                money_total_txt.text ="$sum"
 
-                sumTest(sum,count_coin)
+                if (sum > 0){
+
+                    btn_cancle_coin.visibility = View.INVISIBLE
+                    btn.visibility = View.VISIBLE
+
+
+                }
+
+//                 sumTest(sum,count_coin)
 
                 mString = ""
 
