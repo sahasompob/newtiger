@@ -34,7 +34,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.status.text = test.action
 
             itemView.deposit.text = test.deposit.toString()
-            itemView.drop_money.text = test.status.toString()
+            itemView.drop_money.text = test.drop.toString()
             itemView.total.text = test.toto_deposit.toString()
             itemView.total_balance.text = test.balance.toString()
 

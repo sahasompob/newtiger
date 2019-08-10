@@ -66,7 +66,7 @@
                 android:layout_height="match_parent">
 
                <ImageView
-                   android:src="@drawable/ic_action_home"
+                   android:src="@drawable/deposit"
                    android:layout_width="80dp"
                    android:layout_height="80dp" />
 
@@ -97,7 +97,7 @@
                 android:layout_height="match_parent">
 
                <ImageView
-                   android:src="@drawable/ic_action_home"
+                   android:src="@drawable/open_console"
                    android:layout_width="80dp"
                    android:layout_height="80dp" />
 
@@ -137,7 +137,7 @@
                 android:layout_height="match_parent">
 
                <ImageView
-                   android:src="@drawable/ic_action_home"
+                   android:src="@drawable/history"
                    android:layout_width="80dp"
                    android:layout_height="80dp" />
 
@@ -168,7 +168,7 @@
                 android:layout_height="match_parent">
 
                <ImageView
-                   android:src="@drawable/ic_action_home"
+                   android:src="@drawable/settings"
                    android:layout_width="80dp"
                    android:layout_height="80dp" />
 
@@ -209,7 +209,7 @@
                 android:layout_height="match_parent">
 
                <ImageView
-                   android:src="@drawable/ic_action_home"
+                   android:src="@drawable/password"
                    android:layout_width="80dp"
                    android:layout_height="80dp" />
 
@@ -240,7 +240,7 @@
                 android:layout_height="match_parent">
 
                <ImageView
-                   android:src="@drawable/ic_action_home"
+                   android:src="@drawable/services"
                    android:layout_width="80dp"
                    android:layout_height="80dp" />
 
