@@ -1,121 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".MainActivity">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main"
+    tools:context=".MainActivity">
 
-<RelativeLayout
-        android:id="@+id/layout_title"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/colorWhite">
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
 
-   <TextView
-           android:id="@+id/title_left"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_centerVertical="true"
-           android:layout_gravity="left"
-           android:layout_marginLeft="20dp"
-           android:text="@string/hello_user"
-           android:textColor="@color/colorBlack"
-           android:textSize="18dp" />
+      <RelativeLayout
+          android:layout_marginTop="32dp"
+          android:layout_marginRight="20dp"
+          android:layout_marginLeft="20dp"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
 
-   <TextView
-           android:id="@+id/name_user"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_alignTop="@+id/title_left"
-           android:layout_gravity="left"
-           android:layout_marginLeft="80dp"
-           android:layout_marginTop="0dp"
-           android:text="Cashier001"
-           android:textColor="@color/colorBlack"
-           android:textSize="18dp" />
+         <TextView
+             android:id="@+id/title"
+             android:textSize="40dp"
+             android:textColor="@color/colorBlack"
+             android:layout_width="wrap_content"
+             android:text="Helllo"
+             android:layout_height="wrap_content" />
 
-
-</RelativeLayout>
-
-<LinearLayout
-        android:layout_below="@+id/layout_title"
-        android:background="@color/colorWhite"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:gravity="center"
-        android:orientation="vertical">
-
-   <ImageView
-           android:visibility="gone"
-           android:id="@+id/img_setting"
-           android:layout_margin="5dp"
-           android:layout_gravity="end"
-           android:layout_weight="0"
-           android:src="@drawable/ic_action_setting"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content" />
-
-   <Button
-           android:id="@+id/deposit_btn"
-           android:layout_width="170dp"
-           android:layout_height="80dp"
-           android:gravity="center"
-           android:layout_marginTop="10dp"
-           android:text="@string/deposit" />
-
-   <Button
-           android:id="@+id/open_btn"
-           android:layout_width="170dp"
-           android:layout_height="80dp"
-           android:gravity="center"
-           android:layout_marginTop="10dp"
-           android:text="@string/open_app" />
+         <TextView
+             android:id="@+id/name_user"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentTop="true"
+             android:layout_marginStart="20dp"
+             android:layout_toEndOf="@+id/title"
+             android:text="Tonla"
+             android:textColor="@color/colorBlack"
+             android:textSize="40dp" />
 
 
-   <Button
-           android:id="@+id/test_btn"
-           android:layout_width="170dp"
-           android:layout_height="80dp"
-           android:gravity="center"
-           android:layout_marginTop="10dp"
-           android:text="ประวัติ" />
-
-   <Button
-           android:id="@+id/test_system"
-           android:layout_width="170dp"
-           android:layout_height="80dp"
-           android:gravity="center"
-           android:layout_marginTop="10dp"
-           android:text="@string/test_systems"/>
+      </RelativeLayout>
 
 
-   <Button
+      <LinearLayout
+          android:layout_marginTop="20dp"
+          android:gravity="center"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="160dp">
 
-           android:visibility="gone"
-           android:id="@+id/manage_btn"
-           android:layout_width="170dp"
-           android:layout_height="80dp"
-           android:gravity="center"
-           android:layout_marginTop="10dp"
-           android:text="@string/manage_user" />
+         <android.support.v7.widget.CardView
+             android:id="@+id/deposit_btn"
+             android:layout_width="200dp"
+             android:layout_height="155dp"
+             app:cardElevation="4dp"
+             app:cardCornerRadius="10dp"
+             android:layout_margin="35dp"
+             >
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-   <Button
-           android:id="@+id/reset_pass_btn"
-           android:layout_width="170dp"
-           android:layout_height="80dp"
-           android:gravity="center"
-           android:layout_marginTop="10dp"
-           android:text="@string/reset_password" />
+               <ImageView
+                   android:src="@drawable/ic_action_home"
+                   android:layout_width="80dp"
+                   android:layout_height="80dp" />
+
+               <TextView
+                   android:layout_marginTop="12dp"
+                   android:textSize="22dp"
+                   android:textColor="@color/colorBlack"
+                   android:text="@string/deposit"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
 
 
-</LinearLayout>
+         <android.support.v7.widget.CardView
+             android:id="@+id/open_btn"
+             android:layout_width="200dp"
+             android:layout_height="155dp"
+             app:cardElevation="4dp"
+             app:cardCornerRadius="10dp"
+             android:layout_margin="35dp"
+             >
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+               <ImageView
+                   android:src="@drawable/ic_action_home"
+                   android:layout_width="80dp"
+                   android:layout_height="80dp" />
+
+               <TextView
+                   android:layout_marginTop="12dp"
+                   android:textSize="22dp"
+                   android:textColor="@color/colorBlack"
+                   android:text="@string/open_app"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
+
+      </LinearLayout>
+
+
+      <LinearLayout
+          android:layout_marginTop="15dp"
+          android:gravity="center"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="160dp">
+
+         <android.support.v7.widget.CardView
+             android:id="@+id/test_btn"
+             android:layout_width="200dp"
+             android:layout_height="155dp"
+             app:cardElevation="4dp"
+             app:cardCornerRadius="10dp"
+             android:layout_margin="35dp"
+             >
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+               <ImageView
+                   android:src="@drawable/ic_action_home"
+                   android:layout_width="80dp"
+                   android:layout_height="80dp" />
+
+               <TextView
+                   android:layout_marginTop="12dp"
+                   android:textSize="22dp"
+                   android:textColor="@color/colorBlack"
+                   android:text="ประวัติ"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
+
+
+         <android.support.v7.widget.CardView
+             android:id="@+id/img_setting"
+             android:layout_width="200dp"
+             android:layout_height="155dp"
+             app:cardElevation="4dp"
+             app:cardCornerRadius="10dp"
+             android:layout_margin="35dp"
+             >
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+               <ImageView
+                   android:src="@drawable/ic_action_home"
+                   android:layout_width="80dp"
+                   android:layout_height="80dp" />
+
+               <TextView
+                   android:layout_marginTop="12dp"
+                   android:textSize="22dp"
+                   android:textColor="@color/colorBlack"
+                   android:text="@string/menu_setting"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
+
+      </LinearLayout>
+
+
+
+      <LinearLayout
+          android:layout_marginTop="15dp"
+          android:gravity="center"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="160dp">
+
+         <android.support.v7.widget.CardView
+             android:id="@+id/reset_pass_btn"
+             android:layout_width="200dp"
+             android:layout_height="155dp"
+             app:cardElevation="4dp"
+             app:cardCornerRadius="10dp"
+             android:layout_margin="35dp"
+             >
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+               <ImageView
+                   android:src="@drawable/ic_action_home"
+                   android:layout_width="80dp"
+                   android:layout_height="80dp" />
+
+               <TextView
+                   android:layout_marginTop="12dp"
+                   android:textSize="22dp"
+                   android:textColor="@color/colorBlack"
+                   android:text="@string/reset_password"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
+
+
+         <android.support.v7.widget.CardView
+             android:id="@+id/test_system"
+             android:layout_width="200dp"
+             android:layout_height="155dp"
+             app:cardElevation="4dp"
+             app:cardCornerRadius="10dp"
+             android:layout_margin="35dp"
+             >
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+               <ImageView
+                   android:src="@drawable/ic_action_home"
+                   android:layout_width="80dp"
+                   android:layout_height="80dp" />
+
+               <TextView
+                   android:layout_marginTop="12dp"
+                   android:textSize="22dp"
+                   android:textColor="@color/colorBlack"
+                   android:text="@string/test_systems"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
+
+      </LinearLayout>
+
+
+
+      <LinearLayout
+          android:layout_marginTop="15dp"
+          android:gravity="center"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="160dp">
 
 
 
 
+      </LinearLayout>
 
-</RelativeLayout>
+   </LinearLayout>
+
+
+</ScrollView>

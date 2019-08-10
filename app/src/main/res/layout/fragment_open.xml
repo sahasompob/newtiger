@@ -48,100 +48,98 @@
             android:gravity="center">
 
         <RelativeLayout
-                android:id="@+id/table1"
-                android:layout_width="450dp"
-                android:layout_height="450dp"
-                android:layout_marginBottom="200dp"
-                android:background="@drawable/layout_border">
+            android:id="@+id/table1"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
+            android:background="@drawable/layout_border"
+            android:gravity="center">
 
 
             <Button
-                    android:id="@+id/open_button"
-                    android:visibility="invisible"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="280dp"
-                    android:layout_marginBottom="37dp"
-                    android:background="@drawable/btn_green"
-                    android:text="@string/open_app"
-                    android:textSize="22dp" />
+                android:id="@+id/open_button"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="37dp"
+                android:layout_marginStart="280dp"
+                android:background="@drawable/btn_green"
+                android:text="@string/open_app"
+                android:textSize="22dp"
+                android:visibility="invisible" />
 
             <Button
-                    android:visibility="visible"
-                    android:id="@+id/default_button"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="280dp"
-                    android:layout_marginBottom="37dp"
-                    android:background="@color/colorGrey"
-                    android:text="@string/open_app"
-                    android:textSize="22dp" />
+                android:id="@+id/default_button"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="37dp"
+                android:layout_marginStart="315dp"
+                android:background="@drawable/btn_grey"
+                android:text="@string/open_app"
+                android:textSize="22dp"
+                android:visibility="visible" />
 
             <Button
-                    android:id="@+id/cancel_button"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="57dp"
-                    android:layout_marginBottom="38dp"
-                    android:background="@drawable/btn_red"
-                    android:text="@string/cancel"
-                    android:textSize="22dp" />
+                android:id="@+id/cancel_button"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="38dp"
+                android:layout_marginStart="65dp"
+                android:background="@drawable/btn_red"
+                android:text="@string/cancel"
+                android:textSize="22dp" />
 
             <TextView
-                    android:id="@+id/waiting_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="55dp"
-                    android:layout_marginTop="60dp"
-                    android:text="@string/waiting"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="30dp"/>
-
-
+                android:id="@+id/waiting_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="60dp"
+                android:text="@string/waiting"
+                android:textColor="@color/colorBlack"
+                android:textSize="30dp" />
 
 
             <RelativeLayout
-                    android:layout_below="@+id/waiting_txt"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp">
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/waiting_txt">
 
 
                 <TextView
-                        android:id="@+id/tv_open"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center"
-                        android:textSize="50sp"
-                        android:textColor="@color/colorBlack" android:layout_marginStart="0dp"
-                        android:layout_alignParentTop="true"/>
+                    android:id="@+id/tv_open"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="50sp" />
 
 
             </RelativeLayout>
 
 
-
-
-
-
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/op_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="63dp"
-            android:layout_marginEnd="122dp"
-            android:text="Open" />
+
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/op_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="63dp"
+        android:layout_marginEnd="122dp"
+        android:visibility="gone"
+        android:text="Open" />
 
 </RelativeLayout>

@@ -2,7 +2,7 @@
     <string name="app_name">TigerCashbox</string>
 
     <string name="deposit">ฝากเงิน</string>
-    <string name="test_systems">ทดสอบเครื่องพิมพ์หรือระบบอื่นๆ</string>
+    <string name="test_systems">ทดสอบระบบต่างๆ</string>
     <string name="reset_password">แก้ไขรหัสผ่าน</string>
     <string name="wrong_password">ใส่รหัสผิด</string>
     <string name="open_app">เปิดตู้</string>

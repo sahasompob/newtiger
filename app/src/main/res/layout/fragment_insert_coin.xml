@@ -35,6 +35,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="left"
             android:layout_marginLeft="20dp"
+            android:fontFamily="@font/kanit"
             android:text="@string/hello_user"
             android:textColor="@color/colorBlack"
             android:textSize="18dp" />

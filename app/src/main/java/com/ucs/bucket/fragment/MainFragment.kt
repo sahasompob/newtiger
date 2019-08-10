@@ -3,6 +3,7 @@ package com.ucs.bucket.fragment;
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +17,13 @@ import com.ucs.bucket.BalanceListActivity
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : Fragment() {
-    lateinit var deposit : Button
-    lateinit var openBox : Button
-    lateinit var test_system : Button
-    lateinit var test: Button
-    lateinit var manage : Button
-    lateinit var reset_pass : Button
-    lateinit var setting : Button
+    lateinit var deposit : CardView
+    lateinit var openBox : CardView
+    lateinit var test_system : CardView
+    lateinit var test: CardView
+    lateinit var manage : CardView
+    lateinit var reset_pass : CardView
+    lateinit var setting : CardView
     lateinit var nameUser : TextView
     var rank = ""
     var str = ""

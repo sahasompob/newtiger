@@ -3,6 +3,7 @@ package com.ucs.bucket.fragment;
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,14 +17,14 @@ import com.ucs.bucket.BalanceListActivity
 import kotlinx.android.synthetic.main.fragment_manager.view.*
 
 class ManagerFragment : Fragment() {
-    lateinit var deposit : Button
-    lateinit var openBox : Button
-    lateinit var test: Button
-    lateinit var manage : Button
-    lateinit var reset_pass : Button
-    lateinit var setting : ImageView
+    lateinit var deposit : CardView
+    lateinit var openBox : CardView
+    lateinit var test: CardView
+    lateinit var manage : CardView
+    lateinit var reset_pass : CardView
+    lateinit var setting : CardView
     lateinit var nameUser : TextView
-    lateinit var test_system : Button
+    lateinit var test_system : CardView
     var rank = ""
     var str = ""
     var nameData = ""
@@ -57,7 +58,6 @@ class ManagerFragment : Fragment() {
         deposit = root.deposit_btn
         openBox = root.open_btn
         test = root.test_btn
-        manage = root.manage_btn
         reset_pass = root.reset_pass_btn
 
         setting = root.img_setting
