@@ -55,6 +55,17 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback {
                         password = "1234", role = "Admin")
                 InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
 
+            val user2 =
+                User(username =  "1111", firstname = "User",
+                    password = "1234", role = "User")
+            InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user2)
+
+
+            val user3 =
+                User(username =  "2222", firstname = "Manager",
+                    password = "2222", role = "Manager")
+            InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user3)
+
 
         }else {
 

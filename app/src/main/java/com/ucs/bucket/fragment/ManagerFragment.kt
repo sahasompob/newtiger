@@ -87,15 +87,15 @@ class ManagerFragment : Fragment() {
                 ?.commit()
         }
 
-        manage.setOnClickListener {
-
-            activity?.let{
-                val intent = Intent (it, ManagmentUserActivity::class.java)
-                it.startActivity(intent)
-            }
-
-
-        }
+//        manage.setOnClickListener {
+//
+//            activity?.let{
+//                val intent = Intent (it, ManagmentUserActivity::class.java)
+//                it.startActivity(intent)
+//            }
+//
+//
+//        }
 
         reset_pass.setOnClickListener {
 
