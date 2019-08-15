@@ -1,91 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-tools:context=".MainActivity">
-
-<RelativeLayout
-        android:id="@+id/layout_title"
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/colorWhite"
->
-
-   <TextView
-           android:id="@+id/title_left"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_centerVertical="true"
-           android:layout_gravity="left"
-           android:layout_marginLeft="20dp"
-           android:text="@string/hello_user"
-           android:textColor="@color/colorBlack"
-           android:textSize="18dp" />
-
-   <TextView
-           android:id="@+id/name_user"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_alignTop="@+id/title_left"
-           android:layout_gravity="left"
-           android:layout_marginLeft="80dp"
-           android:layout_marginTop="0dp"
-           android:text="Cashier001"
-           android:textColor="@color/colorBlack"
-           android:textSize="18dp" />
-
-
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_main"
+        tools:context=".MainActivity">
 
    <LinearLayout
-           android:background="@color/colorWhite"
            android:layout_width="match_parent"
-           android:layout_height="600dp"
-           android:gravity="center"
+           android:layout_height="match_parent"
            android:orientation="vertical">
 
-      <Button
-              android:id="@+id/test_internet"
-              android:layout_width="170dp"
-              android:layout_height="80dp"
+      <RelativeLayout
+              android:layout_marginTop="32dp"
+              android:layout_marginRight="20dp"
+              android:layout_marginLeft="20dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+         <TextView
+                 android:id="@+id/title"
+                 android:textSize="40dp"
+                 android:textColor="@color/colorBlack"
+                 android:layout_width="wrap_content"
+                 android:text="Hi"
+                 android:layout_height="wrap_content" />
+
+         <TextView
+                 android:id="@+id/name_user"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentTop="true"
+                 android:layout_marginStart="20dp"
+                 android:layout_toEndOf="@+id/title"
+                 android:text="Tonla"
+                 android:textColor="@color/colorBlack"
+                 android:textSize="40dp" />
+
+
+      </RelativeLayout>
+
+
+      <LinearLayout
+              android:layout_marginTop="40dp"
               android:gravity="center"
-              android:text="@string/test_internet"/>
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="190dp">
 
-      <Button
-              android:id="@+id/test_printer"
-              android:layout_width="170dp"
-              android:layout_height="80dp"
-              android:gravity="center"
-              android:layout_marginTop="10dp"
-              android:text="@string/test_printer"/>
+         <android.support.v7.widget.CardView
+                 android:id="@+id/test_internet"
+                 android:layout_width="180dp"
+                 android:layout_height="180dp"
+                 app:cardElevation="4dp"
+                 app:cardCornerRadius="10dp"
+                 android:layout_margin="5dp"
+         >
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-      <Button
-          android:id="@+id/time_btn"
-          android:layout_width="170dp"
-          android:layout_height="80dp"
-          android:gravity="center"
-          android:layout_marginTop="10dp"
-          android:text="ตั้งวัน-เวลา"/>
+               <ImageView
+                       android:src="@drawable/wifi"
+                       android:layout_width="80dp"
+                       android:layout_height="80dp" />
+
+               <TextView
+                       android:layout_marginTop="12dp"
+                       android:textSize="20dp"
+                       android:textColor="@color/colorBlack"
+                       android:text="@string/test_internet"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
 
 
-      <Button
-              android:id="@+id/back_btn"
-              android:layout_width="170dp"
-              android:layout_height="80dp"
-              android:gravity="center"
-              android:layout_marginTop="10dp"
-              android:text="กลับ"/>
+
+         <android.support.v7.widget.CardView
+                 android:id="@+id/test_printer"
+                 android:layout_width="180dp"
+                 android:layout_height="180dp"
+                 app:cardElevation="4dp"
+                 app:cardCornerRadius="10dp"
+                 android:layout_margin="5dp"
+         >
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+               <ImageView
+                       android:src="@drawable/printer"
+                       android:layout_width="80dp"
+                       android:layout_height="80dp" />
+
+               <TextView
+                       android:layout_marginTop="12dp"
+                       android:textSize="20dp"
+                       android:textColor="@color/colorBlack"
+                       android:text="@string/test_printer"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
+
+         <android.support.v7.widget.CardView
+                 android:id="@+id/time_btn"
+                 android:layout_width="180dp"
+                 android:layout_height="180dp"
+                 app:cardElevation="4dp"
+                 app:cardCornerRadius="10dp"
+                 android:layout_margin="5dp"
+         >
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+               <ImageView
+                       android:src="@drawable/clock"
+                       android:layout_width="80dp"
+                       android:layout_height="80dp" />
+
+               <TextView
+                       android:layout_marginTop="12dp"
+                       android:textSize="22dp"
+                       android:textColor="@color/colorBlack"
+                       android:text="ตั้งวัน-เวลา"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
+
+      </LinearLayout>
+
+
+      <LinearLayout
+              android:layout_marginTop="40dp"
+              android:layout_marginLeft="15dp"
+              android:gravity="left"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="190dp">
+
+
+
+         <android.support.v7.widget.CardView
+                 android:id="@+id/back_btn"
+                 android:layout_width="180dp"
+                 android:layout_height="180dp"
+                 app:cardElevation="4dp"
+                 app:cardCornerRadius="10dp"
+                 android:layout_margin="5dp"
+         >
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+               <ImageView
+                       android:src="@drawable/previous"
+                       android:layout_width="80dp"
+                       android:layout_height="80dp" />
+
+               <TextView
+                       android:layout_marginTop="12dp"
+                       android:textSize="20dp"
+                       android:textColor="@color/colorBlack"
+                       android:text="ย้อนกลับ"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
+      </LinearLayout>
+
+
+
+
 
 
 
    </LinearLayout>
 
 
-
-
-
-</LinearLayout>
+</ScrollView>

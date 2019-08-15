@@ -3,6 +3,8 @@ package com.ucs.bucket.fragment;
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +52,9 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
     lateinit var testsend : Button
     lateinit var money_total_txt : TextView
 
+    lateinit var money_errors_value : EditText
+
+
 
     var test = 0
     var user = ""
@@ -91,7 +96,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
         }
 
         testsend =root.testsend
-        depositText = root.total_deposit_value
+//        depositText = root.total_deposit_value
 
         one_value = root.one_value
         two_value = root.two_value
@@ -103,7 +108,8 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
         five_hunred_value = root.five_hunred_value
         thousand_value = root.thousand_value
 
-        money_total_txt = root.money_total_txt
+        money_total_txt = root.total_deposit_value
+        money_errors_value = root.money_errors_value
 
 
         name_user = root.name_user
@@ -160,8 +166,63 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
 
 //            Toast.makeText(context, balanceBefore.toString()+" // convert", Toast.LENGTH_SHORT).show()
 
+
+
+            sendToServer(user,
+                currentDateTime.format(Date()).trim(),
+                "DE",
+                deposit,
+                drop,
+                totalDeposit,
+                balanceBefore + totalDeposit,
+                "N")
         }
 
+
+        money_errors_value.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // TODO Auto-generated method stub
+
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // TODO Auto-generated method stub
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                // add a condition to check length here - you can give here length according to your requirement to go to next EditTexts.
+//                if (firstET.getText().toString().trim().length() > 2) {
+//                    firstET.clearFocus()
+//                    firstET.requestFocus()
+//                }
+
+//                sumTest(sum)
+
+
+                var depositMoney = textSum.text.toString()
+                var dropMoney = money_errors_value.text.toString()
+
+                if (dropMoney.equals("")){
+
+                    Toast.makeText(getActivity(),"ว่าง",Toast.LENGTH_SHORT).show();
+
+                }else{
+
+                    val dropMoneyInt = dropMoney.toInt()
+                    val depositMoneyInt = depositMoney.toInt()
+
+                    var total = dropMoneyInt + depositMoneyInt
+                    Toast.makeText(getActivity(),"${total}",Toast.LENGTH_SHORT).show()
+
+                    money_total_txt.text = "$total"
+                }
+
+//                val dropMoneyInt = dropMoney.toInt()
+
+
+            }
+        })
 
 
         testsend.setOnClickListener {
@@ -253,29 +314,42 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
 
     }
 
-    fun sumTest(sum: Int, sum2: Array<Int>){
+    fun sendToServer(user: String,currntTime: String, action: String,deposit: Int,drop: Int,totalDeposit: Int,total: Int,status: String){
 
+//        for()
 
-        test += sum
-        textSum2.text = "$test"
-        textSum.text = "$test"
-        depositText.text = "$test"
+//        sendToServer(user,currentDateTime.format(Date()).trim(),"DE",deposit,drop,totalDeposit,balanceBefore + totalDeposit,"N")
 
-        one_value.text = sum2[0].toString()
-        two_value.text = sum2[1].toString()
-        five_value.text = sum2[2].toString()
-        ten_value.text = sum2[3].toString()
-        twenty_value.text = sum2[4].toString()
-        fifty_value.text = sum2[5].toString()
-        one_hunred_value.text = sum2[6].toString()
-        five_hunred_value.text = sum2[7].toString()
-        thousand_value.text = sum2[8].toString()
+//        test += sum
+//        textSum2.text = "$test"
+//        textSum.text = "$test"
+//
+//
+//        money_total_txt.text ="$sum"
 
+//        depositText.text = "$test"
 //        var bbb = sum2[8].toString()
-//        Toast.makeText(getActivity(),"$bbb",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),"$user"+"/" + "$currntTime"+"/" + "$action"+"/" + "$deposit"+"/" + "$drop"+"/" + "$totalDeposit"+"/" + "$total"+"/" + "$status",Toast.LENGTH_SHORT).show();
 
 
     }
+
+//    fun sumTest(sum: Int){
+//
+//
+//        test += sum
+//        textSum2.text = "$test"
+//        textSum.text = "$test"
+//
+//
+//        money_total_txt.text ="$sum"
+//
+////        depositText.text = "$test"
+////        var bbb = sum2[8].toString()
+////        Toast.makeText(getActivity(),"$bbb",Toast.LENGTH_SHORT).show();
+//
+//
+//    }
 
             class InsertLogAsync(private val balanceLogDao: BalanceLogDao, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<BalanceLog, Void, BalanceLog>() {
             override fun doInBackground(vararg balancelog: BalanceLog?): BalanceLog? {

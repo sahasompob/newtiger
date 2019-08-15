@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.app.Fragment
+import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,10 @@ import kotlinx.android.synthetic.main.fragment_system.view.*
 
 class SystemFragment : Fragment() {
 //    lateinit var area : LinearLayout
-    lateinit var test_internet : Button
-    lateinit var test_printer : Button
-    lateinit var time_btn : Button
-    lateinit var back_btn : Button
+    lateinit var test_internet : CardView
+    lateinit var test_printer : CardView
+    lateinit var time_btn : CardView
+    lateinit var back_btn : CardView
 
 
     companion object {
