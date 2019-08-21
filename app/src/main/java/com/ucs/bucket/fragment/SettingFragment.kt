@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import com.ucs.bucket.R
-import com.ucs.bucket.Storage
 import com.ucs.bucket.UserManageActivity
+import com.ucs.bucket.Util.SessionManager
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 
 class SettingFragment : Fragment() {
@@ -37,7 +37,7 @@ class SettingFragment : Fragment() {
     }
 
     fun initInstance(root: View) {
-        var storage = Storage(context!!)
+        var storage = SessionManager(context!!)
         user = root.setting_user
         Btndelay = root.setting_btn_tv_delay
         TvDelay = root.setting_tv_delay

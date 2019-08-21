@@ -10,13 +10,7 @@ import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Toast
-import com.ucs.bucket.HistoryItemCustomview
 import com.ucs.bucket.R
-import com.ucs.bucket.Storage
-import kotlinx.android.synthetic.main.fragment_log.view.*
 import kotlinx.android.synthetic.main.fragment_system.view.*
 
 class SystemFragment : Fragment() {

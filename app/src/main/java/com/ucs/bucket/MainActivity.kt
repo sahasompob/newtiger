@@ -2,12 +2,14 @@ package com.ucs.bucket
 
 import android.app.ActivityManager
 import android.content.*
+import android.net.ConnectivityManager
 import android.os.*
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.ucs.bucket.Util.SessionManager
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.UserDAO
@@ -16,7 +18,10 @@ import com.ucs.bucket.db.db.helper.RoomConstants
 import com.ucs.bucket.fragment.*
 import java.lang.ref.WeakReference
 
-class MainActivity : AppCompatActivity() , AsyncResponseCallback {
+class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragment.OnInputSelected  {
+
+
+
 
     private var db: ApplicationDatabase? = null
     private var usbService: UsbService? = null
@@ -25,6 +30,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback {
     private var mHandler: MyHandler? = null
     private var tvtv : TextView? = null
     private lateinit var arrayUser: List<User>
+    lateinit var session : SessionManager
 //    private lateinit var arrayUser: null!!
 
 
@@ -42,39 +48,59 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        session = SessionManager(applicationContext)
         mHandler = MyHandler(this)
         db = ApplicationDatabase.getInstance(this)
-        arrayUser = db?.userDao()?.getAll()!!
+//        arrayUser = db?.userDao()?.getAll()!!
+
+        if (checkNetworkConnection()){
+
+//            session.checkLogin()
+
+            var user:HashMap<String,String> = session.getUserDetails()
+
+            var username:String = user.get(SessionManager.USERNAME)!!
+            var firstname:String = user.get(SessionManager.FIRSTNAME)!!
+            var token:String = user.get(SessionManager.TOKEN)!!
 
 
+            supportFragmentManager.beginTransaction()
+                .add(R.id.area_main,MainFragment.newInstance("Admin",username,firstname),"main")
+                .commit()
 
-        if (arrayUser.isEmpty()){
+        }else{
 
-            val user =
-                User(username =  "1234", firstname = "admin",
-                        password = "1234", role = "Admin")
-                InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
-
-            val user2 =
-                User(username =  "1111", firstname = "User",
-                    password = "1234", role = "User")
-            InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user2)
+            val username=intent.getStringExtra("username")
+            val name=intent.getStringExtra("name")
+            val role=intent.getStringExtra("role")
 
 
-            val user3 =
-                User(username =  "2222", firstname = "Manager",
-                    password = "2222", role = "Manager")
-            InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user3)
+            if (role == "Admin"){
 
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.area_main,MainFragment.newInstance(role,username,name),"main")
+                    .commit()
 
-        }else {
+            }else if (role == "User"){
+
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.area_main,UserFragment.newInstance(role,username,name),"main")
+                    .commit()
+
+            }else if (role == "Manager"){
+
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.area_main,ManagerFragment.newInstance(role,username,name),"main")
+                    .commit()
+            }
 
 
         }
 
-        supportFragmentManager.beginTransaction()
-           .add(R.id.area_main,LoginFragment.newInstance(1),"main")
-           .commit()
+
+
+
+
     }
 
 
@@ -100,6 +126,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback {
         super.onResume()
         setFilters()  // Start listening notifications from UsbService
         startService(UsbService::class.java, usbConnection, null) // Start UsbService(if it was not started before) and Bind it
+
     }
 
     public override fun onPause() {
@@ -113,6 +140,13 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback {
 //            .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 //
 //        activityManager.moveTaskToFront(taskId, 0)
+    }
+
+    public override fun onDestroy() {
+
+        super.onDestroy()
+//        session.logOutUser()
+
     }
 
     private fun startService(service: Class<*>, serviceConnection: ServiceConnection, extras: Bundle?) {
@@ -181,6 +215,10 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback {
         }
     }
 
+
+    fun closeApp(){
+       finish()
+    }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
 
@@ -254,6 +292,16 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback {
         }
     }
 
+    fun checkNetworkConnection(): Boolean {
 
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
 
+    override fun sendInput(input: String) {
+        val fragment = supportFragmentManager.findFragmentByTag("coin")
+        (fragment as InsertCoinFragment).displayReceivedData(input)
+
+    }
 }

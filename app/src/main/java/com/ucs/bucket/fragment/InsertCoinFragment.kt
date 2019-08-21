@@ -1,5 +1,7 @@
 package com.ucs.bucket.fragment;
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -14,7 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.ucs.bucket.MainActivity
 import com.ucs.bucket.R
-import com.ucs.bucket.Storage
+import com.ucs.bucket.Util.SessionManager
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.BalanceLogDao
@@ -25,7 +27,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class InsertCoinFragment : Fragment(),AsyncResponseCallback {
+class InsertCoinFragment : Fragment(),AsyncResponseCallback{
+
+
 
 
     private var db: ApplicationDatabase? = null
@@ -45,20 +49,23 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
     lateinit var five_hunred_value : TextView
     lateinit var thousand_value : TextView
     lateinit var textMoney : TextView
-    lateinit var money_errors_txt : EditText
+//    lateinit var money_errors_txt : EditText
     lateinit var name_user : TextView
     lateinit var btn_cancle_coin : Button
     lateinit var btn : Button
     lateinit var testsend : Button
     lateinit var money_total_txt : TextView
 
-    lateinit var money_errors_value : EditText
+    lateinit var money_errors_value : TextView
+    lateinit var btn_insert_drop : Button
 
 
 
     var test = 0
     var user = ""
     var balanceBefore = 0
+    var dMoney = 0
+
 
     companion object {
 
@@ -88,6 +95,13 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
         db = context?.let { ApplicationDatabase.getInstance(it) }
         arrayUser = db?.balanceLogDao()?.getLastId()!!
 
+//        var storage = SessionManager(context!!)
+//
+//        var tokenTest:HashMap<String,String> = storage.getUserDetails()
+////        var username:String = user.get(SessionManager.USERNAME)!!
+////        var firstname:String = user.get(SessionManager.FIRSTNAME)!!
+//        var token:String = tokenTest.get(SessionManager.TOKEN)!!
+//        Toast.makeText(getActivity(),token,Toast.LENGTH_SHORT).show();
 
         for (item in arrayUser){
 
@@ -110,10 +124,11 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
 
         money_total_txt = root.total_deposit_value
         money_errors_value = root.money_errors_value
+        btn_insert_drop = root.btn_insert_drop
 
 
         name_user = root.name_user
-        money_errors_txt = root.money_errors_value
+//        money_errors_txt = root.money_errors_value
         textMoney = root.test_money
         textSum = root.tv_insert_sum
         textSum2 = root.tv_insert_sum2
@@ -125,15 +140,17 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
 //        textSum.text = "${arguments?.getString("rank")}"
         textSum.text = "${arguments?.getString("rank")}"
 
-        val storage = Storage(context!!)
-        var log = storage.getLog()
+//        val storage = Storage(context!!)
+//        var log = storage.getLog()
 
         btn.setOnClickListener {
 
+
+
             val currentDate = SimpleDateFormat("MM/dd/yyyy")
             val currentDateTime = SimpleDateFormat("MM/dd/yyyy HH:mm")
-            log+="$user,${currentDate.format(Date())},${textSum.text};"
-            storage.setLog(log)
+//            log+="$user,${currentDate.format(Date())},${textSum.text};"
+//            storage.setLog(log)
             fragmentManager?.popBackStack()
 
 //            val user =
@@ -143,23 +160,52 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
             textSum.text.toString().trim()
 //            textMoney.text.toString()
 
-
-            var strDeposit:String = textSum.text.toString()
+            var strDeposit:String = textSum.text.toString().replace(",","")
 
             var deposit:Int = strDeposit.toInt()
 
-            var strDropMoney:String = money_errors_txt.text.toString()
-            var drop:Int = strDropMoney.toInt()
+            var strDropMoney:String = money_errors_value.text.toString().replace(",","")
+
+            if (strDropMoney == "-"){
+
+                dMoney = 0
+
+            }else{
+
+                dMoney = strDropMoney.toInt()
+
+            }
+
+            var drop:Int = dMoney
 
             var totalDeposit = deposit + drop
             var test = "08/09/2019"
 
-            val balance =
-                BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
-                           action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                           balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N")
 
-            InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+
+            if (checkNetworkConnection()){
+
+                val balance =
+                    BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
+                        action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
+                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "N")
+
+                InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+
+            }else{
+
+
+                val balance =
+                    BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
+                        action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
+                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "N")
+
+                InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+            }
+
 
             (activity as MainActivity).sendData("c,"+"drop/${drop}"+",deposit/${deposit}"+",total/${totalDeposit}")
 //            (activity as MainActivity).sendData("c"+ "test")
@@ -179,56 +225,70 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
         }
 
 
-        money_errors_value.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                // TODO Auto-generated method stub
+
+        btn_insert_drop.setOnClickListener{
+
+            val dialog = DropMoneyFragment()
+            dialog.show(fragmentManager, "DropMoneyFragment")
 
 
-            }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // TODO Auto-generated method stub
-            }
+        }
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // add a condition to check length here - you can give here length according to your requirement to go to next EditTexts.
-//                if (firstET.getText().toString().trim().length() > 2) {
-//                    firstET.clearFocus()
-//                    firstET.requestFocus()
+
+
+//        money_errors_value.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable) {
+//                // TODO Auto-generated method stub
+//
+//
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+//                // TODO Auto-generated method stub
+//            }
+//
+//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+//                // add a condition to check length here - you can give here length according to your requirement to go to next EditTexts.
+////                if (firstET.getText().toString().trim().length() > 2) {
+////                    firstET.clearFocus()
+////                    firstET.requestFocus()
+////                }
+//
+////                sumTest(sum)
+//
+//
+//                var depositMoney = textSum.text.toString()
+//                var dropMoney = money_errors_value.text.toString()
+//
+//                if (dropMoney.equals("")){
+//
+//                    Toast.makeText(getActivity(),"ว่าง",Toast.LENGTH_SHORT).show();
+//
+//                }else{
+//
+//                    var test = depositMoney.replace(",","")
+//                    val dropMoneyInt = dropMoney.toInt()
+//                    val depositMoneyInt = test.toInt()
+//
+//                    var total = dropMoneyInt + depositMoneyInt
+//                    var totalSum = String.format("%,d", total)
+////                    Toast.makeText(getActivity(),"${total}",Toast.LENGTH_SHORT).show()
+//
+//                    money_total_txt.text = "$totalSum"
 //                }
-
-//                sumTest(sum)
-
-
-                var depositMoney = textSum.text.toString()
-                var dropMoney = money_errors_value.text.toString()
-
-                if (dropMoney.equals("")){
-
-                    Toast.makeText(getActivity(),"ว่าง",Toast.LENGTH_SHORT).show();
-
-                }else{
-
-                    val dropMoneyInt = dropMoney.toInt()
-                    val depositMoneyInt = depositMoney.toInt()
-
-                    var total = dropMoneyInt + depositMoneyInt
-                    Toast.makeText(getActivity(),"${total}",Toast.LENGTH_SHORT).show()
-
-                    money_total_txt.text = "$total"
-                }
-
-//                val dropMoneyInt = dropMoney.toInt()
-
-
-            }
-        })
+//
+////                val dropMoneyInt = dropMoney.toInt()
+//
+//
+//            }
+//        })
 
 
         testsend.setOnClickListener {
+            getCoin("\nS0 0 1 2 0 0 0 0 0E")
 
-
-            getCoin("\nS0 0 1 2 0 0 0 0 1E")
+//            getCoin("\nS0 0 1 2 0 0 0 0 10E")
 
         }
 
@@ -293,8 +353,13 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
                 one_hunred_value.text = count_coin[6].toString()
                 five_hunred_value.text = count_coin[7].toString()
                 thousand_value.text = count_coin[8].toString()
-                textSum.text = "$sum"
-                money_total_txt.text ="$sum"
+
+
+                var total = sum
+                var totalSum = String.format("%,d", total)
+                textSum.text = "$totalSum"
+                money_total_txt.text ="$totalSum"
+
 
                 if (sum > 0){
 
@@ -329,7 +394,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
 
 //        depositText.text = "$test"
 //        var bbb = sum2[8].toString()
-        Toast.makeText(getActivity(),"$user"+"/" + "$currntTime"+"/" + "$action"+"/" + "$deposit"+"/" + "$drop"+"/" + "$totalDeposit"+"/" + "$total"+"/" + "$status",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(),"$user"+"/" + "$currntTime"+"/" + "$action"+"/" + "$deposit"+"/" + "$drop"+"/" + "$totalDeposit"+"/" + "$total"+"/" + "$status",Toast.LENGTH_SHORT).show();
 
 
     }
@@ -385,6 +450,35 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback {
 
             }
         }
+    }
+
+//    override fun sendInput(input: String) {
+//
+//        money_errors_value.text = input
+//        Toast.makeText(getActivity(),input, Toast.LENGTH_SHORT).show();
+//
+//    }
+
+    fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
+
+    fun displayReceivedData(message: String) {
+
+
+        var depositMoney = textSum.text.toString()
+        var depositIntMoney = depositMoney.toInt()
+        val dropMoneyInt = message.toInt()
+        var totalBalance = dropMoneyInt + depositIntMoney
+
+        var totalSum = String.format("%,d", totalBalance)
+        var dropMoneyInt2 = String.format("%,d", dropMoneyInt)
+
+        money_errors_value.text = "$dropMoneyInt2"
+        money_total_txt.text = "$totalSum"
     }
 
 }

@@ -14,6 +14,8 @@ import android.widget.Toast
 import com.ucs.bucket.ManagmentUserActivity
 import com.ucs.bucket.R
 import com.ucs.bucket.BalanceListActivity
+import com.ucs.bucket.MainActivity
+import com.ucs.bucket.Util.SessionManager
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : Fragment() {
@@ -24,7 +26,10 @@ class MainFragment : Fragment() {
     lateinit var manage : CardView
     lateinit var reset_pass : CardView
     lateinit var setting : CardView
+    lateinit var logOut : CardView
+
     lateinit var nameUser : TextView
+
     var rank = ""
     var str = ""
     var nameData = ""
@@ -61,7 +66,7 @@ class MainFragment : Fragment() {
         manage = root.manage_btn
         reset_pass = root.reset_pass_btn
         test_system = root.test_system
-
+        logOut = root.log_out
         setting = root.img_setting
 
         nameUser.text = arguments?.getString("name")!!
@@ -70,7 +75,7 @@ class MainFragment : Fragment() {
 
         nameData = arguments?.getString("name")!!
 
-
+        var storage = SessionManager(context!!)
 
         deposit.setOnClickListener {
 
@@ -135,6 +140,17 @@ class MainFragment : Fragment() {
                 ?.commit()
 //            else username.error = "request admin"
         }
+
+        logOut.setOnClickListener {
+
+            var session = SessionManager(context!!)
+
+            session.logOutUser()
+
+            (activity as MainActivity).closeApp()
+
+        }
+
 
 
 

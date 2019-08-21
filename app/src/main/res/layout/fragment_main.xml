@@ -25,7 +25,7 @@ tools:context=".MainActivity">
              android:textSize="40dp"
              android:textColor="@color/colorBlack"
              android:layout_width="wrap_content"
-             android:text="Hi"
+             android:text="@string/hello_user"
              android:layout_height="wrap_content" />
 
          <TextView
@@ -286,6 +286,38 @@ tools:context=".MainActivity">
             </LinearLayout>
          </android.support.v7.widget.CardView>
 
+
+         <android.support.v7.widget.CardView
+                 android:id="@+id/log_out"
+                 android:layout_width="180dp"
+                 android:layout_height="180dp"
+                 android:layout_marginLeft="10dp"
+                 app:cardElevation="4dp"
+                 app:cardCornerRadius="10dp"
+                 android:layout_margin="5dp"
+         >
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+               <ImageView
+                       android:src="@drawable/services"
+                       android:layout_width="80dp"
+                       android:layout_height="80dp" />
+
+               <TextView
+                       android:layout_marginTop="12dp"
+                       android:textSize="20dp"
+                       android:textColor="@color/colorBlack"
+                       android:text="ออกจากระบบ"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+            </LinearLayout>
+         </android.support.v7.widget.CardView>
 
       </LinearLayout>
 

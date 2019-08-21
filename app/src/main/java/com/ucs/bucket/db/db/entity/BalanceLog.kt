@@ -55,7 +55,11 @@ class BalanceLog(
 
         @ColumnInfo(name = "status")
 
-        var status: String? = null
+        var status: String? = null,
+
+        @ColumnInfo(name = "sync")
+
+        var sync: String? = null
 
 
 ) {

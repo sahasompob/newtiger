@@ -11,15 +11,13 @@ import android.widget.TextView
 import android.widget.Toast
 import com.ucs.bucket.MainActivity
 import com.ucs.bucket.R
-import com.ucs.bucket.Storage
+import com.ucs.bucket.Util.SessionManager
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.BalanceLogDao
 import com.ucs.bucket.db.db.entity.BalanceLog
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_open.view.*
-import org.json.JSONException
-import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -95,7 +93,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
         var timer = Timer()
-        var time = Storage(context!!).getDelay()
+        var time = SessionManager(context!!).getDelay()
 
         text.text = "เหลือเวลาอีก ${time--} วินาที"
 
@@ -195,7 +193,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         Toast.makeText(context, data, Toast.LENGTH_SHORT).show()
         if (data.trim().equals("ready")){
 
-            var time = Storage(context!!).getDelay()
+            var time = SessionManager(context!!).getDelay()
 
             text.text = "เหลือเวลาอีก ${time--} วินาที"
 

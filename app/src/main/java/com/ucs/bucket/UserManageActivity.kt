@@ -17,7 +17,7 @@ class UserManageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_manage)
         area = area_user
         btn = user_save_manage
-        user = Storage(applicationContext).getUser()
+//        user = S(applicationContext).getUser()
         user?.forEach {
                     val v = UserItemCustom(applicationContext, null, 0, it)
                     area.addView(v)
@@ -31,7 +31,7 @@ class UserManageActivity : AppCompatActivity() {
                 val v = area.getChildAt(i) as UserItemCustom
                 if(v.getUser()!=null)array.add(v.getUser()!!)
             }
-            Storage(applicationContext).setUser(array.toTypedArray())
+//            Storage(applicationContext).setUser(array.toTypedArray())
         }
 
 

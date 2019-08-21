@@ -8,15 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.ucs.bucket.R
-import com.ucs.bucket.Storage
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.UserDAO
 import com.ucs.bucket.db.db.entity.User
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_edit_user.view.*
-import kotlinx.android.synthetic.main.fragment_open.view.*
-import java.util.*
 
 class EditUserFragment : Fragment(), AsyncResponseCallback {
 
