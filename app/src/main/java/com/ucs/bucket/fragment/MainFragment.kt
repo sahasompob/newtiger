@@ -11,10 +11,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.ucs.bucket.ManagmentUserActivity
-import com.ucs.bucket.R
-import com.ucs.bucket.BalanceListActivity
-import com.ucs.bucket.MainActivity
+import com.ucs.bucket.*
 import com.ucs.bucket.Util.SessionManager
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
@@ -117,7 +114,7 @@ class MainFragment : Fragment() {
         test.setOnClickListener {
 
             activity?.let{
-                val intent = Intent (it, BalanceListActivity::class.java)
+                val intent = Intent (it, ReportActivity::class.java)
                 it.startActivity(intent)
             }
         }

@@ -139,7 +139,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="63dp"
         android:layout_marginEnd="122dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:text="Open" />
 
 </RelativeLayout>

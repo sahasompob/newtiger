@@ -21,7 +21,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             itemView.bg_layout.setBackgroundColor(
                 ContextCompat.getColor(itemView.context,
-                R.color.recycleColor))
+                    R.color.recycleColor))
         }
 
 //
@@ -32,7 +32,6 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.sid.text = test.username
             itemView.startTime.text = test.dated
             itemView.status.text = test.action
-
             itemView.deposit.text = test.deposit.toString()
             itemView.drop_money.text = test.drop.toString()
             itemView.total.text = test.toto_deposit.toString()
@@ -60,6 +59,10 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.drop_money.text = "-"
             itemView.total.text = test.toto_deposit.toString()
             itemView.total_balance.text = test.balance.toString()
+
+            itemView.bg_layout.setBackgroundColor(
+                ContextCompat.getColor(itemView.context,
+                    R.color.open))
         }
 
     }

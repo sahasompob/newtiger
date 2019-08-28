@@ -102,6 +102,6 @@ public class SessionManager {
         editor.apply()
     }
 
-    fun getDelay() : Int = getSharePre().getInt("delay",60)
+    fun getDelay() : Int = getSharePre().getInt("delay",5)
 
 }

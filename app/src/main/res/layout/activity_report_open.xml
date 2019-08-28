@@ -8,7 +8,7 @@
     <LinearLayout
             android:id="@+id/linear2"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:visibility="visible">
 
         <TextView
@@ -19,24 +19,18 @@
                 android:gravity="center"
                 android:textColor="@color/colorBlack"
                 android:textSize="30dp"
-                android:text="รายงานความเคลื่อนไหวรายวัน"
+                android:text="รายงานการเปิดตู้"
                 android:textStyle="bold" />
 
     </LinearLayout>
-
 
     <LinearLayout
             android:layout_marginTop="5dp"
             android:id="@+id/linear1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:visibility="visible">
 
-        <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:background="@drawable/spinner"
-                android:layout_weight="0.3" />
 
         <Button
                 android:id="@+id/previousButton"
@@ -75,9 +69,10 @@
     -->
 
     <RelativeLayout
-                  android:layout_marginTop="5dp"
-                  android:layout_width="match_parent"
-                  android:layout_height="40dp">
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:visibility="gone">
 
 
         <TextView
@@ -120,12 +115,13 @@
             android:baselineAligned="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
         <TableRow
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_weight="0.18"
+                android:layout_weight="0.1"
                 android:background="#FFFFFF"
                 android:paddingBottom="1dip"
                 android:paddingLeft="1dip"
@@ -138,7 +134,7 @@
                     android:background="#33B5E5"
                     android:gravity="center"
                     android:paddingRight="3dp"
-                    android:text="@string/id"
+                    android:text="เปิดโดย"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
         </TableRow>
@@ -146,7 +142,7 @@
         <TableRow
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_weight="0.2"
+                android:layout_weight="0.15"
                 android:background="#FFFFFF"
                 android:paddingBottom="1dip"
                 android:paddingLeft="1dip"
@@ -177,105 +173,22 @@
             <TextView
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:layout_weight="0.75"
+                    android:layout_weight="0.1"
                     android:background="#33B5E5"
                     android:gravity="center"
                     android:paddingRight="3dp"
-                    android:text="สถานะ"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
-        </TableRow>
-
-        <TableRow
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:paddingBottom="1dip"
-                android:paddingLeft="1dip"
-                android:paddingRight="1dip"
-                android:paddingTop="1dip" >
-
-            <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.75"
-                    android:background="#33B5E5"
-                    android:gravity="center"
-                    android:paddingRight="3dp"
-                    android:text="ฝากได้"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
-        </TableRow>
-
-        <TableRow
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:paddingBottom="1dip"
-                android:paddingLeft="1dip"
-                android:paddingRight="1dip"
-                android:paddingTop="1dip" >
-
-            <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.75"
-                    android:background="#33B5E5"
-                    android:gravity="center"
-                    android:paddingRight="3dp"
-                    android:text="ดรอป"
+                    android:text="ยอดเงิน"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
         </TableRow>
 
 
 
-        <TableRow
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:paddingBottom="1dip"
-                android:paddingLeft="1dip"
-                android:paddingRight="1dip"
-                android:paddingTop="1dip" >
-
-            <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.75"
-                    android:background="#33B5E5"
-                    android:gravity="center"
-                    android:paddingRight="3dp"
-                    android:text="รวม"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
-        </TableRow>
 
 
-        <TableRow
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:paddingBottom="1dip"
-                android:paddingLeft="1dip"
-                android:paddingRight="1dip"
-                android:paddingTop="1dip" >
 
-            <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.75"
-                    android:background="#33B5E5"
-                    android:gravity="center"
-                    android:paddingRight="3dp"
-                    android:text="คงเหลือ"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
-        </TableRow>
+
+
 
 
 

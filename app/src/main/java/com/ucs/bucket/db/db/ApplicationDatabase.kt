@@ -5,16 +5,18 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.ucs.bucket.db.db.dao.BalanceLogDao
+import com.ucs.bucket.db.db.dao.OpenDAO
 import com.ucs.bucket.db.db.dao.TokenDAO
 import com.ucs.bucket.db.db.dao.UserDAO
 import com.ucs.bucket.db.db.entity.BalanceLog
+import com.ucs.bucket.db.db.entity.OpenConsole
 import com.ucs.bucket.db.db.entity.Token
 import com.ucs.bucket.db.db.entity.User
 
 /***
  * Android4Dev
  */
-@Database(entities = [(User::class),(BalanceLog::class),(Token::class)], version = 1)
+@Database(entities = [(User::class),(BalanceLog::class),(Token::class),(OpenConsole::class)], version = 1)
 abstract class ApplicationDatabase : RoomDatabase() {
 
     //Generate Singleton Instance
@@ -35,6 +37,7 @@ abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun userDao(): UserDAO
     abstract fun balanceLogDao(): BalanceLogDao
     abstract fun tokenDao(): TokenDAO
+    abstract fun openDao(): OpenDAO
 
 
 

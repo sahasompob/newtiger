@@ -15,7 +15,9 @@ import com.ucs.bucket.Util.SessionManager
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.BalanceLogDao
+import com.ucs.bucket.db.db.dao.OpenDAO
 import com.ucs.bucket.db.db.entity.BalanceLog
+import com.ucs.bucket.db.db.entity.OpenConsole
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_open.view.*
 import java.text.SimpleDateFormat
@@ -32,6 +34,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
     private var db: ApplicationDatabase? = null
     private lateinit var arrayBalanceBefore: List<BalanceLog>
     private lateinit var arrayBalanceStatus: List<BalanceLog>
+    private lateinit var arrayOpenConsole: List<OpenConsole>
 
 
     var user = ""
@@ -45,6 +48,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
     var dropTest = 0
     var totaoTest = 0
     var statusTest = ""
+
+    var openId = 0
 
 
 
@@ -109,7 +114,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                     action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
                     balance_before = balanceBefore, balance = balanceBefore, status = "-")
 
-            InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+            InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
             fragmentManager?.popBackStack()
 
         }
@@ -123,59 +128,31 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             val sssss = SimpleDateFormat("MM/dd/yyyy")
             val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
-            val balance =
-                BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                    action = "OP", deposit = 0, drop = 0, toto_deposit = balanceBefore,
-                    balance_before = balanceBefore, balance = 0, status = "-")
-
-            InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
 
 
 
 
-            arrayBalanceStatus = db?.balanceLogDao()?.getByStatus()!!
-//
-//            for (item in arrayBalanceStatus){
-//
-//                var idTest = 0
-//                var balanceBeforeTest = item.balance_before!!.toInt()
-//                var actionTest = item.action!!
-//                val dateTest = item.dated
-//                idTest = item.bid!!.toInt()
-//                balanceTest = item.balance!!.toInt()
-//                depositTest = item.deposit!!.toInt()
-//                dropTest = item.drop!!.toInt()
-//                totaoTest = item.toto_deposit!!.toInt()
-//                statusTest = item.status!!
-//
-//                val balance =
-//                    BalanceLog(bid = idTest,username = user, dated = dateTest,
-//                        action = actionTest, deposit = depositTest, drop = dropTest, toto_deposit = totaoTest,
-//                        balance_before = balanceBeforeTest, balance = balanceTest, status = "U")
-//
-//                UpdateAsync(db!!.balanceLogDao(), RoomConstants.UPDATE_USER, this).execute(balance)
-//
-//                val testData = JSONObject()
-//                    try {
-//                        testData.put("type", "d")
-//                        testData.put("username", user)
-//                        testData.put("date", item.dated)
-//                        testData.put("deposit", depositTest)
-//                        testData.put("drop", depositTest)
-//                        testData.put("total_deposit", totaoTest)
-//                        testData.put("balance_before", balanceBeforeTest)
-//                        testData.put("balance", balanceTest)
-//
-//                        } catch (e: JSONException) {
-//                        // TODO Auto-generated catch block
-//                        e.printStackTrace()
-//                        }
-//
-////                Toast.makeText(context, dateTest, Toast.LENGTH_SHORT).show()
-////                    (activity as MainActivity).sendData(testData.toString())
-//
-//            }
+
+
+
+//            arrayBalanceStatus = db?.balanceLogDao()?.getByStatus()!!
+            arrayBalanceStatus = db?.balanceLogDao()?.getBeforeOpen()!!
+
+            var count = arrayBalanceStatus.size
+
+            val openAction =
+
+                OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
+
+            InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
+
+
+
+//            Toast.makeText(context, openId.toString(), Toast.LENGTH_SHORT).show()
+
+
+
 
 
         }
@@ -230,6 +207,28 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
     }
 
+    class InsertOpenAcion(private val openDao: OpenDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<OpenConsole, Void, OpenConsole>() {
+        override fun doInBackground(vararg openConsole: OpenConsole?): OpenConsole? {
+            return try {
+                openDao.insertOpenConsole(openConsole[0]!!)
+                openConsole[0]!!
+            } catch (ex: Exception) {
+                null
+            }
+        }
+
+        override fun onPostExecute(result: OpenConsole?) {
+            super.onPostExecute(result)
+            if (result != null) {
+                responseAsyncResponse.onResponse(true, call)
+
+            } else {
+                responseAsyncResponse.onResponse(false, call)
+            }
+        }
+    }
+
+
     class InsertLogAsync(private val balanceLogDao: BalanceLogDao, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<BalanceLog, Void, BalanceLog>() {
         override fun doInBackground(vararg balancelog: BalanceLog?): BalanceLog? {
             return try {
@@ -250,6 +249,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             }
         }
     }
+
 
     class UpdateAsync(private val balanceLogDao: BalanceLogDao, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<BalanceLog, Void, BalanceLog>() {
         override fun doInBackground(vararg balancelog: BalanceLog?): BalanceLog? {
@@ -276,11 +276,102 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
     override fun onResponse(isSuccess: Boolean, call: String) {
 
         if (call == RoomConstants.INSERT_USER) {
+
             if (isSuccess) {
 //                Toast.makeText(context, "Successfully added", Toast.LENGTH_SHORT).show()
+//                test()
             } else {
 //                Toast.makeText(context, "Some error occur please try again later!!!", Toast.LENGTH_SHORT).show()
             }
+        }else if (call == RoomConstants.INSERT_OPEN){
+
+            if (isSuccess) {
+
+                test()
+
+            } else {
+
+
+            }
+
+        } else if (call == RoomConstants.INSERT_OPF){
+
+            if (isSuccess) {
+
+//                Toast.makeText(context, "INSERT_OPF", Toast.LENGTH_SHORT).show()
+
+            } else {
+
+
+            }
+
         }
+
+
+    }
+
+    fun test(){
+
+        val sssss = SimpleDateFormat("MM/dd/yyyy")
+        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+
+        arrayOpenConsole = db?.openDao()?.getLastedId()!!
+
+
+        for (item in arrayOpenConsole){
+
+            openId = item.oid!!.toInt()
+
+        }
+
+        for (item in arrayBalanceStatus){
+
+            var idTest = 0
+            var balanceBeforeTest = item.balance_before!!.toInt()
+            var actionTest = item.action!!
+            val dateTest = item.dated
+            idTest = item.bid!!.toInt()
+            balanceTest = item.balance!!.toInt()
+            depositTest = item.deposit!!.toInt()
+            dropTest = item.drop!!.toInt()
+            totaoTest = item.toto_deposit!!.toInt()
+            statusTest = item.status!!
+
+            val balance =
+                BalanceLog(bid = idTest,username = user, dated = dateTest,
+                    action = actionTest, deposit = depositTest, drop = dropTest, toto_deposit = totaoTest,
+                    balance_before = balanceBeforeTest, balance = balanceTest, status = "U", sync = "N", open_id = openId)
+
+            UpdateAsync(db!!.balanceLogDao(), RoomConstants.UPDATE_USER, this).execute(balance)
+
+//                val testData = JSONObject()
+//                    try {
+//                        testData.put("type", "d")
+//                        testData.put("username", user)
+//                        testData.put("date", item.dated)
+//                        testData.put("deposit", depositTest)
+//                        testData.put("drop", depositTest)
+//                        testData.put("total_deposit", totaoTest)
+//                        testData.put("balance_before", balanceBeforeTest)
+//                        testData.put("balance", balanceTest)
+//
+//                        } catch (e: JSONException) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace()
+//                        }
+
+//                Toast.makeText(context, dateTest, Toast.LENGTH_SHORT).show()
+//                    (activity as MainActivity).sendData(testData.toString())
+
+        }
+
+        val balance =
+            BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
+                action = "OP", deposit = 0, drop = 0, toto_deposit = balanceBefore,
+                balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId)
+
+        InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+        fragmentManager?.popBackStack()
     }
 }

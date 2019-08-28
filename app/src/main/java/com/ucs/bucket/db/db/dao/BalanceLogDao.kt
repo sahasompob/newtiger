@@ -13,11 +13,17 @@ interface BalanceLogDao {
     @Query("SELECT * FROM balance_log WHERE dated = (:date)")
     fun getAll(date: String): List<BalanceLog>
 
+    @Query("SELECT * FROM balance_log WHERE open_id = 0")
+    fun getDeposit(): List<BalanceLog>
+
     @Query("SELECT * FROM balance_log ORDER BY bid DESC LIMIT 1")
     fun getLastId(): List<BalanceLog>
 
     @Query("SELECT * FROM balance_log WHERE status = 'N'")
     fun getByStatus(): List<BalanceLog>
+
+    @Query("SELECT * FROM balance_log WHERE open_id = 0")
+    fun getBeforeOpen(): List<BalanceLog>
 
     @Query("SELECT * FROM balance_log WHERE `action` IN (:actionStatus) AND `dated` = (:date)")
     fun getByAction(actionStatus: String,date: String): List<BalanceLog>

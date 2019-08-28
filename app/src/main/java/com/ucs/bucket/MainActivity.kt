@@ -1,6 +1,5 @@
 package com.ucs.bucket
 
-import android.app.ActivityManager
 import android.content.*
 import android.net.ConnectivityManager
 import android.os.*
@@ -17,6 +16,13 @@ import com.ucs.bucket.db.db.entity.User
 import com.ucs.bucket.db.db.helper.RoomConstants
 import com.ucs.bucket.fragment.*
 import java.lang.ref.WeakReference
+import android.app.job.JobScheduler
+import android.app.job.JobInfo
+import com.ucs.bucket.Util.ExampleJobService
+import android.content.ComponentName
+import android.util.Log
+import java.util.concurrent.TimeUnit
+
 
 class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragment.OnInputSelected  {
 
@@ -48,6 +54,8 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        workManager()
         session = SessionManager(applicationContext)
         mHandler = MyHandler(this)
         db = ApplicationDatabase.getInstance(this)
@@ -298,6 +306,34 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
+
+
+    fun workManager() {
+
+        val componentName = ComponentName(this, ExampleJobService::class.java)
+        val info = JobInfo.Builder(123, componentName)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            .setPersisted(true)
+            .setPeriodic(5000)
+            .build()
+
+        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = scheduler.schedule(info)
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d("MainActivity Test", "Job scheduled")
+
+
+//            val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+//            scheduler.cancel(123)
+//            Log.d("MainActivity Test", "Job cancelled")
+
+        } else {
+            Log.d("MainActivity Test", "Job scheduling failed")
+        }
+
+    }
+
+
 
     override fun sendInput(input: String) {
         val fragment = supportFragmentManager.findFragmentByTag("coin")

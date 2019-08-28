@@ -189,7 +189,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                 val balance =
                     BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
                         action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "N")
+                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "N", open_id = 0)
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
@@ -200,7 +200,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                 val balance =
                     BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
                         action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "N")
+                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "N", open_id = 0)
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
@@ -221,7 +221,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                 drop,
                 totalDeposit,
                 balanceBefore + totalDeposit,
-                "N")
+                "N",0)
         }
 
 
@@ -379,7 +379,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
     }
 
-    fun sendToServer(user: String,currntTime: String, action: String,deposit: Int,drop: Int,totalDeposit: Int,total: Int,status: String){
+    fun sendToServer(user: String,currntTime: String, action: String,deposit: Int,drop: Int,totalDeposit: Int,total: Int,status: String,open_id: Int){
 
 //        for()
 

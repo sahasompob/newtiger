@@ -178,6 +178,7 @@ class BalanceListActivity : BaseActivity(), AsyncResponseCallback, AdapterView.O
 
     }
 
+
     private fun initView(todayDate : String) {
 
         db = ApplicationDatabase.getInstance(this)
