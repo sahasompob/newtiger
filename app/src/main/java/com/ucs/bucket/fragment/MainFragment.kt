@@ -1,6 +1,8 @@
 package com.ucs.bucket.fragment;
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.CardView
@@ -26,6 +28,9 @@ class MainFragment : Fragment() {
     lateinit var logOut : CardView
 
     lateinit var nameUser : TextView
+
+    lateinit var online_btn : Button
+    lateinit var offline_btn : Button
 
     var rank = ""
     var str = ""
@@ -56,6 +61,8 @@ class MainFragment : Fragment() {
 
     fun initInstance(root: View) {
 
+        offline_btn = root.status_offline
+        online_btn = root.status_online
         nameUser = root.name_user
         deposit = root.deposit_btn
         openBox = root.open_btn
@@ -65,6 +72,15 @@ class MainFragment : Fragment() {
         test_system = root.test_system
         logOut = root.log_out
         setting = root.img_setting
+
+        if(checkNetworkConnection()){
+
+            offline_btn.visibility = View.INVISIBLE
+
+        }else{
+
+            online_btn.visibility = View.INVISIBLE
+        }
 
         nameUser.text = arguments?.getString("name")!!
         rank = arguments?.getString("rank")!!
@@ -151,6 +167,13 @@ class MainFragment : Fragment() {
 
 
 
+    }
+
+    fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 
 }

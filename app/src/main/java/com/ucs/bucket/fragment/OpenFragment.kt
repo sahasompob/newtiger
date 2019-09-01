@@ -1,5 +1,7 @@
 package com.ucs.bucket.fragment;
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -19,7 +21,11 @@ import com.ucs.bucket.db.db.dao.OpenDAO
 import com.ucs.bucket.db.db.entity.BalanceLog
 import com.ucs.bucket.db.db.entity.OpenConsole
 import com.ucs.bucket.db.db.helper.RoomConstants
+import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.android.synthetic.main.fragment_open.view.*
+import kotlinx.android.synthetic.main.fragment_open.view.name_user
+import kotlinx.android.synthetic.main.fragment_open.view.status_offline
+import kotlinx.android.synthetic.main.fragment_open.view.status_online
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,6 +37,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
     lateinit var default_button : Button
     lateinit var openBtn : Button
     lateinit var op_btn : Button
+    lateinit var online_btn : Button
+    lateinit var offline_btn : Button
     private var db: ApplicationDatabase? = null
     private lateinit var arrayBalanceBefore: List<BalanceLog>
     private lateinit var arrayBalanceStatus: List<BalanceLog>
@@ -85,6 +93,9 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             balanceBefore = item.balance!!.toInt()
 
         }
+        offline_btn = root.status_offline
+        online_btn = root.status_online
+
         op_btn = root.op_btn
         name_user = root.name_user
         text = root.tv_open
@@ -96,6 +107,14 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         user = arguments?.getString("user")!!
 
 
+        if(checkNetworkConnection()){
+
+            offline_btn.visibility = View.INVISIBLE
+
+        }else{
+
+            online_btn.visibility = View.INVISIBLE
+        }
 
         var timer = Timer()
         var time = SessionManager(context!!).getDelay()
@@ -373,5 +392,12 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
         fragmentManager?.popBackStack()
+    }
+
+    fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 }

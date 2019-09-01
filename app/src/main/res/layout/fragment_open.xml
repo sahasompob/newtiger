@@ -36,6 +36,28 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="18dp" />
 
+        <Button
+                android:id="@+id/status_offline"
+                android:layout_marginLeft="20dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@+id/name_user"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="40dp"
+                android:background="@drawable/offline_btn"
+        />
+
+        <Button
+                android:id="@+id/status_online"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@+id/name_user"
+                android:background="@drawable/online_btn"
+                android:layout_marginStart="40dp"/>
+
 
     </RelativeLayout>
 
@@ -61,7 +83,7 @@
                 android:layout_height="80dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="37dp"
-                android:layout_marginStart="280dp"
+                android:layout_marginStart="315dp"
                 android:background="@drawable/btn_green"
                 android:text="@string/open_app"
                 android:textSize="22dp"

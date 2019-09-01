@@ -40,6 +40,27 @@
                     android:textSize="40dp" />
 
 
+            <Button
+                    android:id="@+id/status_offline"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/offline_btn"
+            />
+
+            <Button
+                    android:id="@+id/status_online"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/online_btn"
+            />
+
+
         </RelativeLayout>
 
 

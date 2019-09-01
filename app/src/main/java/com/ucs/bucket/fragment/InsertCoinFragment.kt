@@ -23,6 +23,10 @@ import com.ucs.bucket.db.db.dao.BalanceLogDao
 import com.ucs.bucket.db.db.entity.BalanceLog
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_insert_coin.view.*
+import kotlinx.android.synthetic.main.fragment_insert_coin.view.name_user
+import kotlinx.android.synthetic.main.fragment_insert_coin.view.status_offline
+import kotlinx.android.synthetic.main.fragment_insert_coin.view.status_online
+import kotlinx.android.synthetic.main.fragment_open.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,6 +62,8 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
     lateinit var money_errors_value : TextView
     lateinit var btn_insert_drop : Button
+    lateinit var online_btn : Button
+    lateinit var offline_btn : Button
 
 
 
@@ -125,7 +131,8 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
         money_total_txt = root.total_deposit_value
         money_errors_value = root.money_errors_value
         btn_insert_drop = root.btn_insert_drop
-
+        offline_btn = root.status_offline
+        online_btn = root.status_online
 
         name_user = root.name_user
 //        money_errors_txt = root.money_errors_value
@@ -143,6 +150,14 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 //        val storage = Storage(context!!)
 //        var log = storage.getLog()
 
+        if(checkNetworkConnection()){
+
+            offline_btn.visibility = View.INVISIBLE
+
+        }else{
+
+            online_btn.visibility = View.INVISIBLE
+        }
         btn.setOnClickListener {
 
 

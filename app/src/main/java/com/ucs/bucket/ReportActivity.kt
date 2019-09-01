@@ -1,9 +1,12 @@
 package com.ucs.bucket
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.CardView
+import android.view.View
 import android.widget.Button
 
 class ReportActivity : AppCompatActivity() {
@@ -12,6 +15,8 @@ class ReportActivity : AppCompatActivity() {
     private lateinit var deposit_report : CardView
     private lateinit var open_report : CardView
     private lateinit var back_page : CardView
+    private lateinit var online_btn : Button
+    private lateinit var offline_btn : Button
 
 
 
@@ -23,6 +28,17 @@ class ReportActivity : AppCompatActivity() {
         day_report = findViewById(R.id.day_report)
         open_report = findViewById(R.id.open_report)
         deposit_report = findViewById(R.id.deposit_report)
+        online_btn = findViewById(R.id.status_online)
+        offline_btn = findViewById(R.id.status_offline)
+
+        if(checkNetworkConnection()){
+
+            offline_btn.visibility = View.INVISIBLE
+
+        }else{
+
+            online_btn.visibility = View.INVISIBLE
+        }
 
         deposit_report.setOnClickListener {
 
@@ -58,5 +74,12 @@ class ReportActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 }
