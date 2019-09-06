@@ -20,6 +20,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".DetailOpenActivity">
+        </activity>
         <activity android:name=".ReportOpenActivity">
         </activity>
         <activity android:name=".ReportActivity">
@@ -46,11 +48,10 @@
                 android:name=".UsbService"
                 android:enabled="true">
         </service>
-
         <service
                 android:name=".Util.ExampleJobService"
-                android:permission="android.permission.BIND_JOB_SERVICE"
-                android:exported="true"/>
+                android:exported="true"
+                android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <activity
                 android:name=".UserManageActivity"

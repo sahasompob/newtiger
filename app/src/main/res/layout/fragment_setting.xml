@@ -63,6 +63,31 @@
                 android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <View
+            android:layout_margin="5dp"
+            android:background="#909090"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
+    <LinearLayout
+            android:id="@+id/previous_page"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+                android:layout_weight="0.5"
+                android:padding="5dp"
+                android:textSize="20sp"
+                android:textColor="#505050"
+                android:text="Back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+    </LinearLayout>
+
     <View
             android:layout_margin="5dp"
             android:background="#909090"

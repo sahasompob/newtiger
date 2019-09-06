@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.ucs.bucket.R
 import com.ucs.bucket.UserManageActivity
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_setting.view.*
 
 class SettingFragment : Fragment() {
     lateinit var Btndelay : TextView
+    lateinit var previousBtn : LinearLayout
     lateinit var TvDelay : TextView
     lateinit var edtDelay : EditText
     lateinit var user : TextView
@@ -38,6 +40,7 @@ class SettingFragment : Fragment() {
 
     fun initInstance(root: View) {
         var storage = SessionManager(context!!)
+        previousBtn = root.previous_page
         user = root.setting_user
         Btndelay = root.setting_btn_tv_delay
         TvDelay = root.setting_tv_delay
@@ -47,6 +50,7 @@ class SettingFragment : Fragment() {
         user.setOnClickListener {
             context?.startActivity(Intent(context,UserManageActivity::class.java))
         }
+
         Btndelay.setOnClickListener {
             if(Btndelay.text=="edit"){
                 Btndelay.text = "ok"
@@ -59,6 +63,12 @@ class SettingFragment : Fragment() {
 
             }
 
+        }
+
+
+        previousBtn.setOnClickListener {
+
+            fragmentManager?.popBackStack()
         }
     }
 

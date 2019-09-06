@@ -18,17 +18,20 @@ class ReportDepositActivity : BaseActivity(), AsyncResponseCallback {
     }
 
     private lateinit var balanceListAdapter: BalanceListAdapter
+    private lateinit var back_btn: Button
     private var db: ApplicationDatabase? = null
     private lateinit var arrayUser: List<BalanceLog>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report_deposit)
+
         initView()
     }
 
     private fun initView() {
 
+//        back_btn = findViewById(R.id.back_btn_rd)
         db = ApplicationDatabase.getInstance(this)
 
         recyclerUserList.layoutManager = LinearLayoutManager(this)
@@ -43,12 +46,19 @@ class ReportDepositActivity : BaseActivity(), AsyncResponseCallback {
         recyclerUserList.adapter = balanceListAdapter
 
 
-        val button = findViewById<Button>(R.id.back_btn)
+        val button = findViewById<Button>(R.id.back_btn_rd)
         button.setOnClickListener {
 
             //            supportFragmentManager.popBackStack()
-
+            finish()
         }
+
+//        back_btn.setOnClickListener {
+//
+//
+//
+//
+//        }
     }
 
 }

@@ -27,6 +27,7 @@ class ReportActivity : AppCompatActivity() {
 
         day_report = findViewById(R.id.day_report)
         open_report = findViewById(R.id.open_report)
+        back_page = findViewById(R.id.back_page)
         deposit_report = findViewById(R.id.deposit_report)
         online_btn = findViewById(R.id.status_online)
         offline_btn = findViewById(R.id.status_offline)
@@ -39,6 +40,7 @@ class ReportActivity : AppCompatActivity() {
 
             online_btn.visibility = View.INVISIBLE
         }
+
 
         deposit_report.setOnClickListener {
 
@@ -73,6 +75,14 @@ class ReportActivity : AppCompatActivity() {
 
 
         }
+
+        back_page.setOnClickListener {
+
+
+            finish()
+
+        }
+
 
     }
 

@@ -31,6 +31,9 @@ interface BalanceLogDao {
     @Query("SELECT * FROM balance_log WHERE bid IN (:balancelogIds)")
     fun loadAllByIds(balancelogIds: IntArray): List<BalanceLog>
 
+    @Query("SELECT * FROM balance_log WHERE open_id IN (:openID)")
+    fun loadByOpenId(openID: Int): List<BalanceLog>
+
 
 //    @Query("SELECT * FROM balance_log WHERE `dated` BETWEEN (:date) IN (:actionStatus)")
 //    fun getLogbyDate(date: String,actionStatus: String): List<BalanceLog>

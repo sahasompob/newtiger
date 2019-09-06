@@ -198,6 +198,7 @@ class BalanceListActivity : BaseActivity(), AsyncResponseCallback, AdapterView.O
         button.setOnClickListener {
 
 //            supportFragmentManager.popBackStack()
+            finish()
 
         }
     }

@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import com.ucs.bucket.db.db.entity.BalanceLog
 import com.ucs.bucket.db.db.entity.OpenConsole
 import com.ucs.bucket.recyclerextensions.onClick
+import kotlinx.android.synthetic.main.list_item_open.view.*
 import kotlinx.android.synthetic.main.list_item_user.view.*
+import kotlinx.android.synthetic.main.recycleview_user.view.*
 
 class OpenListAdapter : RecyclerView.Adapter<OpenViewHolder>() {
 
@@ -18,9 +20,10 @@ class OpenListAdapter : RecyclerView.Adapter<OpenViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OpenViewHolder {
         return OpenViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_open, parent, false)).onClick { view, position, type ->
-//            view.textDelete.setOnClickListener {
-//                onItemDeleteClick?.invoke(position)
-//            }
+
+            view.bg_layout.setOnClickListener {
+                onItemDeleteClick?.invoke(position)
+            }
         }
     }
 

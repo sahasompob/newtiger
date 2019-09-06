@@ -1,9 +1,11 @@
 package com.ucs.bucket
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Button
+import android.widget.Toast
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.entity.BalanceLog
 import com.ucs.bucket.db.db.entity.OpenConsole
@@ -39,9 +41,30 @@ class ReportOpenActivity : AppCompatActivity() {
         recyclerUserList.adapter = openListAdapter
 
 
+        openListAdapter.onItemDeleteClick = { position ->
+
+            var oid = arrayUser[position].oid
+
+//            var usernamedata = arrayUser[position].username.toString()
+//            var pass = arrayUser[position].password.toString()
+//            var name = arrayUser[position].firstname.toString()
+//            var role = arrayUser[position].role.toString()
+
+            var i : Intent = Intent(applicationContext,DetailOpenActivity::class.java)
+//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            i.putExtra("openid",oid.toString())
+//            i.putExtra("name",nameData)
+//            i.putExtra("role",roleData)
+            startActivity(i)
+
+
+        }
+
         val button = findViewById<Button>(R.id.back_btn)
         button.setOnClickListener {
 
+            finish()
             //            supportFragmentManager.popBackStack()
 
         }
