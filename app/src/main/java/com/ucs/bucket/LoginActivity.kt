@@ -16,6 +16,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.ucs.bucket.Util.SessionManager
+import com.ucs.bucket.Util.SessionSerial
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.base.BaseActivity
 import com.ucs.bucket.db.db.ApplicationDatabase
@@ -41,7 +42,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     }
 
     private var db: ApplicationDatabase? = null
-    lateinit var session:SessionManager
+    lateinit var session:SessionSerial
     lateinit var username: EditText
     lateinit var password: EditText
     lateinit var btn_submit_login : Button
@@ -56,7 +57,10 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        session = SessionManager(applicationContext)
+        session = SessionSerial(applicationContext)
+
+//        username = (EditText) findViewById(R.id.edt_username_login);
+
         username = findViewById(R.id.edt_username_login) as EditText
         password = findViewById(R.id.edt_password_login) as EditText
         btn_submit_login = findViewById(R.id.btn_submit_login) as Button
@@ -71,6 +75,15 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 //            startActivity(i)
 //            finish()
 //        }
+
+        var storage = SessionSerial(applicationContext)
+
+        var tokenTest:HashMap<String,String> = storage.getUserDetails()
+//        var username:String = user.get(SessionManager.USERNAME)!!
+//        var firstname:String = user.get(SessionManager.FIRSTNAME)!!
+        var serial_value:String = tokenTest.get(SessionSerial.SERIAL_ID)!!
+
+        Toast.makeText(this,serial_value,Toast.LENGTH_SHORT).show();
 
         btn_submit_login.setOnClickListener {
             // your code to perform when the user clicks on the button
@@ -126,7 +139,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                 var tokenData = response.getJSONObject("login").getString("token")
 
 
-                session.creatLoginSession(userId,username,firstname,lastname,email,tokenData)
+//                session.creatLoginSession(userId,username,firstname,lastname,email,tokenData)
 
                 var i : Intent = Intent(applicationContext,MainActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -254,16 +267,16 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                     password = "1234", role = "Admin")
             MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
 
-            val user2 =
-                User(username =  "1111", firstname = "User",
-                    password = "1234", role = "User")
-            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user2)
-
-
-            val user3 =
-                User(username =  "2222", firstname = "Manager",
-                    password = "2222", role = "Manager")
-            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user3)
+//            val user2 =
+//                User(username =  "1111", firstname = "User",
+//                    password = "1234", role = "User")
+//            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user2)
+//
+//
+//            val user3 =
+//                User(username =  "2222", firstname = "Manager",
+//                    password = "2222", role = "Manager")
+//            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user3)
 
 
         }else {

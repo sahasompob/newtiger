@@ -105,10 +105,10 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
             name_data =  edt_name.text.toString()
 
 
-            val user =
-                User(uid = userId, username =  user_data, firstname = name_data,
-                    password = pass_data, role = edt_role)
-            UpdateUserAsync(db!!.userDao(), RoomConstants.UPDATE_USER, this).execute(user)
+//            val user =
+//                User(uid = userId, username =  user_data, firstname = name_data,
+//                    password = pass_data, role = edt_role)
+//            UpdateUserAsync(db!!.userDao(), RoomConstants.UPDATE_USER, this).execute(user)
 
             fragmentManager?.popBackStack()
 

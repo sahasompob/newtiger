@@ -16,12 +16,22 @@ class User(
         @ColumnInfo(name = "username")
         var username: String? = null,
 
+        @ColumnInfo(name = "email")
+        var email: String? = null,
+
 
         @ColumnInfo(name = "firstname")
         var firstname: String? = null,
 
+        @ColumnInfo(name = "lastname")
+        var lastname: String? = null,
+
         @ColumnInfo(name = "password")
         var password: String? = null,
+
+        @ColumnInfo(name = "enabled")
+
+        var enabled:Int = 0,
 
         @ColumnInfo(name = "role")
         var role: String? = null

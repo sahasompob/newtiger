@@ -93,11 +93,11 @@ class AddUserFragment : Fragment(), AsyncResponseCallback {
         btnOk.setOnClickListener {
 
 
-            val user =
-                User(username =  username.text.toString().trim(), firstname = name.text.toString().trim(),
-                    password = password.text.toString().trim(), role = role)
-
-            InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+//            val user =
+//                User(username =  username.text.toString().trim(), firstname = name.text.toString().trim(),
+//                    password = password.text.toString().trim(), role = role)
+//
+//            InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
 
 
             activity?.let{
