@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
     private var db: ApplicationDatabase? = null
     lateinit var session:SessionSerial
+    lateinit var session2:SessionManager
     lateinit var username: EditText
     lateinit var password: EditText
     lateinit var btn_submit_login : Button
@@ -57,7 +59,8 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        session = SessionSerial(applicationContext)
+//        session = SessionSerial(applicationContext)
+        session2 = SessionManager(applicationContext)
 
 //        username = (EditText) findViewById(R.id.edt_username_login);
 
@@ -76,14 +79,14 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 //            finish()
 //        }
 
-        var storage = SessionSerial(applicationContext)
-
-        var tokenTest:HashMap<String,String> = storage.getUserDetails()
-//        var username:String = user.get(SessionManager.USERNAME)!!
-//        var firstname:String = user.get(SessionManager.FIRSTNAME)!!
-        var serial_value:String = tokenTest.get(SessionSerial.SERIAL_ID)!!
-
-        Toast.makeText(this,serial_value,Toast.LENGTH_SHORT).show();
+//        var storage = SessionSerial(applicationContext)
+//
+//        var tokenTest:HashMap<String,String> = storage.getUserDetails()
+////        var username:String = user.get(SessionManager.USERNAME)!!
+////        var firstname:String = user.get(SessionManager.FIRSTNAME)!!
+//        var serial_value:String = tokenTest.get(SessionSerial.SERIAL_ID)!!
+//
+//        Toast.makeText(this,serial_value,Toast.LENGTH_SHORT).show();
 
         btn_submit_login.setOnClickListener {
             // your code to perform when the user clicks on the button
@@ -120,26 +123,42 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
         val userAndPass= JSONObject()
         userAndPass.put("username",user)
         userAndPass.put("password",pass)
+        userAndPass.put("serial","wXHj0PovVCkXC")
 
 //        Toast.makeText(context, userAndPass.toString(), Toast.LENGTH_SHORT).show()
 
         val queue = Volley.newRequestQueue(this)
-        val url = "http://139.180.142.52:3310/login"
-
+        val url = "http://139.180.142.52/api/login"
         val stringReq = JsonObjectRequest(
             Request.Method.POST, url,userAndPass,
+
             Response.Listener<JSONObject> { response ->
 
+//                                Log.d("userEiei",response.toString())
 
-                var userId = response.getJSONObject("login").getString("userid").toString()
-                var username = response.getJSONObject("login").getString("username")
-                var firstname = response.getJSONObject("login").getString("firstname")
-                var lastname = response.getJSONObject("login").getString("lastname")
-                var email = response.getJSONObject("login").getString("email")
-                var tokenData = response.getJSONObject("login").getString("token")
+                var success = response.getJSONObject("success")
+                var token = success.getString("token")
+                var user = success.getJSONObject("user")
 
+                var username = user.getString("username")
+                var usernameID = user.getInt("id")
+                var firstname = user.getString("firstname")
+                var lastname = user.getString("lastname")
+                var email = user.getString("email")
+                var role = user.getString("role")
+//                var tokenData = response.getJSONObject("user").getString("token")
+//
+//
+//
+                Log.d("userEiei",usernameID.toString())
+                Log.d("userEiei", username)
+                Log.d("userEiei", firstname)
+                Log.d("userEiei", lastname)
+                Log.d("userEiei", email)
+                Log.d("userEiei", role)
+                Log.d("userEiei",token)
 
-//                session.creatLoginSession(userId,username,firstname,lastname,email,tokenData)
+                session2.creatLoginSession(usernameID.toString(),username,firstname,lastname,email,token)
 
                 var i : Intent = Intent(applicationContext,MainActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -183,7 +202,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
     fun loginWihtLocal(){
 
-        creatOfflineUser()
+//        creatOfflineUser()
 
         var user:String = username.text.toString()
         var pass:String = password.text.toString()
@@ -257,32 +276,34 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
     fun creatOfflineUser(){
 
-        db = ApplicationDatabase.getInstance(this)
-        arrayUser = db?.userDao()?.getAll()!!
-
-        if (arrayUser.isEmpty()){
-
-            val user =
-                User(username =  "1234", firstname = "admin",
-                    password = "1234", role = "Admin")
-            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
-
-//            val user2 =
-//                User(username =  "1111", firstname = "User",
-//                    password = "1234", role = "User")
-//            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user2)
+//        db = ApplicationDatabase.getInstance(this)
+//        arrayUser = db?.userDao()?.getAll()!!
+//
+//        if (arrayUser.isEmpty()){
+//
+//            val user =
+//                User(username =  "1234", firstname = "admin",
+//                    password = "1234", role = "Admin")
+//            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+//
+////            val user2 =
+////                User(username =  "1111", firstname = "User",
+////                    password = "1234", role = "User")
+////            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user2)
+////
+////
+////            val user3 =
+////                User(username =  "2222", firstname = "Manager",
+////                    password = "2222", role = "Manager")
+////            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user3)
 //
 //
-//            val user3 =
-//                User(username =  "2222", firstname = "Manager",
-//                    password = "2222", role = "Manager")
-//            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user3)
-
-
-        }else {
-
-
-        }
+//        }else {
+//
+//            val user = User(username =  "1234",email = "gg@gmail.com", firstname = "admin",lastname = "eiei",
+//                    password = "1234",enabled = 1, role = "O")
+//            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+//        }
 
     }
 

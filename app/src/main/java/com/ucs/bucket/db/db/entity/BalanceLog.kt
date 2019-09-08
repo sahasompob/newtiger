@@ -63,7 +63,11 @@ class BalanceLog(
 
         @ColumnInfo(name = "open_id")
 
-        var open_id: Int? = null
+        var open_id: Int? = null,
+
+        @ColumnInfo(name = "detail_deposit")
+
+        var detail_deposit: String? = null
 
 
 

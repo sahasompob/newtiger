@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_insert_coin.view.name_user
 import kotlinx.android.synthetic.main.fragment_insert_coin.view.status_offline
 import kotlinx.android.synthetic.main.fragment_insert_coin.view.status_online
 import kotlinx.android.synthetic.main.fragment_open.view.*
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -161,6 +162,29 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
         btn.setOnClickListener {
 
 
+            var detail_one = one_value.text.toString()
+            var detail_two = two_value.text.toString()
+            var detail_five = five_value.text.toString()
+            var detail_ten = ten_value.text.toString()
+            var detail_twenty = twenty_value.text.toString()
+            var detail_fifty = fifty_value.text.toString()
+            var detail_one_hunred = one_hunred_value.text.toString()
+            var detail_five_hunred = five_hunred_value.text.toString()
+            var detail_thousand = thousand_value.text.toString()
+
+            val detailDeposit= JSONObject()
+            detailDeposit.put("coin_1",detail_one)
+            detailDeposit.put("coin_2",detail_two)
+            detailDeposit.put("coin_5",detail_five)
+            detailDeposit.put("coin_10",detail_ten)
+            detailDeposit.put("bank_20",detail_twenty)
+            detailDeposit.put("bank_50",detail_fifty)
+            detailDeposit.put("bank_100",detail_one_hunred)
+            detailDeposit.put("bank_500",detail_five_hunred)
+            detailDeposit.put("bank_1000",detail_thousand)
+
+
+
 
             val currentDate = SimpleDateFormat("MM/dd/yyyy")
             val currentDateTime = SimpleDateFormat("MM/dd/yyyy HH:mm")
@@ -168,9 +192,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 //            storage.setLog(log)
             fragmentManager?.popBackStack()
 
-//            val user =
-//                User(firstName = user, lastName = textSum.text.toString().trim())
-//                InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+
 
             textSum.text.toString().trim()
 //            textMoney.text.toString()
@@ -204,10 +226,12 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                 val balance =
                     BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
                         action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "N", open_id = 0)
+                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "0", open_id = 0,detail_deposit = detailDeposit.toString())
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
+
+                Toast.makeText(getActivity(),detailDeposit.toString(),Toast.LENGTH_SHORT).show();
 
             }else{
 
@@ -215,9 +239,11 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                 val balance =
                     BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
                         action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "N", open_id = 0)
+                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "1", open_id = 0,detail_deposit = detailDeposit.toString())
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+                Toast.makeText(getActivity(),detailDeposit.toString(),Toast.LENGTH_SHORT).show();
 
             }
 
@@ -225,7 +251,6 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
             (activity as MainActivity).sendData("c,"+"drop/${drop}"+",deposit/${deposit}"+",total/${totalDeposit}")
 //            (activity as MainActivity).sendData("c"+ "test")
 
-//            Toast.makeText(context, balanceBefore.toString()+" // convert", Toast.LENGTH_SHORT).show()
 
 
 
@@ -252,59 +277,11 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
 
 
-//        money_errors_value.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable) {
-//                // TODO Auto-generated method stub
-//
-//
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-//                // TODO Auto-generated method stub
-//            }
-//
-//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-//                // add a condition to check length here - you can give here length according to your requirement to go to next EditTexts.
-////                if (firstET.getText().toString().trim().length() > 2) {
-////                    firstET.clearFocus()
-////                    firstET.requestFocus()
-////                }
-//
-////                sumTest(sum)
-//
-//
-//                var depositMoney = textSum.text.toString()
-//                var dropMoney = money_errors_value.text.toString()
-//
-//                if (dropMoney.equals("")){
-//
-//                    Toast.makeText(getActivity(),"ว่าง",Toast.LENGTH_SHORT).show();
-//
-//                }else{
-//
-//                    var test = depositMoney.replace(",","")
-//                    val dropMoneyInt = dropMoney.toInt()
-//                    val depositMoneyInt = test.toInt()
-//
-//                    var total = dropMoneyInt + depositMoneyInt
-//                    var totalSum = String.format("%,d", total)
-////                    Toast.makeText(getActivity(),"${total}",Toast.LENGTH_SHORT).show()
-//
-//                    money_total_txt.text = "$totalSum"
-//                }
-//
-////                val dropMoneyInt = dropMoney.toInt()
-//
-//
-//            }
-//        })
-
 
         testsend.setOnClickListener {
             getCoin("\nS0 0 1 2 0 0 0 0 0E")
 
 //            getCoin("\nS0 0 1 2 0 0 0 0 10E")
-
         }
 
         btn_cancle_coin.setOnClickListener {

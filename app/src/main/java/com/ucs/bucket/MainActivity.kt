@@ -84,19 +84,19 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
             val role=intent.getStringExtra("role")
 
 
-            if (role == "Admin"){
+            if (role == "O"){
 
                 supportFragmentManager.beginTransaction()
                     .add(R.id.area_main,MainFragment.newInstance(role,username,name),"main")
                     .commit()
 
-            }else if (role == "User"){
+            }else if (role == "C"){
 
                 supportFragmentManager.beginTransaction()
                     .add(R.id.area_main,UserFragment.newInstance(role,username,name),"main")
                     .commit()
 
-            }else if (role == "Manager"){
+            }else if (role == "M"){
 
                 supportFragmentManager.beginTransaction()
                     .add(R.id.area_main,ManagerFragment.newInstance(role,username,name),"main")
