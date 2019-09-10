@@ -1,12 +1,14 @@
 package com.ucs.bucket.fragment;
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +16,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.ucs.bucket.MainActivity
 import com.ucs.bucket.R
 import com.ucs.bucket.Util.SessionManager
+import com.ucs.bucket.Util.SessionSerial
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.BalanceLogDao
@@ -231,7 +238,52 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
 
-                Toast.makeText(getActivity(),detailDeposit.toString(),Toast.LENGTH_SHORT).show();
+                var storage = SessionSerial(context!!)
+
+                var serial:HashMap<String,String> = storage.getUserDetails()
+
+                var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+                var storage2 = SessionManager(context!!)
+
+                var token:HashMap<String,String> = storage2.getUserDetails()
+
+                var tokenValue:String = token.get(SessionManager.TOKEN)!!
+
+                val depositData = JSONObject()
+                depositData.put("serial",serial_value)
+                depositData.put("action_code","DE")
+                depositData.put("detail",detailDeposit.toString())
+                depositData.put("deposit",deposit)
+                depositData.put("drop",drop)
+                depositData.put("balance",balanceBefore + totalDeposit)
+
+//                depositData.put("balance",balanceBefore + totalDeposit)
+
+
+                val updateQueue = Volley.newRequestQueue(context)
+                val url = "http://139.180.142.52/api/save/event"
+                val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
+                    Response.Listener {response ->
+
+                        Log.e("Success","OK")
+
+                    },
+                    Response.ErrorListener {response ->
+
+                        Log.e("Error",response.toString())
+                    }) {
+
+                    // override getHeader for pass session to service
+                    override fun getHeaders(): MutableMap<String, String> {
+
+                        val header = mutableMapOf<String, String>()
+                        // "Cookie" and "PHPSESSID=" + <session value> are default format
+                        header.put("Accept", "application/json")
+                        header.put("Authorization", "Bearer "+ tokenValue)
+                        return header
+                    }
+                }
+                updateQueue.add(updateReq)
 
             }else{
 
@@ -254,14 +306,6 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
 
 
-            sendToServer(user,
-                currentDateTime.format(Date()).trim(),
-                "DE",
-                deposit,
-                drop,
-                totalDeposit,
-                balanceBefore + totalDeposit,
-                "N",0)
         }
 
 
@@ -371,42 +415,9 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
     }
 
-    fun sendToServer(user: String,currntTime: String, action: String,deposit: Int,drop: Int,totalDeposit: Int,total: Int,status: String,open_id: Int){
-
-//        for()
-
-//        sendToServer(user,currentDateTime.format(Date()).trim(),"DE",deposit,drop,totalDeposit,balanceBefore + totalDeposit,"N")
-
-//        test += sum
-//        textSum2.text = "$test"
-//        textSum.text = "$test"
-//
-//
-//        money_total_txt.text ="$sum"
-
-//        depositText.text = "$test"
-//        var bbb = sum2[8].toString()
-//        Toast.makeText(getActivity(),"$user"+"/" + "$currntTime"+"/" + "$action"+"/" + "$deposit"+"/" + "$drop"+"/" + "$totalDeposit"+"/" + "$total"+"/" + "$status",Toast.LENGTH_SHORT).show();
 
 
-    }
 
-//    fun sumTest(sum: Int){
-//
-//
-//        test += sum
-//        textSum2.text = "$test"
-//        textSum.text = "$test"
-//
-//
-//        money_total_txt.text ="$sum"
-//
-////        depositText.text = "$test"
-////        var bbb = sum2[8].toString()
-////        Toast.makeText(getActivity(),"$bbb",Toast.LENGTH_SHORT).show();
-//
-//
-//    }
 
             class InsertLogAsync(private val balanceLogDao: BalanceLogDao, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<BalanceLog, Void, BalanceLog>() {
             override fun doInBackground(vararg balancelog: BalanceLog?): BalanceLog? {

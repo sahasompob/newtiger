@@ -48,7 +48,6 @@ class BalanceLog(
         var balance_before: Int? = null,
 
         //        รวม
-
         @ColumnInfo(name = "balance")
 
         var balance: Int? = null,

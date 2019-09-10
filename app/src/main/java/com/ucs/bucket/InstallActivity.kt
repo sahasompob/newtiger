@@ -5,6 +5,8 @@ import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
@@ -27,6 +29,10 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
     private var db: ApplicationDatabase? = null
     private lateinit var arrayUser: List<User>
+    lateinit var submit_btn : Button
+    lateinit var serial_txt: EditText
+
+
 
     override fun onResponse(isSuccess: Boolean, call: String) {
         if (call == RoomConstants.INSERT_USER) {
@@ -46,6 +52,11 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
         setContentView(R.layout.activity_install)
         session = SessionSerial(applicationContext)
 
+        submit_btn = findViewById(R.id.btn_submit_login) as Button
+        serial_txt = findViewById(R.id.edt_serial) as EditText
+
+
+
         if (session.isLoggedIn()){
 
 
@@ -54,7 +65,13 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(i)
             finish()
-        }else{
+        }
+
+
+        submit_btn.setOnClickListener {
+            // your code to perform when the user clicks on the button
+
+
 
             sendSerial()
 
@@ -70,14 +87,18 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
 
     fun sendSerial(){
-
-        var test = "wXHj0PovVCkXC"
+        
+        var serialData:String = serial_txt.text.toString()
+//
+//        Toast.makeText(this,serialData,Toast.LENGTH_SHORT).show();
+//
+        var test = serialData.trim()
         val serial= JSONObject()
         serial.put("serial",test)
 
         val queue = Volley.newRequestQueue(this)
         val url = "http://139.180.142.52/api/get/users"
-
+        Toast.makeText(this,test,Toast.LENGTH_SHORT).show();
         val stringReq = JsonObjectRequest(
                 Request.Method.POST, url,serial,
 
@@ -123,7 +144,11 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
                     }
 
 
-
+                    var i : Intent = Intent(applicationContext,LoginActivity::class.java)
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(i)
+                    finish()
 
 
 

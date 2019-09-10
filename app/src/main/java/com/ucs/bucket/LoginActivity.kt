@@ -28,6 +28,7 @@ import com.ucs.bucket.fragment.LoginFragment
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.json.JSONObject
+import java.util.HashMap
 
 
 class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
@@ -90,8 +91,8 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
         btn_submit_login.setOnClickListener {
             // your code to perform when the user clicks on the button
-            var user:String = username.text.toString()
-            var pass:String = password.text.toString()
+
+
 
             if (checkNetworkConnection()){
 
@@ -117,13 +118,18 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
     fun loginToServer(){
 
+        var storage = SessionSerial(applicationContext)
+
+        var serial: HashMap<String, String> = storage.getUserDetails()
+
+        var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
         var user:String = username.text.toString()
         var pass:String = password.text.toString()
-
+        Toast.makeText(this,serial_value,Toast.LENGTH_SHORT).show();
         val userAndPass= JSONObject()
         userAndPass.put("username",user)
         userAndPass.put("password",pass)
-        userAndPass.put("serial","wXHj0PovVCkXC")
+        userAndPass.put("serial",serial_value)
 
 //        Toast.makeText(context, userAndPass.toString(), Toast.LENGTH_SHORT).show()
 
@@ -167,26 +173,6 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                 finish()
 
 
-
-//                val dataJson= JSONObject()
-//                dataJson.put("userid",userId)
-//                dataJson.put("username",username)
-//                dataJson.put("firstname",firstname)
-//                dataJson.put("lastname",lastname)
-//                dataJson.put("email",email)
-//                dataJson.put("token",tokenData)
-
-//                var strResp = response.toString()
-//                val jsonObj: JSONObject = JSONObject(strResp)
-//                Toast.makeText(this, dataJson.toString(), Toast.LENGTH_SHORT).show()
-
-//                val jsonArray: JSONArray = jsonObj.getJSONArray("items")
-//                var str_user: String = ""
-
-//                for (i in 0 until jsonObj.length()) {
-//                    var jsonInner: JSONObject = jsonObj.getJSONObject(i)
-//                    str_user = str_user + "\n" + jsonInner.get("login")
-//                }
 
             },
             Response.ErrorListener {
