@@ -173,7 +173,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
                         val balance =
                             BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                                action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
+                                action = "OF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
                                 balance_before = balanceBefore, balance = balanceBefore, status = "-",log_id = log_id)
 
                         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
@@ -211,7 +211,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                 val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
                 val balance =
                     BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                        action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
+                        action = "OF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
                         balance_before = balanceBefore, balance = balanceBefore, status = "-",log_id = log_id)
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
