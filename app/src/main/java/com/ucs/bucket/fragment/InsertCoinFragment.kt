@@ -76,6 +76,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
 
     var test = 0
+    var log_id = 0
     var user = ""
     var balanceBefore = 0
     var dMoney = 0
@@ -263,10 +264,12 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                     Response.Listener {response ->
 
                         Log.e("Success","OK")
+
+                        log_id = 6
                         val balance =
                                 BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
                                         action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "0", open_id = 0,detail_deposit = detailDeposit.toString())
+                                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "0", open_id = 0,detail_deposit = detailDeposit.toString(),log_id = log_id)
 
                         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
@@ -288,13 +291,14 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                 }
                 updateQueue.add(updateReq)
 
-            }else{
 
+            }else{
+                log_id = 0
 
                 val balance =
                     BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
                         action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "1", open_id = 0,detail_deposit = detailDeposit.toString())
+                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "1", open_id = 0,detail_deposit = detailDeposit.toString(),log_id = log_id)
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 

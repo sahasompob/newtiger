@@ -66,6 +66,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
     var openId = 0
 
+    var log_id = 0
+
 
 
     companion object {
@@ -162,6 +164,9 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                     Response.Listener { response ->
 
                         Log.e("Success","OK")
+
+                        log_id = 5
+
                         timer.cancel()
 
                         val sssss = SimpleDateFormat("MM/dd/yyyy")
@@ -169,7 +174,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         val balance =
                             BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
                                 action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
-                                balance_before = balanceBefore, balance = balanceBefore, status = "-")
+                                balance_before = balanceBefore, balance = balanceBefore, status = "-",log_id = log_id)
 
                         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
                         fragmentManager?.popBackStack()
@@ -198,6 +203,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             }else{
 
+                log_id = 0
+
                 timer.cancel()
 
                 val sssss = SimpleDateFormat("MM/dd/yyyy")
@@ -205,7 +212,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                 val balance =
                     BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
                         action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
-                        balance_before = balanceBefore, balance = balanceBefore, status = "-")
+                        balance_before = balanceBefore, balance = balanceBefore, status = "-",log_id = log_id)
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
                 fragmentManager?.popBackStack()
@@ -221,6 +228,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         openBtn.setOnClickListener {
 
             if (checkNetworkConnection()){
+
 
                 var storage = SessionSerial(context!!)
 
@@ -251,7 +259,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                         Log.e("Success","OK")
 
-
+                        log_id =5
                         timer.cancel()
                         (activity as MainActivity).sendData("unlock".trim())
 //            fragmentManager?.popBackStack()
@@ -375,6 +383,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                             default_button.visibility = View.GONE
                             openBtn.visibility = View.VISIBLE
 
+                            text.text = "กดปุ่มเปิดตู้"
                             timer.cancel()
 
 
@@ -527,40 +536,25 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             val balance =
                 BalanceLog(bid = idTest,username = user, dated = dateTest,
                     action = actionTest, deposit = depositTest, drop = dropTest, toto_deposit = totaoTest,
-                    balance_before = balanceBeforeTest, balance = balanceTest, status = "U", sync = "N", open_id = openId)
+                    balance_before = balanceBeforeTest, balance = balanceTest, status = "U", sync = "N", open_id = openId ,log_id = log_id)
 
             UpdateAsync(db!!.balanceLogDao(), RoomConstants.UPDATE_USER, this).execute(balance)
 
-//                val testData = JSONObject()
-//                    try {
-//                        testData.put("type", "d")
-//                        testData.put("username", user)
-//                        testData.put("date", item.dated)
-//                        testData.put("deposit", depositTest)
-//                        testData.put("drop", depositTest)
-//                        testData.put("total_deposit", totaoTest)
-//                        testData.put("balance_before", balanceBeforeTest)
-//                        testData.put("balance", balanceTest)
-//
-//                        } catch (e: JSONException) {
-//                        // TODO Auto-generated catch block
-//                        e.printStackTrace()
-//                        }
-
-//                Toast.makeText(context, dateTest, Toast.LENGTH_SHORT).show()
-//                    (activity as MainActivity).sendData(testData.toString())
-
         }
+
 
         val balance =
             BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
                 action = "OP", deposit = 0, drop = 0, toto_deposit = balanceBefore,
-                balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId)
+                balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId,log_id = log_id)
 
         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
         fragmentManager?.popBackStack()
     }
+
+
+
 
     fun checkNetworkConnection(): Boolean {
 

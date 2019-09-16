@@ -66,7 +66,11 @@ class BalanceLog(
 
         @ColumnInfo(name = "detail_deposit")
 
-        var detail_deposit: String? = null
+        var detail_deposit: String? = null,
+
+        @ColumnInfo(name = "log_id")
+
+        var log_id: Int? = null
 
 
 
