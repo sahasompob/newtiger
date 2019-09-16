@@ -166,6 +166,8 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
             online_btn.visibility = View.INVISIBLE
         }
+
+
         btn.setOnClickListener {
 
 
@@ -230,12 +232,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
             if (checkNetworkConnection()){
 
-                val balance =
-                    BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
-                        action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "0", open_id = 0,detail_deposit = detailDeposit.toString())
 
-                InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
 
                 var storage = SessionSerial(context!!)
@@ -266,6 +263,12 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                     Response.Listener {response ->
 
                         Log.e("Success","OK")
+                        val balance =
+                                BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
+                                        action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
+                                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "0", open_id = 0,detail_deposit = detailDeposit.toString())
+
+                        InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
                     },
                     Response.ErrorListener {response ->

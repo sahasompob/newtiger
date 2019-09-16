@@ -22,7 +22,7 @@ import org.json.JSONObject
 import org.json.JSONArray
 import org.mindrot.jbcrypt.BCrypt
 import retrofit2.adapter.rxjava2.Result.response
-
+import java.util.*
 
 
 class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
@@ -87,14 +87,18 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
 
     fun sendSerial(){
-        
+
+
         var serialData:String = serial_txt.text.toString()
+
 //
 //        Toast.makeText(this,serialData,Toast.LENGTH_SHORT).show();
 //
         var test = serialData.trim()
+        var verifyCode = genVerificationCode(test)
         val serial= JSONObject()
         serial.put("serial",test)
+        serial.put("verification_code",verifyCode)
 
         val queue = Volley.newRequestQueue(this)
         val url = "http://139.180.142.52/api/get/users"
@@ -159,6 +163,19 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
                 })
         queue.add(stringReq)
 
+    }
+
+    private fun genVerificationCode(serial: String): String {
+        val r = Random()
+
+        var random = r.nextInt(10)
+        var code = random.toString()
+        for (i in 0..2) {
+            random = (random + 4) % serial.length
+            code += serial[random]
+        }
+
+        return code
     }
 
     class InsertUserAsync(private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {

@@ -5,15 +5,21 @@ import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.ucs.bucket.MainActivity
 import com.ucs.bucket.R
 import com.ucs.bucket.Util.SessionManager
+import com.ucs.bucket.Util.SessionSerial
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.BalanceLogDao
@@ -26,6 +32,7 @@ import kotlinx.android.synthetic.main.fragment_open.view.*
 import kotlinx.android.synthetic.main.fragment_open.view.name_user
 import kotlinx.android.synthetic.main.fragment_open.view.status_offline
 import kotlinx.android.synthetic.main.fragment_open.view.status_online
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -124,29 +131,133 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         cancelBtn.setOnClickListener {
 
-            timer.cancel()
 
-            val sssss = SimpleDateFormat("MM/dd/yyyy")
-            val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
-            val balance =
-                BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                    action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
-                    balance_before = balanceBefore, balance = balanceBefore, status = "-")
+            if (checkNetworkConnection()){
 
-            InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
-            fragmentManager?.popBackStack()
+                var storage = SessionSerial(context!!)
+
+                var serial:HashMap<String,String> = storage.getUserDetails()
+
+                var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+                var storage2 = SessionManager(context!!)
+
+                var token:HashMap<String,String> = storage2.getUserDetails()
+
+                var tokenValue:String = token.get(SessionManager.TOKEN)!!
+
+                val depositData = JSONObject()
+                depositData.put("serial",serial_value)
+                depositData.put("action_code","OF")
+                depositData.put("detail","")
+                depositData.put("deposit",0)
+                depositData.put("drop",0)
+                depositData.put("balance",balanceBefore)
+
+//                depositData.put("balance",balanceBefore + totalDeposit)
+
+
+                val updateQueue = Volley.newRequestQueue(context)
+                val url = "http://139.180.142.52/api/save/event"
+                val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
+                        Response.Listener { response ->
+
+                            Log.e("Success","OK")
+                            timer.cancel()
+
+                            val sssss = SimpleDateFormat("MM/dd/yyyy")
+                            val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+                            val balance =
+                                    BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
+                                            action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
+                                            balance_before = balanceBefore, balance = balanceBefore, status = "-")
+
+                            InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
+                            fragmentManager?.popBackStack()
+
+
+                        },
+                        Response.ErrorListener { response ->
+
+                            Log.e("Error",response.toString())
+                        }) {
+
+                    // override getHeader for pass session to service
+                    override fun getHeaders(): MutableMap<String, String> {
+
+                        val header = mutableMapOf<String, String>()
+                        // "Cookie" and "PHPSESSID=" + <session value> are default format
+                        header.put("Accept", "application/json")
+                        header.put("Authorization", "Bearer "+ tokenValue)
+                        return header
+                    }
+                }
+                updateQueue.add(updateReq)
+
+
+
+
+            }else{
+
+                timer.cancel()
+
+                val sssss = SimpleDateFormat("MM/dd/yyyy")
+                val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+                val balance =
+                        BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
+                                action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
+                                balance_before = balanceBefore, balance = balanceBefore, status = "-")
+
+                InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
+                fragmentManager?.popBackStack()
+
+
+            }
+
+
 
         }
 
 
         openBtn.setOnClickListener {
 
-            timer.cancel()
-            (activity as MainActivity).sendData("unlock".trim())
+            if (checkNetworkConnection()){
+
+                var storage = SessionSerial(context!!)
+
+                var serial:HashMap<String,String> = storage.getUserDetails()
+
+                var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+                var storage2 = SessionManager(context!!)
+
+                var token:HashMap<String,String> = storage2.getUserDetails()
+
+                var tokenValue:String = token.get(SessionManager.TOKEN)!!
+
+                val depositData = JSONObject()
+                depositData.put("serial",serial_value)
+                depositData.put("action_code","OP")
+                depositData.put("detail","")
+                depositData.put("deposit",0)
+                depositData.put("drop",0)
+                depositData.put("balance",0)
+
+//                depositData.put("balance",balanceBefore + totalDeposit)
+
+
+                val updateQueue = Volley.newRequestQueue(context)
+                val url = "http://139.180.142.52/api/save/event"
+                val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
+                        Response.Listener { response ->
+
+                            Log.e("Success","OK")
+
+
+                            timer.cancel()
+                            (activity as MainActivity).sendData("unlock".trim())
 //            fragmentManager?.popBackStack()
 
-            val sssss = SimpleDateFormat("MM/dd/yyyy")
-            val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+                            val sssss = SimpleDateFormat("MM/dd/yyyy")
+                            val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
 
 
 
@@ -156,20 +267,77 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 //            arrayBalanceStatus = db?.balanceLogDao()?.getByStatus()!!
-            arrayBalanceStatus = db?.balanceLogDao()?.getBeforeOpen()!!
+                            arrayBalanceStatus = db?.balanceLogDao()?.getBeforeOpen()!!
 
-            var count = arrayBalanceStatus.size
+                            var count = arrayBalanceStatus.size
 
-            val openAction =
+                            val openAction =
 
-                OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
+                                    OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
 
-            InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
+                            InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
 
 
 
 //            Toast.makeText(context, openId.toString(), Toast.LENGTH_SHORT).show()
 
+
+
+                        },
+                        Response.ErrorListener { response ->
+
+                            Log.e("Error",response.toString())
+                        }) {
+
+                    // override getHeader for pass session to service
+                    override fun getHeaders(): MutableMap<String, String> {
+
+                        val header = mutableMapOf<String, String>()
+                        // "Cookie" and "PHPSESSID=" + <session value> are default format
+                        header.put("Accept", "application/json")
+                        header.put("Authorization", "Bearer "+ tokenValue)
+                        return header
+                    }
+                }
+                updateQueue.add(updateReq)
+
+
+
+
+            }else{
+
+                timer.cancel()
+                (activity as MainActivity).sendData("unlock".trim())
+//            fragmentManager?.popBackStack()
+
+                val sssss = SimpleDateFormat("MM/dd/yyyy")
+                val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+
+
+
+
+
+
+
+
+//            arrayBalanceStatus = db?.balanceLogDao()?.getByStatus()!!
+                arrayBalanceStatus = db?.balanceLogDao()?.getBeforeOpen()!!
+
+                var count = arrayBalanceStatus.size
+
+                val openAction =
+
+                        OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
+
+                InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
+
+
+
+//            Toast.makeText(context, openId.toString(), Toast.LENGTH_SHORT).show()
+
+
+
+            }
 
 
 
