@@ -26,15 +26,17 @@ public class SessionSerial {
         val  PRF_NAME : String = "UserSession"
         val  IS_LOGIN : String = "isLoggedIn"
         val  SERIAL_ID : String = "serial_id"
+        val  VERIFYCODE : String = "verify_code"
 
 
     }
 
 
-    fun creatLoginSession(serial_id:String){
+    fun creatLoginSession(serial_id:String,verify_code:String){
 
         editor.putBoolean(IS_LOGIN,true)
         editor.putString(SERIAL_ID,serial_id)
+        editor.putString(VERIFYCODE,verify_code)
 
         editor.commit()
 //        Toast.makeText(con, username, Toast.LENGTH_SHORT).show()
@@ -69,10 +71,10 @@ public class SessionSerial {
         editor.clear()
         editor.commit()
 
-        var i : Intent = Intent(con,LoginActivity::class.java)
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        con.startActivity(i)
+//        var i : Intent = Intent(con,LoginActivity::class.java)
+//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        con.startActivity(i)
     }
 
     fun isLoggedIn():Boolean{

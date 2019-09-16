@@ -111,7 +111,7 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
                     var sts: JSONArray? = null
                     sts = response.getJSONArray("success")
 
-                    session.creatLoginSession(test)
+                    session.creatLoginSession(test,verifyCode)
 //                    db = ApplicationDatabase.getInstance(this)
 //                    arrayUser = db?.userDao()?.getAll()!!
 

@@ -159,27 +159,27 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                 val updateQueue = Volley.newRequestQueue(context)
                 val url = "http://139.180.142.52/api/save/event"
                 val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
-                        Response.Listener { response ->
+                    Response.Listener { response ->
 
-                            Log.e("Success","OK")
-                            timer.cancel()
+                        Log.e("Success","OK")
+                        timer.cancel()
 
-                            val sssss = SimpleDateFormat("MM/dd/yyyy")
-                            val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
-                            val balance =
-                                    BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                                            action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
-                                            balance_before = balanceBefore, balance = balanceBefore, status = "-")
+                        val sssss = SimpleDateFormat("MM/dd/yyyy")
+                        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+                        val balance =
+                            BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
+                                action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
+                                balance_before = balanceBefore, balance = balanceBefore, status = "-")
 
-                            InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
-                            fragmentManager?.popBackStack()
+                        InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
+                        fragmentManager?.popBackStack()
 
 
-                        },
-                        Response.ErrorListener { response ->
+                    },
+                    Response.ErrorListener { response ->
 
-                            Log.e("Error",response.toString())
-                        }) {
+                        Log.e("Error",response.toString())
+                    }) {
 
                     // override getHeader for pass session to service
                     override fun getHeaders(): MutableMap<String, String> {
@@ -203,9 +203,9 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                 val sssss = SimpleDateFormat("MM/dd/yyyy")
                 val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
                 val balance =
-                        BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                                action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
-                                balance_before = balanceBefore, balance = balanceBefore, status = "-")
+                    BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
+                        action = "OPF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
+                        balance_before = balanceBefore, balance = balanceBefore, status = "-")
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
                 fragmentManager?.popBackStack()
@@ -247,17 +247,17 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                 val updateQueue = Volley.newRequestQueue(context)
                 val url = "http://139.180.142.52/api/save/event"
                 val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
-                        Response.Listener { response ->
+                    Response.Listener { response ->
 
-                            Log.e("Success","OK")
+                        Log.e("Success","OK")
 
 
-                            timer.cancel()
-                            (activity as MainActivity).sendData("unlock".trim())
+                        timer.cancel()
+                        (activity as MainActivity).sendData("unlock".trim())
 //            fragmentManager?.popBackStack()
 
-                            val sssss = SimpleDateFormat("MM/dd/yyyy")
-                            val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+                        val sssss = SimpleDateFormat("MM/dd/yyyy")
+                        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
 
 
 
@@ -267,15 +267,15 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 //            arrayBalanceStatus = db?.balanceLogDao()?.getByStatus()!!
-                            arrayBalanceStatus = db?.balanceLogDao()?.getBeforeOpen()!!
+                        arrayBalanceStatus = db?.balanceLogDao()?.getBeforeOpen()!!
 
-                            var count = arrayBalanceStatus.size
+                        var count = arrayBalanceStatus.size
 
-                            val openAction =
+                        val openAction =
 
-                                    OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
+                            OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
 
-                            InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
+                        InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
 
 
 
@@ -283,11 +283,11 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 
-                        },
-                        Response.ErrorListener { response ->
+                    },
+                    Response.ErrorListener { response ->
 
-                            Log.e("Error",response.toString())
-                        }) {
+                        Log.e("Error",response.toString())
+                    }) {
 
                     // override getHeader for pass session to service
                     override fun getHeaders(): MutableMap<String, String> {
@@ -327,7 +327,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                 val openAction =
 
-                        OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
+                    OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
 
                 InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
 

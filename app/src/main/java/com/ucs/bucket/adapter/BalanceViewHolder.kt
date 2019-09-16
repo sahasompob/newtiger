@@ -37,7 +37,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.total.text = test.toto_deposit.toString()
             itemView.total_balance.text = test.balance.toString()
 
-        }else if (status.equals("OPF")){
+        }else if (status.equals("OF")){
 
             itemView.sid.text = test.username
             itemView.startTime.text = test.dated
