@@ -264,8 +264,10 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                     Response.Listener {response ->
 
                         Log.e("Success","OK")
+                        var logID = response.getInt("log_id")
+                        Log.e("LOGID IS ==",logID.toString())
 
-                        log_id = 6
+                        log_id = logID
                         val balance =
                                 BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
                                         action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,

@@ -30,7 +30,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         if (status.equals("DE")){
             itemView.sid.text = test.username
-            itemView.startTime.text = test.log_id.toString()
+            itemView.startTime.text = test.datedtime.toString()
             itemView.status.text = test.action
             itemView.deposit.text = test.deposit.toString()
             itemView.drop_money.text = test.drop.toString()
@@ -40,7 +40,18 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }else if (status.equals("OF")){
 
             itemView.sid.text = test.username
-            itemView.startTime.text = test.log_id.toString()
+            itemView.startTime.text = test.datedtime.toString()
+            itemView.status.text = test.action
+
+            itemView.deposit.text = "-"
+            itemView.drop_money.text = "-"
+            itemView.total.text = "-"
+            itemView.total_balance.text = test.balance.toString()
+
+        }else if (status.equals("C")){
+
+            itemView.sid.text = test.username
+            itemView.startTime.text = test.datedtime.toString()
             itemView.status.text = test.action
 
             itemView.deposit.text = "-"
@@ -49,10 +60,11 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.total_balance.text = test.balance.toString()
 
 
+
         }else{
             
             itemView.sid.text = test.username
-            itemView.startTime.text = test.log_id.toString()
+            itemView.startTime.text = test.datedtime.toString()
             itemView.status.text = test.action
 
             itemView.deposit.text = "-"
