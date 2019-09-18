@@ -16,6 +16,10 @@ interface BalanceLogDao {
     @Query("SELECT * FROM balance_log WHERE open_id = 0")
     fun getDeposit(): List<BalanceLog>
 
+    @Query("SELECT * FROM balance_log WHERE log_id = 0")
+    fun getLogOffline(): List<BalanceLog>
+
+
     @Query("SELECT * FROM balance_log ORDER BY bid DESC LIMIT 1")
     fun getLastId(): List<BalanceLog>
 
@@ -36,6 +40,9 @@ interface BalanceLogDao {
 
     @Query("UPDATE balance_log SET open_id=:openID WHERE bid = :id")
     fun updateOpenId(openID: Int, id: Int)
+
+    @Query("UPDATE balance_log SET log_id=:log_id WHERE bid = :id")
+    fun updateLogID(log_id: Int, id: Int)
 
 
 //    @Query("SELECT * FROM balance_log WHERE `dated` BETWEEN (:date) IN (:actionStatus)")

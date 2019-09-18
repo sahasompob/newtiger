@@ -10,11 +10,18 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.ucs.bucket.MainActivity
+import com.ucs.bucket.db.db.ApplicationDatabase
+import com.ucs.bucket.db.db.entity.BalanceLog
+import com.ucs.bucket.db.db.helper.RoomConstants
+import com.ucs.bucket.fragment.InsertCoinFragment
 import org.json.JSONObject
+import java.util.*
 
 
 class ExampleJobService : JobService() {
     private var jobCancelled = false
+    private var db: ApplicationDatabase? = null
+    private lateinit var arrayLog: List<BalanceLog>
 
     override fun onStartJob(params: JobParameters): Boolean {
         Log.d(TAG, "Job started")
@@ -24,7 +31,8 @@ class ExampleJobService : JobService() {
     }
 
     private fun doBackgroundWork(params: JobParameters) {
-        loginToServer()
+
+        sendDataToServer()
 //        Thread(Runnable {
 //
 //            for (i in 0..9) {
@@ -51,65 +59,119 @@ class ExampleJobService : JobService() {
         jobFinished(params, false)
     }
 
-    private fun loginToServer(){
+    private fun sendDataToServer(){
+        Log.d(TAG, "sendDataToServer")
+        db = ApplicationDatabase.getInstance(this)
+        arrayLog = db?.balanceLogDao()?.getLogOffline()!!
 
-        Log.d(TAG, "loginToServer")
 
-//        val userAndPass= JSONObject()
-//        userAndPass.put("username",user)
-//        userAndPass.put("password",pass)
+//        Log.d("Data = ", arrayLog.toString())
+
+        if (arrayLog.isEmpty()){
+
+
+            Log.d("Data = ","Array is Null")
+
+        }else{
+
+            for (item in arrayLog){
+
+                var user_id = item.bid!!
+                var username = item.username!!.toString()
+                var deposit = item.deposit!!.toString()
+                var drop = item.drop!!.toString()
+                var balanceTotal = item.balance!!.toString()
+                var action_code = item.action!!.toString()
+                var detail_deposit = item.detail_deposit!!.toString()
+                var log_id = item.log_id!!.toString()
+
+//                Log.d("User = ",username)
+//                Log.d("Deposit = ",deposit)
+//                Log.d("Total = ",balanceTotal)
+//                Log.d("Log = ",log_id)
+
+
+
+
+
+
+                var storage = SessionSerial(applicationContext!!)
+
+                var serial: HashMap<String, String> = storage.getUserDetails()
+
+                var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+                var veryfy_code:String = serial.get(SessionSerial.VERIFYCODE)!!
+//                var storage2 = SessionManager(applicationContext!!)
 //
-////        Toast.makeText(context, userAndPass.toString(), Toast.LENGTH_SHORT).show()
+//                var token: HashMap<String, String> = storage2.getUserDetails()
 //
-//        val queue = Volley.newRequestQueue(this)
-//        val url = "http://139.180.142.52:3310/login"
+//                var tokenValue:String = token.get(SessionManager.TOKEN)!!
+
+
+                val depositData = JSONObject()
+                depositData.put("serial",serial_value)
+                depositData.put("username",username)
+                depositData.put("action_code",action_code)
+                depositData.put("verification_code",veryfy_code)
+                depositData.put("detail",detail_deposit)
+                depositData.put("deposit",deposit)
+                depositData.put("drop",drop)
+                depositData.put("balance",balanceTotal)
+
+//                depositData.put("balance",balanceBefore + totalDeposit)
+
+
+                val updateQueue = Volley.newRequestQueue(applicationContext)
+                val url = "http://139.180.142.52/api/save/offline"
+                val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
+                    Response.Listener {response ->
+
+                        Log.e("Success","OK")
+                        var logID = response.getInt("log_id")
+
+
+
+                        db?.balanceLogDao()?.updateLogID(logID,user_id)!!
+
+                        Log.e("Update Log ID  = ","Success")
+
+//                        log_id = logID
+
+
+//                        val balance =
+//                            BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(
+//                                Date()
+//                            ).trim(),
+//                                action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
+//                                balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "0", open_id = 0,detail_deposit = detailDeposit.toString(),log_id = log_id)
 //
-//        val stringReq = JsonObjectRequest(
-//            Request.Method.POST, url,userAndPass,
-//            Response.Listener<JSONObject> { response ->
+//                        InsertCoinFragment.InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+                    },
+                    Response.ErrorListener {response ->
+
+                        Log.e("Error",response.toString())
+                    }) {
+
+                    // override getHeader for pass session to service
+//                    override fun getHeaders(): MutableMap<String, String> {
 //
-//
-//                var userId = response.getJSONObject("login").getString("userid").toString()
-//                var username = response.getJSONObject("login").getString("username")
-//                var firstname = response.getJSONObject("login").getString("firstname")
-//                var lastname = response.getJSONObject("login").getString("lastname")
-//                var email = response.getJSONObject("login").getString("email")
-//                var tokenData = response.getJSONObject("login").getString("token")
-//
-//
-//
-//
-////                val dataJson= JSONObject()
-////                dataJson.put("userid",userId)
-////                dataJson.put("username",username)
-////                dataJson.put("firstname",firstname)
-////                dataJson.put("lastname",lastname)
-////                dataJson.put("email",email)
-////                dataJson.put("token",tokenData)
-//
-////                var strResp = response.toString()
-////                val jsonObj: JSONObject = JSONObject(strResp)
-////                Toast.makeText(this, dataJson.toString(), Toast.LENGTH_SHORT).show()
-//
-////                val jsonArray: JSONArray = jsonObj.getJSONArray("items")
-////                var str_user: String = ""
-//
-////                for (i in 0 until jsonObj.length()) {
-////                    var jsonInner: JSONObject = jsonObj.getJSONObject(i)
-////                    str_user = str_user + "\n" + jsonInner.get("login")
-////                }
-//
-//            },
-//            Response.ErrorListener {
-//                //                textView!!.text = "That didn't work!"
-////                Log.d("TAG", "Connect Falied")
-//                Toast.makeText(this, "Connect Falied", Toast.LENGTH_SHORT).show()
-//
-//
-//            })
-//        queue.add(stringReq)
+//                        val header = mutableMapOf<String, String>()
+//                        // "Cookie" and "PHPSESSID=" + <session value> are default format
+//                        header.put("Accept", "application/json")
+//                        header.put("Authorization", "Bearer "+ tokenValue)
+//                        return header
+//                    }
+                }
+                updateQueue.add(updateReq)
+            }
+
+        }
+
 
     }
+
+
 
     override fun onStopJob(params: JobParameters): Boolean {
         Log.d(TAG, "Job cancelled before completion")

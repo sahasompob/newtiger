@@ -29,6 +29,12 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.json.JSONObject
 import java.util.HashMap
+import android.R.attr.password
+import org.mindrot.jbcrypt.BCrypt
+
+
+
+
 
 
 class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
@@ -189,6 +195,8 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     fun loginWihtLocal(){
 
 //        creatOfflineUser()
+        db = ApplicationDatabase.getInstance(this)
+        arrayUser = db?.userDao()?.getAll()!!
 
         var user:String = username.text.toString()
         var pass:String = password.text.toString()
@@ -196,12 +204,28 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
         for (item in arrayUser){
 
             usernameData = item.username!!.toString()
-            passwordData = item.password!!.toString()
+            passwordData = item.password!!
             nameData =item.firstname!!.toString()
             roleData = item.role!!.toString()
 
-            if (user == usernameData && pass== passwordData){
+//            var testpass:String = passwordData
+//            $2a$10$CjxFrD2nNA4Fe8cbYL3PTe1qYboS/dgZfcaznsBp8hy/hKXyHb6xq
+//            var test = BCrypt.hashpw(passwordData,BCrypt.gensalt())
+            var pass = BCrypt.checkpw(pass,passwordData)
 
+//            Log.e("Result = ",pass.toString())
+
+//            String.valueOf(BCrypt.checkpw(pass,passwordData)));
+//            val passwordValid = crypt.BCryptVerify(password, storedHash)
+
+
+
+            if (user == usernameData && pass== true){
+
+                Log.e("Result = ","Success")
+                Log.e("usernameData = ",usernameData)
+                Log.e("name = ",nameData)
+                Log.e("role = ",roleData)
 
                 var i : Intent = Intent(applicationContext,MainActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

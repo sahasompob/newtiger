@@ -310,12 +310,12 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
 
     fun workManager() {
-
+        val flexMillis = (1 * 60 * 1000).toLong()
         val componentName = ComponentName(this, ExampleJobService::class.java)
         val info = JobInfo.Builder(123, componentName)
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .setPersisted(true)
-            .setPeriodic(5000)
+            .setPeriodic(flexMillis)
             .build()
 
         val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler

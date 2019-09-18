@@ -116,11 +116,11 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 //                    arrayUser = db?.userDao()?.getAll()!!
 
                     db = ApplicationDatabase.getInstance(this)
-                    val user =
-                        User(username =  "1234",email = "admin@gmail.com", firstname = "AdminJA",lastname = "eiei",
-                            password = "1234",enabled = 1, role = "O")
-
-                    InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+//                    val user =
+//                        User(username =  "1234",email = "admin@gmail.com", firstname = "AdminJA",lastname = "eiei",
+//                            password = "1234",enabled = 1, role = "O")
+//
+//                    InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
 
 
                     for (i in 0 until sts.length()) {

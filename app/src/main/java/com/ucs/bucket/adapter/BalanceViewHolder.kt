@@ -29,7 +29,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var status = test.action
 
         if (status.equals("DE")){
-            itemView.sid.text = test.username
+            itemView.sid.text = test.log_id.toString()
             itemView.startTime.text = test.datedtime.toString()
             itemView.status.text = test.action
             itemView.deposit.text = test.deposit.toString()
@@ -39,7 +39,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         }else if (status.equals("OF")){
 
-            itemView.sid.text = test.username
+            itemView.sid.text = test.log_id.toString()
             itemView.startTime.text = test.datedtime.toString()
             itemView.status.text = test.action
 
@@ -50,7 +50,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         }else if (status.equals("C")){
 
-            itemView.sid.text = test.username
+            itemView.sid.text = test.log_id.toString()
             itemView.startTime.text = test.datedtime.toString()
             itemView.status.text = test.action
 
@@ -63,7 +63,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         }else{
             
-            itemView.sid.text = test.username
+            itemView.sid.text = test.log_id.toString()
             itemView.startTime.text = test.datedtime.toString()
             itemView.status.text = test.action
 

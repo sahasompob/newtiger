@@ -61,6 +61,7 @@ public class SessionSerial {
         var user: Map<String,String> = HashMap<String,String>()
 
         (user as HashMap).put(SERIAL_ID,pref.getString(SERIAL_ID,null))
+        (user as HashMap).put(VERIFYCODE,pref.getString(VERIFYCODE,null))
 
 
         return  user
