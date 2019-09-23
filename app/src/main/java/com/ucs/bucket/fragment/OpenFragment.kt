@@ -436,7 +436,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                 val depositData = JSONObject()
                 depositData.put("serial",serial_value)
-                depositData.put("action_code","C")
+                depositData.put("action_code","CF")
                 depositData.put("detail","")
                 depositData.put("deposit",0)
                 depositData.put("drop",0)
@@ -466,7 +466,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                         val balance =
                             BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                                action = "C", deposit = 0, drop = 0, toto_deposit = balanceBefore,
+                                action = "CF", deposit = 0, drop = 0, toto_deposit = balanceBefore,
                                 balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId,log_id = log_id)
 
                         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
@@ -503,7 +503,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                 val balance =
                     BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                        action = "C", deposit = 0, drop = 0, toto_deposit = balanceBefore,
+                        action = "CF", deposit = 0, drop = 0, toto_deposit = balanceBefore,
                         balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId,log_id = 0)
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
