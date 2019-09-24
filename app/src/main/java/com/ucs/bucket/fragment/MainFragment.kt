@@ -155,10 +155,10 @@ class MainFragment : Fragment() {
         }
 
         logOut.setOnClickListener {
-
-            var session = SessionManager(context!!)
-
-            session.logOutUser()
+//
+//            var session = SessionManager(context!!)
+//
+//            session.logOutUser()
 
             (activity as MainActivity).closeApp()
 

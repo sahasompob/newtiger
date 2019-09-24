@@ -54,6 +54,7 @@ class UserFragment : Fragment() {
 
 
     fun initInstance(root: View) {
+
         test_system = root.test_system
         nameUser = root.name_user
         deposit = root.deposit_btn

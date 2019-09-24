@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-//        session = SessionSerial(applicationContext)
+        session = SessionSerial(applicationContext)
         session2 = SessionManager(applicationContext)
 
 //        username = (EditText) findViewById(R.id.edt_username_login);
@@ -104,6 +104,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
                 loginToServer()
 
+
             }else{
 
                 loginWihtLocal()
@@ -124,11 +125,13 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
     fun loginToServer(){
 
-        var storage = SessionSerial(applicationContext)
 
-        var serial: HashMap<String, String> = storage.getUserDetails()
+        var serial: HashMap<String, String> = session.getUserDetails()
 
         var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+
+        Toast.makeText(this,serial_value, Toast.LENGTH_SHORT).show()
+
         var user:String = username.text.toString()
         var pass:String = password.text.toString()
         Toast.makeText(this,serial_value,Toast.LENGTH_SHORT).show();
@@ -170,7 +173,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                 Log.d("userEiei", role)
                 Log.d("userEiei",token)
 
-                session2.creatLoginSession(usernameID.toString(),username,firstname,lastname,email,token)
+                session2.creatLoginSession(usernameID.toString(),username,firstname,lastname,email,role,token)
 
                 var i : Intent = Intent(applicationContext,MainActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

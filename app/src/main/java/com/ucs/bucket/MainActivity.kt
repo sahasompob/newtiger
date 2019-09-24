@@ -22,6 +22,9 @@ import com.ucs.bucket.Util.ExampleJobService
 import android.content.ComponentName
 import android.util.Log
 import java.util.concurrent.TimeUnit
+import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
+import com.ucs.bucket.Util.SessionSerial
 
 
 class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragment.OnInputSelected  {
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     private var tvtv : TextView? = null
     private lateinit var arrayUser: List<User>
     lateinit var session : SessionManager
+    lateinit var session2 : SessionSerial
 //    private lateinit var arrayUser: null!!
 
 
@@ -58,9 +62,11 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
         workManager()
         session = SessionManager(applicationContext)
+        session2 = SessionSerial(applicationContext)
         mHandler = MyHandler(this)
         db = ApplicationDatabase.getInstance(this)
 //        arrayUser = db?.userDao()?.getAll()!!
+
 
         if (checkNetworkConnection()){
 
@@ -71,11 +77,34 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
             var username:String = user.get(SessionManager.USERNAME)!!
             var firstname:String = user.get(SessionManager.FIRSTNAME)!!
             var token:String = user.get(SessionManager.TOKEN)!!
+            var role:String = user.get(SessionManager.ROLE)!!
 
 
-            supportFragmentManager.beginTransaction()
-                .add(R.id.area_main,MainFragment.newInstance("Admin",username,firstname),"main")
-                .commit()
+//            supportFragmentManager.beginTransaction()
+//                .add(R.id.area_main,UserFragment.newInstance("Onwer",username,firstname),"main")
+//                .commit()
+
+//
+            if (role.equals("O")){
+
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.area_main,MainFragment.newInstance("Onwer",username,firstname),"main")
+                    .commit()
+
+            }else if (role.equals("C")){
+
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.area_main,UserFragment.newInstance("Cashier",username,firstname),"user")
+                    .commit()
+
+
+            }else if (role.equals("M")){
+
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.area_main,ManagerFragment.newInstance("Manager",username,firstname),"manager")
+                    .commit()
+
+            }
 
         }else{
 
@@ -93,13 +122,13 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
             }else if (role == "C"){
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.area_main,UserFragment.newInstance(role,username,name),"main")
+                    .add(R.id.area_main,UserFragment.newInstance(role,username,name),"user")
                     .commit()
 
             }else if (role == "M"){
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.area_main,ManagerFragment.newInstance(role,username,name),"main")
+                    .add(R.id.area_main,ManagerFragment.newInstance(role,username,name),"manager")
                     .commit()
             }
 
@@ -226,7 +255,29 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
 
     fun closeApp(){
-       finish()
+
+         val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.setTitle("Exit Application?")
+                alertDialogBuilder
+        .setMessage("Click yes to exit!")
+        .setCancelable(false)
+        .setPositiveButton("Yes"
+        ) { dialog, id ->
+            moveTaskToBack(true)
+            android.os.Process.killProcess(android.os.Process.myPid())
+            System.exit(1)
+            finish()
+        }
+
+        .setNegativeButton("No", object:DialogInterface.OnClickListener {
+        override fun onClick(dialog:DialogInterface, id:Int) {
+
+        dialog.cancel()
+        }
+        })
+
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

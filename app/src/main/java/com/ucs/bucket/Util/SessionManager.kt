@@ -34,12 +34,13 @@ public class SessionManager {
         val  FIRSTNAME : String = "firstname"
         val  LASTNAME : String = "lastname"
         val  EMAIL : String = "email"
+        val  ROLE : String = "role"
         val  TOKEN : String = "token"
 
     }
 
 
-    fun creatLoginSession(user_id:String,username:String,firstname:String,lastname:String,email:String,token:String){
+    fun creatLoginSession(user_id:String,username:String,firstname:String,lastname:String,email:String,role:String,token:String){
 
         editor.putBoolean(IS_LOGIN,true)
         editor.putString(USER_ID,user_id)
@@ -47,6 +48,7 @@ public class SessionManager {
         editor.putString(FIRSTNAME,firstname)
         editor.putString(LASTNAME,lastname)
         editor.putString(EMAIL,email)
+        editor.putString(ROLE,role)
         editor.putString(TOKEN,token)
         editor.commit()
 //        Toast.makeText(con, username, Toast.LENGTH_SHORT).show()
@@ -75,6 +77,7 @@ public class SessionManager {
         (user as HashMap).put(FIRSTNAME,pref.getString(FIRSTNAME,null))
         (user as HashMap).put(LASTNAME,pref.getString(LASTNAME,null))
         (user as HashMap).put(EMAIL,pref.getString(EMAIL,null))
+        (user as HashMap).put(ROLE,pref.getString(ROLE,null))
         (user as HashMap).put(TOKEN,pref.getString(TOKEN,null))
 
         return  user
