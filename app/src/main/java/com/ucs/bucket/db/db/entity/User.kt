@@ -34,7 +34,10 @@ class User(
         var enabled:Int = 0,
 
         @ColumnInfo(name = "role")
-        var role: String? = null
+        var role: String? = null,
+
+        @ColumnInfo(name = "action_status")
+        var action_status: Int? = 0
 
 
 

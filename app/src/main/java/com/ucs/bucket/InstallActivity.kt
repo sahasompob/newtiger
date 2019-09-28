@@ -137,7 +137,7 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
                         val user =
                             User(username =  username,email = email, firstname = firstname,lastname = lastname,
-                                password = password,enabled = enabled, role = role)
+                                password = password,enabled = enabled, role = role,action_status = 1)
 
                         InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
 

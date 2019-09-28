@@ -204,8 +204,9 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
         var user:String = username.text.toString()
         var pass:String = password.text.toString()
 
-        for (item in arrayUser){
 
+        for (item in arrayUser){
+            var user_id = item.uid
             usernameData = item.username!!.toString()
             passwordData = item.password!!
             nameData =item.firstname!!.toString()
@@ -229,6 +230,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                 Log.e("usernameData = ",usernameData)
                 Log.e("name = ",nameData)
                 Log.e("role = ",roleData)
+                Log.e("UserId = ",user_id.toString())
 
                 var i : Intent = Intent(applicationContext,MainActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -236,6 +238,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                 i.putExtra("username",usernameData)
                 i.putExtra("name",nameData)
                 i.putExtra("role",roleData)
+                i.putExtra("user_id",user_id.toString())
                 startActivity(i)
                 finish()
 //                val rank = roleData

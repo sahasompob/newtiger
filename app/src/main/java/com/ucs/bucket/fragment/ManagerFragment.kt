@@ -28,12 +28,14 @@ class ManagerFragment : Fragment() {
     var rank = ""
     var str = ""
     var nameData = ""
+    var id = ""
     companion object {
 
-        fun newInstance(rank: String, str: String, nameData: String): ManagerFragment {
+        fun newInstance(id: String,rank: String, str: String, nameData: String): ManagerFragment {
 
             var fragment = ManagerFragment()
             var args = Bundle()
+            args.putString("id",id)
             args.putString("rank",rank)
             args.putString("user",str)
             args.putString("name",nameData)
@@ -66,6 +68,7 @@ class ManagerFragment : Fragment() {
         str = arguments?.getString("user")!!
         nameData = arguments?.getString("name")!!
         nameUser.text = arguments?.getString("name")!!
+        id = arguments?.getString("id")!!
 
 
 
@@ -100,7 +103,7 @@ class ManagerFragment : Fragment() {
         reset_pass.setOnClickListener {
 
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,ResetPasswordFragment.newInstance(),"resetPass")
+                ?.replace(R.id.area_main,ResetPasswordFragment.newInstance(id),"resetPass")
                 ?.addToBackStack("resetPass")
                 ?.commit()
         }

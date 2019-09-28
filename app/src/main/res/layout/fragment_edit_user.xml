@@ -117,6 +117,7 @@
                         android:id="@+id/edt_username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusable="false"
                         android:layout_alignBottom="@+id/imgView_userIcon"
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="0dp"
@@ -126,7 +127,7 @@
                         android:background="@color/white"
                         android:hint="Username"
                         android:paddingLeft="20dp"
-                        android:textSize="15sp" />
+                        android:textSize="25dp" />
 
             </RelativeLayout>
 
@@ -153,18 +154,20 @@
                         android:id="@+id/edt_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusable="false"
                         android:layout_alignBottom="@+id/imgView_userIcon2"
                         android:layout_alignParentTop="true"
                         android:layout_toRightOf="@+id/imgView_userIcon2"
                         android:background="@color/white"
                         android:hint="Name"
                         android:paddingLeft="20dp"
-                        android:textSize="15sp" />
+                        android:textSize="25dp" />
 
             </RelativeLayout>
 
 
             <RelativeLayout
+                    android:visibility="gone"
                     android:id="@+id/relativeLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -190,9 +193,10 @@
                         android:layout_alignParentTop="true"
                         android:layout_toRightOf="@+id/imgView_passwordIcon"
                         android:background="@color/white"
-                        android:hint="Password"
+                        android:focusable="false"
+                        android:hint="กรอกรหัสผ่านเดิม"
                         android:paddingLeft="20dp"
-                        android:textSize="15sp" />
+                        android:textSize="25dp" />
 
             </RelativeLayout>
 
@@ -222,9 +226,11 @@
                         android:layout_alignParentTop="true"
                         android:layout_toRightOf="@+id/imgView_repasswordIcon"
                         android:background="@color/white"
-                        android:hint="Re-type Password"
+                        android:focusable="true"
+                        android:inputType="numberPassword"
+                        android:hint="กรอกรหัสผ่านใหม่"
                         android:paddingLeft="20dp"
-                        android:textSize="15sp" />
+                        android:textSize="25dp" />
 
             </RelativeLayout>
 

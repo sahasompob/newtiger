@@ -31,10 +31,11 @@ class UserFragment : Fragment() {
     var nameData = ""
     companion object {
 
-        fun newInstance(rank: String, str: String, nameData: String): UserFragment {
+        fun newInstance(id: String,rank: String, str: String, nameData: String): UserFragment {
 
             var fragment = UserFragment()
             var args = Bundle()
+            args.putString("id",id)
             args.putString("rank",rank)
             args.putString("user",str)
             args.putString("name",nameData)
@@ -69,6 +70,9 @@ class UserFragment : Fragment() {
         str = arguments?.getString("user")!!
         nameData = arguments?.getString("name")!!
         nameUser.text = arguments?.getString("name")!!
+        var user_id = arguments?.getString("id")!!
+
+
 
 
 
@@ -83,28 +87,11 @@ class UserFragment : Fragment() {
             Toast.makeText(context, rank, Toast.LENGTH_SHORT).show()
         }
 
-//       openBox.setOnClickListener {
-//
-//            fragmentManager?.beginTransaction()
-//                ?.replace(R.id.area_main,OpenFragment.newInstance(rank,str,nameData),"open")
-//                ?.addToBackStack("open")
-//                ?. commit()
-//        }
-//
-//        manage.setOnClickListener {
-//
-//            activity?.let{
-//                val intent = Intent (it, ManagmentUserActivity::class.java)
-//                it.startActivity(intent)
-//            }
-//
-//
-//        }
 
         reset_pass.setOnClickListener {
 
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,ResetPasswordFragment.newInstance(),"resetPass")
+                ?.replace(R.id.area_main,ResetPasswordFragment.newInstance(user_id),"resetPass")
                 ?.addToBackStack("resetPass")
                 ?.commit()
         }

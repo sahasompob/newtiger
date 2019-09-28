@@ -73,11 +73,16 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 //            session.checkLogin()
 
             var user:HashMap<String,String> = session.getUserDetails()
+//
+//            var username:String = user.get(SessionManager.USERNAME)!!
+//            var firstname:String = user.get(SessionManager.FIRSTNAME)!!
+//            var token:String = user.get(SessionManager.TOKEN)!!
+//            var role:String = user.get(SessionManager.ROLE)!!
 
-            var username:String = user.get(SessionManager.USERNAME)!!
-            var firstname:String = user.get(SessionManager.FIRSTNAME)!!
-            var token:String = user.get(SessionManager.TOKEN)!!
-            var role:String = user.get(SessionManager.ROLE)!!
+            var username=intent.getStringExtra("username")
+            var firstname=intent.getStringExtra("name")
+            var role=intent.getStringExtra("role")
+            var user_id=intent.getStringExtra("user_id")
 
 
 //            supportFragmentManager.beginTransaction()
@@ -88,47 +93,50 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
             if (role.equals("O")){
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.area_main,MainFragment.newInstance("Onwer",username,firstname),"main")
+                    .add(R.id.area_main,MainFragment.newInstance(user_id,"Onwer",username,firstname),"main")
                     .commit()
 
             }else if (role.equals("C")){
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.area_main,UserFragment.newInstance("Cashier",username,firstname),"user")
+                    .add(R.id.area_main,UserFragment.newInstance(user_id,"Cashier",username,firstname),"user")
                     .commit()
 
 
             }else if (role.equals("M")){
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.area_main,ManagerFragment.newInstance("Manager",username,firstname),"manager")
+                    .add(R.id.area_main,ManagerFragment.newInstance(user_id,"Manager",username,firstname),"manager")
                     .commit()
 
             }
 
         }else{
 
-            val username=intent.getStringExtra("username")
-            val name=intent.getStringExtra("name")
-            val role=intent.getStringExtra("role")
+            var username=intent.getStringExtra("username")
+            var name=intent.getStringExtra("name")
+            var role=intent.getStringExtra("role")
+            var user_id=intent.getStringExtra("user_id")
+
+
 
 
             if (role == "O"){
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.area_main,MainFragment.newInstance(role,username,name),"main")
+                    .add(R.id.area_main,MainFragment.newInstance(user_id,role,username,name),"main")
                     .commit()
 
             }else if (role == "C"){
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.area_main,UserFragment.newInstance(role,username,name),"user")
+                    .add(R.id.area_main,UserFragment.newInstance(user_id,role,username,name),"user")
                     .commit()
 
             }else if (role == "M"){
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.area_main,ManagerFragment.newInstance(role,username,name),"manager")
+                    .add(R.id.area_main,ManagerFragment.newInstance(user_id,role,username,name),"manager")
                     .commit()
             }
 

@@ -37,10 +37,11 @@ class MainFragment : Fragment() {
     var nameData = ""
     companion object {
 
-        fun newInstance(rank: String, str: String, nameData: String): MainFragment {
+        fun newInstance(id: String,rank: String, str: String, nameData: String): MainFragment {
 
             var fragment = MainFragment()
             var args = Bundle()
+            args.putString("id",id)
             args.putString("rank",rank)
             args.putString("user",str)
             args.putString("name",nameData)
@@ -88,6 +89,7 @@ class MainFragment : Fragment() {
 
         nameData = arguments?.getString("name")!!
 
+        var user_id = arguments?.getString("id")!!
         var storage = SessionManager(context!!)
 
         deposit.setOnClickListener {
@@ -121,7 +123,7 @@ class MainFragment : Fragment() {
         reset_pass.setOnClickListener {
 
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,ResetPasswordFragment.newInstance(),"resetPass")
+                ?.replace(R.id.area_main,ResetPasswordFragment.newInstance(user_id),"resetPass")
                 ?.addToBackStack("resetPass")
                 ?.commit()
         }

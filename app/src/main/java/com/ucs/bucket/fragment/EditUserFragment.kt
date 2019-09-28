@@ -3,6 +3,7 @@ package com.ucs.bucket.fragment;
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.ucs.bucket.db.db.dao.UserDAO
 import com.ucs.bucket.db.db.entity.User
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_edit_user.view.*
+import org.mindrot.jbcrypt.BCrypt
 
 class EditUserFragment : Fragment(), AsyncResponseCallback {
 
@@ -27,13 +29,16 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
 
     var user_data = ""
     var pass_data = ""
+    var new_pass_data = ""
     var name_data = ""
     var edt_role = ""
 
+    var role_text =""
+
     lateinit var edt_username: EditText
     lateinit var edt_name: EditText
-    lateinit var edt_password: EditText
-    lateinit var edt_repassword: EditText
+    lateinit var edt_old_password: EditText
+    lateinit var edt_new_password: EditText
 
     var userId = 0;
 
@@ -63,8 +68,8 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
 
         edt_username = root.edt_username
         edt_name = root.edt_name
-        edt_password = root.edt_password
-        edt_repassword = root.edt_repassword
+        edt_old_password = root.edt_password
+        edt_new_password = root.edt_repassword
         edit_btn = root.edit_btn
         cancel_btn = root.cancel_btn
         edt_role_spinner = root.edt_role_spinner
@@ -80,6 +85,22 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
 
                 edt_role = edt_role_spinner.selectedItem.toString()
 
+                if (edt_role.equals("Admin")){
+
+                    role_text = "O"
+
+                }else if (edt_role.equals("User")){
+
+                    role_text = "C"
+
+                }else if (edt_role.equals("Manager")){
+                    role_text = "M"
+
+                }else{
+                    role_text = "O"
+
+                }
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -90,8 +111,7 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
 
         userId = arguments?.getInt("userId")!!
         edt_username.setText(arguments?.getString("username")!!)
-        edt_password.setText(arguments?.getString("password")!!)
-        edt_repassword.setText(arguments?.getString("password")!!)
+        edt_old_password.setText(arguments?.getString("password")!!)
         edt_name.setText(arguments?.getString("firstname")!!)
 
 
@@ -101,16 +121,29 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
         edit_btn.setOnClickListener {
 
             user_data = edt_username.text.toString()
-            pass_data = edt_password.text.toString()
+            pass_data = edt_old_password.text.toString()
+            new_pass_data = edt_new_password.text.toString()
             name_data =  edt_name.text.toString()
 
+//            var pass = BCrypt.checkpw(pass_data,passwordData)
+
+//            if ()
+
+            var newpassGen = BCrypt.hashpw(new_pass_data,BCrypt.gensalt())
 
 //            val user =
 //                User(uid = userId, username =  user_data, firstname = name_data,
-//                    password = pass_data, role = edt_role)
+//                    password = pass_data, role = role_text)
+//
 //            UpdateUserAsync(db!!.userDao(), RoomConstants.UPDATE_USER, this).execute(user)
 
-            fragmentManager?.popBackStack()
+//            fragmentManager?.popBackStack()
+            Log.d("newPass = ",newpassGen.toString())
+
+            db?.userDao()?.updatePass(userId,newpassGen,0)!!
+
+             fragmentManager?.popBackStack()
+
 
         }
 
