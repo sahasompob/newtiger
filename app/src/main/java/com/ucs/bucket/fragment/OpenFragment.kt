@@ -1,15 +1,19 @@
 package com.ucs.bucket.fragment;
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.hardware.Camera
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
@@ -33,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_open.view.name_user
 import kotlinx.android.synthetic.main.fragment_open.view.status_offline
 import kotlinx.android.synthetic.main.fragment_open.view.status_online
 import org.json.JSONObject
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,6 +56,9 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
     private lateinit var arrayBalanceBefore: List<BalanceLog>
     private lateinit var arrayBalanceStatus: List<BalanceLog>
     private lateinit var arrayOpenConsole: List<OpenConsole>
+
+    lateinit var camera : Camera
+    lateinit var frameLayout: FrameLayout
 
 
     var user = ""
@@ -88,7 +96,6 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         initInstance(rootView)
         return rootView
     }
-
     fun initInstance(root: View) {
 
         db = context?.let { ApplicationDatabase.getInstance(it) }
@@ -103,6 +110,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             balanceBefore = item.balance!!.toInt()
 
         }
+
+        frameLayout = root.camera_layout
         offline_btn = root.status_offline
         online_btn = root.status_online
         close_btn = root.close_btn
@@ -115,6 +124,16 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         name_user.text = arguments?.getString("name")!!
         user = arguments?.getString("user")!!
+
+
+
+//        camera.
+         fun checkPersmission(): Boolean {
+            return (ContextCompat.checkSelfPermission(context!!, android.Manifest.permission.CAMERA) ==
+                    PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(context!!,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        }
+
 
 
         if(checkNetworkConnection()){
@@ -367,6 +386,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         }
 
     }
+
+
 
     fun getData(data : String){
 
@@ -687,4 +708,23 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
+
+//    private fun checkCameraHardware(context: Context): Boolean {
+//        if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+//            // this device has a camera
+//            return true
+//        } else {
+//            // no camera on this device
+//            return false
+//        }
+//    }
+//
+//    fun getCameraInstance(): Camera? {
+//        return try {
+//            Camera.open() // attempt to get a Camera instance
+//        } catch (e: Exception) {
+//            // Camera is not available (in use or does not exist)
+//            null // returns null if camera is unavailable
+//        }
+//    }
 }
