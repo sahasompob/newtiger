@@ -28,6 +28,7 @@ import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.BalanceLogDao
 import com.ucs.bucket.db.db.entity.BalanceLog
+import com.ucs.bucket.db.db.entity.Token
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_insert_coin.view.*
 import kotlinx.android.synthetic.main.fragment_insert_coin.view.name_user
@@ -46,6 +47,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
     private var db: ApplicationDatabase? = null
     private lateinit var arrayUser: List<BalanceLog>
+    private lateinit var tokenUser: List<Token>
 
 
     lateinit var textSum : TextView
@@ -80,14 +82,16 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
     var user = ""
     var balanceBefore = 0
     var dMoney = 0
+    var testID =""
 
 
     companion object {
 
-        fun newInstance(rank: String, str: String , nameData : String): InsertCoinFragment {
+        fun newInstance(id: String,rank: String, str: String , nameData : String): InsertCoinFragment {
 
             var fragment = InsertCoinFragment()
             var args = Bundle()
+            args.putString("id",id)
             args.putString("rank",rank)
             args.putString("user",str)
             args.putString("name",nameData)
@@ -161,7 +165,11 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
         if(checkNetworkConnection()){
 
+
+
+
             offline_btn.visibility = View.INVISIBLE
+
 
         }else{
 
@@ -234,18 +242,28 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
             if (checkNetworkConnection()){
 
 
+                testID = arguments?.getString("id")!!
+                Log.d("testID = ",testID)
 
+                tokenUser = db?.tokenDao()?.getToken(testID.toInt())!!
+
+
+                var testtoken=""
+
+                for (item in tokenUser){
+
+                    testtoken = item.token!!
+
+                }
+
+                Log.d("tokenUser = ",testtoken)
 
                 var storage = SessionSerial(context!!)
-
                 var serial:HashMap<String,String> = storage.getUserDetails()
-
                 var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
-                var storage2 = SessionManager(context!!)
 
-                var token:HashMap<String,String> = storage2.getUserDetails()
 
-                var tokenValue:String = token.get(SessionManager.TOKEN)!!
+
 
                 val depositData = JSONObject()
                 depositData.put("serial",serial_value)
@@ -287,7 +305,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                         val header = mutableMapOf<String, String>()
                         // "Cookie" and "PHPSESSID=" + <session value> are default format
                         header.put("Accept", "application/json")
-                        header.put("Authorization", "Bearer "+ tokenValue)
+                        header.put("Authorization", "Bearer "+ testtoken)
                         return header
                     }
                 }
@@ -295,6 +313,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
 
             }else{
+
                 log_id = 0
 
                 val balance =

@@ -12,6 +12,13 @@ interface TokenDAO {
 
     @Query("SELECT * FROM token")
     fun getAll(): List<Token>
+
+    @Query("SELECT * FROM token WHERE user_id IN (:userID)")
+    fun getToken(userID: Int): List<Token>
+
+    @Query("DELETE FROM token")
+    fun deleteToken()
+
 //
 //    @Query("SELECT * FROM user WHERE uid IN (:userIds)")
 //    fun loadAllByIds(userIds: IntArray): List<User>

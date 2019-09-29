@@ -30,6 +30,8 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.json.JSONObject
 import java.util.HashMap
 import android.R.attr.password
+import com.ucs.bucket.db.db.dao.TokenDAO
+import com.ucs.bucket.db.db.entity.Token
 import org.mindrot.jbcrypt.BCrypt
 
 
@@ -173,11 +175,19 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                 Log.d("userEiei", role)
                 Log.d("userEiei",token)
 
-                session2.creatLoginSession(usernameID.toString(),username,firstname,lastname,email,role,token)
+//                session2.creatLoginSession(usernameID.toString(),username,firstname,lastname,email,role,token)
+                db = ApplicationDatabase.getInstance(this)
+                val tokenData = Token(user_id = usernameID,username = username,firstname = firstname,lastname = lastname,email = email,role = role,token =token )
+                InsertToken(db!!.tokenDao(), RoomConstants.INSERT_USER, this).execute(tokenData)
+
 
                 var i : Intent = Intent(applicationContext,MainActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                i.putExtra("username",username)
+                i.putExtra("name",firstname)
+                i.putExtra("role",role)
+                i.putExtra("user_id",usernameID.toString())
                 startActivity(i)
                 finish()
 
@@ -332,17 +342,41 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     }
 
 
-    class InsertUserAsync(private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {
-        override fun doInBackground(vararg user: User?): User? {
+//    class InsertUserAsync(private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {
+//        override fun doInBackground(vararg user: User?): User? {
+//            return try {
+//                userDao.insertAll(user[0]!!)
+//                user[0]!!
+//            } catch (ex: Exception) {
+//                null
+//            }
+//        }
+//
+//        override fun onPostExecute(result: User?) {
+//            super.onPostExecute(result)
+//            if (result != null) {
+//                responseAsyncResponse.onResponse(true, call)
+//            } else {
+//                responseAsyncResponse.onResponse(false, call)
+//            }
+//        }
+//
+//
+//
+//    }
+
+
+    class InsertToken(private val tokenDAO: TokenDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<Token, Void, Token>() {
+        override fun doInBackground(vararg token: Token?): Token? {
             return try {
-                userDao.insertAll(user[0]!!)
-                user[0]!!
+                tokenDAO.insertToken(token[0]!!)
+                token[0]!!
             } catch (ex: Exception) {
                 null
             }
         }
 
-        override fun onPostExecute(result: User?) {
+        override fun onPostExecute(result: Token?) {
             super.onPostExecute(result)
             if (result != null) {
                 responseAsyncResponse.onResponse(true, call)

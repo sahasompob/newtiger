@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     lateinit var session2 : SessionSerial
 //    private lateinit var arrayUser: null!!
 
+    var testId =""
 
     private val usbConnection = object : ServiceConnection {
         override fun onServiceConnected(arg0: ComponentName, arg1: IBinder) {
@@ -70,26 +71,20 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
         if (checkNetworkConnection()){
 
-//            session.checkLogin()
-
-            var user:HashMap<String,String> = session.getUserDetails()
-//
-//            var username:String = user.get(SessionManager.USERNAME)!!
-//            var firstname:String = user.get(SessionManager.FIRSTNAME)!!
-//            var token:String = user.get(SessionManager.TOKEN)!!
-//            var role:String = user.get(SessionManager.ROLE)!!
-
             var username=intent.getStringExtra("username")
             var firstname=intent.getStringExtra("name")
             var role=intent.getStringExtra("role")
             var user_id=intent.getStringExtra("user_id")
 
 
+            testId = user_id
+
 //            supportFragmentManager.beginTransaction()
 //                .add(R.id.area_main,UserFragment.newInstance("Onwer",username,firstname),"main")
 //                .commit()
 
 //
+            Log.d("Role = ",role)
             if (role.equals("O")){
 
                 supportFragmentManager.beginTransaction()
@@ -151,6 +146,12 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
 
 
+    fun userID(): Int {
+
+        return testId.toInt()
+    }
+
+
     private val mUsbReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
@@ -192,6 +193,9 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
         super.onDestroy()
 //        session.logOutUser()
+
+        db = ApplicationDatabase.getInstance(this)
+        db?.tokenDao()?.deleteToken()!!
 
     }
 
@@ -271,6 +275,8 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
         .setCancelable(false)
         .setPositiveButton("Yes"
         ) { dialog, id ->
+            db = ApplicationDatabase.getInstance(this)
+            db?.tokenDao()?.deleteToken()!!
             moveTaskToBack(true)
             android.os.Process.killProcess(android.os.Process.myPid())
             System.exit(1)

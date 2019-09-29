@@ -90,12 +90,13 @@ class MainFragment : Fragment() {
         nameData = arguments?.getString("name")!!
 
         var user_id = arguments?.getString("id")!!
+
         var storage = SessionManager(context!!)
 
         deposit.setOnClickListener {
 
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,InsertCoinFragment.newInstance(rank,str,nameData),"coin")
+                ?.replace(R.id.area_main,InsertCoinFragment.newInstance(user_id,rank,str,nameData),"coin")
                 ?.addToBackStack("coin")
                 ?.commit()
 

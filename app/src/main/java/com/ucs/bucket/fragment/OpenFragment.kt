@@ -30,6 +30,7 @@ import com.ucs.bucket.db.db.dao.BalanceLogDao
 import com.ucs.bucket.db.db.dao.OpenDAO
 import com.ucs.bucket.db.db.entity.BalanceLog
 import com.ucs.bucket.db.db.entity.OpenConsole
+import com.ucs.bucket.db.db.entity.Token
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.android.synthetic.main.fragment_open.view.*
@@ -55,6 +56,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
     private var db: ApplicationDatabase? = null
     private lateinit var arrayBalanceBefore: List<BalanceLog>
     private lateinit var arrayBalanceStatus: List<BalanceLog>
+    private lateinit var tokenUser: List<Token>
     private lateinit var arrayOpenConsole: List<OpenConsole>
 
     lateinit var camera : Camera
@@ -138,6 +140,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         if(checkNetworkConnection()){
 
+            var id = (activity as MainActivity).userID()
+            Log.e("IDEIEI = ",id.toString())
             offline_btn.visibility = View.INVISIBLE
 
         }else{
@@ -156,16 +160,27 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             if (checkNetworkConnection()){
 
+                var id = (activity as MainActivity).userID()
+                Log.e("IDEIEI = ",id.toString())
+
+                tokenUser = db?.tokenDao()?.getToken(id)!!
+
+                var testtoken=""
+
+                for (item in tokenUser){
+
+                    testtoken = item.token!!
+
+                }
+
+                Log.d("tokenUser = ",testtoken)
+
+
+
                 var storage = SessionSerial(context!!)
-
                 var serial:HashMap<String,String> = storage.getUserDetails()
-
                 var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
-                var storage2 = SessionManager(context!!)
 
-                var token:HashMap<String,String> = storage2.getUserDetails()
-
-                var tokenValue:String = token.get(SessionManager.TOKEN)!!
 
                 val depositData = JSONObject()
                 depositData.put("serial",serial_value)
@@ -213,7 +228,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         val header = mutableMapOf<String, String>()
                         // "Cookie" and "PHPSESSID=" + <session value> are default format
                         header.put("Accept", "application/json")
-                        header.put("Authorization", "Bearer "+ tokenValue)
+                        header.put("Authorization", "Bearer "+ testtoken)
                         return header
                     }
                 }
@@ -250,6 +265,21 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             if (checkNetworkConnection()){
 
+                var id = (activity as MainActivity).userID()
+                Log.e("IDEIEI = ",id.toString())
+
+                tokenUser = db?.tokenDao()?.getToken(id)!!
+
+                var testtoken=""
+
+                for (item in tokenUser){
+
+                    testtoken = item.token!!
+
+                }
+
+                Log.d("tokenUser = ",testtoken)
+
 
                 var storage = SessionSerial(context!!)
 
@@ -257,10 +287,6 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                 var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
                 var storage2 = SessionManager(context!!)
-
-                var token:HashMap<String,String> = storage2.getUserDetails()
-
-                var tokenValue:String = token.get(SessionManager.TOKEN)!!
 
                 val depositData = JSONObject()
                 depositData.put("serial",serial_value)
@@ -325,7 +351,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         val header = mutableMapOf<String, String>()
                         // "Cookie" and "PHPSESSID=" + <session value> are default format
                         header.put("Accept", "application/json")
-                        header.put("Authorization", "Bearer "+ tokenValue)
+                        header.put("Authorization", "Bearer "+ testtoken)
                         return header
                     }
                 }
@@ -444,20 +470,34 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             if (checkNetworkConnection()){
 
+                var id = (activity as MainActivity).userID()
+                Log.e("IDEIEI = ",id.toString())
+
+                tokenUser = db?.tokenDao()?.getToken(id)!!
+
+                var testtoken=""
+
+                for (item in tokenUser){
+
+                    testtoken = item.token!!
+
+                }
+
+                Log.d("tokenUser = ",testtoken)
+
+
+
                 var storage = SessionSerial(context!!)
 
                 var serial:HashMap<String,String> = storage.getUserDetails()
 
                 var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
-                var storage2 = SessionManager(context!!)
 
-                var token:HashMap<String,String> = storage2.getUserDetails()
 
-                var tokenValue:String = token.get(SessionManager.TOKEN)!!
 
                 val depositData = JSONObject()
                 depositData.put("serial",serial_value)
-                depositData.put("action_code","CF")
+                depositData.put("action_code","CL")
                 depositData.put("detail","")
                 depositData.put("deposit",0)
                 depositData.put("drop",0)
@@ -487,7 +527,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                         val balance =
                             BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                                action = "CF", deposit = 0, drop = 0, toto_deposit = balanceBefore,
+                                action = "CL", deposit = 0, drop = 0, toto_deposit = balanceBefore,
                                 balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId,log_id = log_id)
 
                         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
@@ -510,7 +550,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         val header = mutableMapOf<String, String>()
                         // "Cookie" and "PHPSESSID=" + <session value> are default format
                         header.put("Accept", "application/json")
-                        header.put("Authorization", "Bearer "+ tokenValue)
+                        header.put("Authorization", "Bearer "+ testtoken)
                         return header
                     }
                 }
@@ -524,7 +564,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                 val balance =
                     BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                        action = "CF", deposit = 0, drop = 0, toto_deposit = balanceBefore,
+                        action = "CL", deposit = 0, drop = 0, toto_deposit = balanceBefore,
                         balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId,log_id = 0)
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
@@ -695,7 +735,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
-        closeData("close")
+
 //        fragmentManager?.popBackStack()
     }
 

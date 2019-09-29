@@ -75,7 +75,7 @@ class ManagerFragment : Fragment() {
         deposit.setOnClickListener {
 
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,InsertCoinFragment.newInstance(rank,str,nameData),"coin")
+                ?.replace(R.id.area_main,InsertCoinFragment.newInstance(id,rank,str,nameData),"coin")
                 ?.addToBackStack("coin")
                 ?.commit()
 
