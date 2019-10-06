@@ -102,6 +102,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         db = context?.let { ApplicationDatabase.getInstance(it) }
         arrayBalanceBefore = db?.balanceLogDao()?.getLastId()!!
+        (activity as MainActivity).openCamera()
         (activity as MainActivity).sendData("p")
 
         for (item in arrayBalanceBefore){
@@ -129,8 +130,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 
-//        camera.
-         fun checkPersmission(): Boolean {
+        //        camera.
+        fun checkPersmission(): Boolean {
             return (ContextCompat.checkSelfPermission(context!!, android.Manifest.permission.CAMERA) ==
                     PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(context!!,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
@@ -156,6 +157,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
         cancelBtn.setOnClickListener {
+
+            (activity as MainActivity).setupSurfaceHolder()
 
 
             if (checkNetworkConnection()){

@@ -158,6 +158,11 @@ class MainFragment : Fragment() {
         }
 
         logOut.setOnClickListener {
+
+//            fragmentManager?.beginTransaction()
+//                ?.replace(R.id.area_main,Camera2BasicFragment.newInstance(),"system")
+//                ?.addToBackStack("system")
+//                ?.commit()
 //
 //            var session = SessionManager(context!!)
 //

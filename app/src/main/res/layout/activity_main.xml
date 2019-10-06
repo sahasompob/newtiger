@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,10 +7,32 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+
     <FrameLayout
             android:id="@+id/area_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
 
 
-</android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/camera"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="200dp"
+            android:visibility="gone"
+            android:layout_alignParentRight="true">
+
+        <SurfaceView
+                android:id="@+id/surfaceView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+
+    </FrameLayout>
+
+
+
+</RelativeLayout>
