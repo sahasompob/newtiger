@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.fragment_open.view.name_user
 import kotlinx.android.synthetic.main.fragment_open.view.status_offline
 import kotlinx.android.synthetic.main.fragment_open.view.status_online
 import org.json.JSONObject
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -158,11 +159,12 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         cancelBtn.setOnClickListener {
 
-            (activity as MainActivity).setupSurfaceHolder()
+
 
 
             if (checkNetworkConnection()){
 
+                (activity as MainActivity).setupSurfaceHolder()
                 var id = (activity as MainActivity).userID()
                 Log.e("IDEIEI = ",id.toString())
 
@@ -216,7 +218,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                                 balance_before = balanceBefore, balance = balanceBefore, status = "-",log_id = log_id)
 
                         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
-                        fragmentManager?.popBackStack()
+//                        fragmentManager?.popBackStack()
 
 
                     },
@@ -242,6 +244,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             }else{
 
+                (activity as MainActivity).setupSurfaceHolder()
+
                 log_id = 0
 
                 timer.cancel()
@@ -254,11 +258,14 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         balance_before = balanceBefore, balance = balanceBefore, status = "-",log_id = log_id)
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_OPF, this).execute(balance)
-                fragmentManager?.popBackStack()
+//                fragmentManager?.popBackStack()
 
 
             }
 
+
+            (activity as MainActivity).closeCamera()
+//            fragmentManager?.popBackStack()
 
 
         }
@@ -770,4 +777,9 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 //            null // returns null if camera is unavailable
 //        }
 //    }
+
+    fun testImage(file : File){
+
+        Log.d("FileOpen = ","${file}")
+    }
 }

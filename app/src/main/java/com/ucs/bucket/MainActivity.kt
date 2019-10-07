@@ -26,6 +26,9 @@ import android.util.Log
 import java.util.concurrent.TimeUnit
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.hardware.Camera
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -35,10 +38,7 @@ import android.view.SurfaceView
 import android.view.View
 import android.widget.FrameLayout
 import com.ucs.bucket.Util.SessionSerial
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 
 
 class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragment.OnInputSelected, SurfaceHolder.Callback, Camera.PictureCallback  {
@@ -443,9 +443,17 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
     fun openCamera(){
 
-        val cameraLayout = findViewById<FrameLayout>(R.id.camera)
+        val cameraLayout = findViewById<FrameLayout>(R.id.camera_preview)
 
         cameraLayout.visibility = View.VISIBLE
+
+    }
+
+    fun closeCamera(){
+
+        val cameraLayout = findViewById<FrameLayout>(R.id.camera_preview)
+
+        cameraLayout.visibility = View.GONE
 
     }
 
@@ -541,6 +549,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     private fun startCamera() {
         camera = Camera.open()
         camera!!.setDisplayOrientation(90)
+
         try {
             camera!!.setPreviewDisplay(surfaceHolder)
             camera!!.startPreview()
@@ -592,20 +601,59 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
 
     private fun saveImage(bytes: ByteArray) {
+
         val outStream: FileOutputStream
+        var bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size);
         try {
-            val fileName = "TUTORIALWING_" + System.currentTimeMillis() + ".jpg"
+
+            var bitmapFinal: Bitmap? = null
+            var bitmapFinal2: Bitmap? = null
+
+            val matrix = Matrix()
+            matrix.postRotate(90F)
+
+            val fileName = "TigerCashBox" + System.currentTimeMillis() + ".jpg"
             val file = File(Environment.getExternalStorageDirectory(), fileName)
+            val bytes = ByteArrayOutputStream()
+
+            bitmapFinal = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),bmp.getHeight(), matrix, true);
+            bmp.recycle();
+            bmp=null
+
+            bitmapFinal2 = Bitmap.createScaledBitmap(bitmapFinal,250,250,true);
+            bitmapFinal.recycle();
+            bitmapFinal=null
+            bitmapFinal2.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+//
+            val fragment = supportFragmentManager.findFragmentByTag("open")
+
+
+            if(fragment!=null){
+
+                (fragment as OpenFragment).testImage(file)
+
+            }
+
             outStream = FileOutputStream(file)
-            outStream.write(bytes)
+            outStream.write(bytes.toByteArray())
             outStream.close()
-            Toast.makeText(this@MainActivity, "Picture Saved: $file", Toast.LENGTH_LONG).show()
+//            Toast.makeText(this@MainActivity, "Picture Saved: $file", Toast.LENGTH_LONG).show()
+            Log.d("File = ",bitmapFinal2.toString())
+
+
+
+
+
+
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
+
+
 
 
 
