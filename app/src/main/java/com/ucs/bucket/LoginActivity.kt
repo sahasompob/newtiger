@@ -30,8 +30,10 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.json.JSONObject
 import java.util.HashMap
 import android.R.attr.password
+import android.app.ProgressDialog
 import com.ucs.bucket.db.db.dao.TokenDAO
 import com.ucs.bucket.db.db.entity.Token
+import org.json.JSONArray
 import org.mindrot.jbcrypt.BCrypt
 
 
@@ -68,6 +70,28 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        db = ApplicationDatabase.getInstance(this)
+
+        if (checkNetworkConnection()){
+
+
+            db?.userDao()?.deleteAllUser()!!
+
+
+            getNewDataUser()
+
+
+
+
+
+
+        }else{
+
+
+
+        }
+
         session = SessionSerial(applicationContext)
         session2 = SessionManager(applicationContext)
 
@@ -104,12 +128,52 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
             if (checkNetworkConnection()){
 
-                loginToServer()
+
+                var usertext:String = username.text.toString()
+                var passtext:String = password.text.toString()
+
+                if (usertext.equals("")){
+
+                    Toast.makeText(this, "กรุณากรอก Username", Toast.LENGTH_SHORT).show()
+
+                }else if (passtext.equals("")){
+
+
+                    Toast.makeText(this, "กรุณากรอก Password", Toast.LENGTH_SHORT).show()
+
+                }else{
+
+                    loginToServer()
+                }
+
+
+
 
 
             }else{
 
-                loginWihtLocal()
+                var usertext:String = username.text.toString()
+                var passtext:String = password.text.toString()
+
+
+
+                if (usertext.equals("")){
+
+                    Toast.makeText(this, "กรุณากรอก Username", Toast.LENGTH_SHORT).show()
+
+                }else if (passtext.equals("")){
+
+
+                    Toast.makeText(this, "กรุณากรอก Password", Toast.LENGTH_SHORT).show()
+
+                }else{
+
+                    loginWihtLocal()
+                }
+
+
+
+
             }
 
 
@@ -128,6 +192,8 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     fun loginToServer(){
 
 
+
+
         var serial: HashMap<String, String> = session.getUserDetails()
 
         var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
@@ -136,6 +202,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
         var user:String = username.text.toString()
         var pass:String = password.text.toString()
+
         Toast.makeText(this,serial_value,Toast.LENGTH_SHORT).show();
         val userAndPass= JSONObject()
         userAndPass.put("username",user)
@@ -207,95 +274,111 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
     fun loginWihtLocal(){
 
+
+
 //        creatOfflineUser()
-        db = ApplicationDatabase.getInstance(this)
-        arrayUser = db?.userDao()?.getAll()!!
-
-        var user:String = username.text.toString()
-        var pass:String = password.text.toString()
 
 
-        for (item in arrayUser){
-            var user_id = item.uid
-            usernameData = item.username!!.toString()
-            passwordData = item.password!!
-            nameData =item.firstname!!.toString()
-            roleData = item.role!!.toString()
-
-//            var testpass:String = passwordData
-//            $2a$10$CjxFrD2nNA4Fe8cbYL3PTe1qYboS/dgZfcaznsBp8hy/hKXyHb6xq
-//            var test = BCrypt.hashpw(passwordData,BCrypt.gensalt())
-            var pass = BCrypt.checkpw(pass,passwordData)
-
-//            Log.e("Result = ",pass.toString())
-
-//            String.valueOf(BCrypt.checkpw(pass,passwordData)));
-//            val passwordValid = crypt.BCryptVerify(password, storedHash)
+        var usertext:String = username.text.toString()
+        var passtext:String = password.text.toString()
 
 
 
-            if (user == usernameData && pass== true){
+        if (usertext.equals("")){
 
-                Log.e("Result = ","Success")
-                Log.e("usernameData = ",usernameData)
-                Log.e("name = ",nameData)
-                Log.e("role = ",roleData)
-                Log.e("UserId = ",user_id.toString())
+            Toast.makeText(this, "กรุณากรอก Username", Toast.LENGTH_SHORT).show()
 
-                var i : Intent = Intent(applicationContext,MainActivity::class.java)
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.putExtra("username",usernameData)
-                i.putExtra("name",nameData)
-                i.putExtra("role",roleData)
-                i.putExtra("user_id",user_id.toString())
-                startActivity(i)
-                finish()
-//                val rank = roleData
-//                isHave = true
-//                fragmentManager?.popBackStack()
+        }else if (passtext.equals("")){
 
-//                when(roleData){
-//
-//                    "Admin" -> {
-//
-//                        fragmentManager?.beginTransaction()
-//                            ?.replace(R.id.area_main,MainFragment.newInstance(rank,str,nameData),"main")
-//                            ?.addToBackStack("main")
-//                            ?.commit()
-//                    }
-//
-//                    "User" -> {
-//
-//                        fragmentManager?.beginTransaction()
-//                            ?.replace(R.id.area_main,UserFragment.newInstance(rank,str,nameData),"user")
-//                            ?.addToBackStack("user")
-//                            ?.commit()
-//                    }
-//
-//                    "Manager" -> {
-//
-//                        fragmentManager?.beginTransaction()
-//                            ?.replace(R.id.area_main,ManagerFragment.newInstance(rank,str,nameData),"manager")
-//                            ?.addToBackStack("manager")
-//                            ?.commit()
-//                    }
-//
-//                    "Owner" -> {
-//                        fragmentManager?.beginTransaction()
-//                            ?.replace(R.id.area_main,MainFragment.newInstance(rank,str,nameData),"main")
-//                            ?.addToBackStack("setting")
-//                            ?.commit()
-//
-////                            if(rank=="admin"){
-////
-////                            }
-////
-////                            else username.error = "request admin"
-//                    }
-//                }
+
+            Toast.makeText(this, "กรุณากรอก Password", Toast.LENGTH_SHORT).show()
+
+        }else{
+
+            val dialog = ProgressDialog.show(
+                this@LoginActivity, "กำลังเข้าสู่ระบบ",
+                "Loading. Please wait...", true
+            )
+
+            db = ApplicationDatabase.getInstance(this)
+            arrayUser = db?.userDao()?.getUser(usertext)!!
+//            arrayUser = db?.userDao()?.getAll()!!
+
+            if (arrayUser.isEmpty()){
+
+                Toast.makeText(this, "Username ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง", Toast.LENGTH_SHORT).show()
+
+            }else{
+
+
+
+
+                for (item in arrayUser){
+
+                    var user_id = item.uid
+                    var username_value = item.username!!.toString().trim()
+                    var pass_value= item.password!!.toString().trim()
+                    var name_value =item.firstname!!
+                    var role_value = item.role!!
+
+                    var passcheck = BCrypt.checkpw(passtext.trim(),pass_value)
+
+//                    Log.d("Result = ","Success")
+//                    Log.d("usernameData = ",username_value)
+//                    Log.d("name = ",name_value)
+//                    Log.d("role = ",role_value)
+//                    Log.d("UserId = ",user_id.toString())
+//                    Log.d("Password = ",pass_value)
+//                    Log.d("CheckPassword = ",passcheck.toString())
+
+//             Log.d("usertext = ",usertext)
+
+                    if (usertext == username_value && passcheck == true){
+
+                        Log.d("Result = ","Success")
+                        Log.d("usernameData = ",username_value)
+                        Log.d("name = ",name_value)
+                        Log.d("role = ",role_value)
+                        Log.d("UserId = ",user_id.toString())
+
+
+                        var i : Intent = Intent(applicationContext,MainActivity::class.java)
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        i.putExtra("username",username_value)
+                        i.putExtra("name",name_value)
+                        i.putExtra("role",role_value)
+                        i.putExtra("user_id",user_id.toString())
+                        startActivity(i)
+                        finish()
+
+//                        dialog.dismiss()
+
+
+                    }
+
+                }
+
+
             }
+
+//            val dialog = ProgressDialog.show(
+//                this@LoginActivity, "กำลังเข้าสู่ระบบ",
+//                "Loading. Please wait...", true
+//            )
+
+
+
         }
+
+//        val dialog = ProgressDialog.show(
+//            this@LoginActivity, "กำลังเข้าสู่ระบบ",
+//            "Loading. Please wait...", true
+//        )
+
+
+
+
 
 
     }
@@ -330,6 +413,83 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 //                    password = "1234",enabled = 1, role = "O")
 //            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
 //        }
+
+    }
+
+    fun getNewDataUser(){
+
+
+
+
+//
+//        Toast.makeText(this,serialData,Toast.LENGTH_SHORT).show();
+//
+
+        var storage = SessionSerial(applicationContext!!)
+
+        var serialSesstion: HashMap<String, String> = storage.getUserDetails()
+
+        var serialKey =  serialSesstion.get(SessionSerial.SERIAL_ID)!!
+        var verifyCode = serialSesstion.get(SessionSerial.VERIFYCODE)!!
+
+        val serial= JSONObject()
+        serial.put("serial",serialKey)
+        serial.put("verification_code",verifyCode)
+
+        val queue = Volley.newRequestQueue(this)
+        val url = "http://139.180.142.52/api/get/users"
+
+        Toast.makeText(this,serialKey,Toast.LENGTH_SHORT).show();
+
+        val stringReq = JsonObjectRequest(
+            Request.Method.POST, url,serial,
+
+            Response.Listener<JSONObject> { response ->
+
+                var sts: JSONArray? = null
+                sts = response.getJSONArray("success")
+
+
+
+                db = ApplicationDatabase.getInstance(this)
+//                    val user =
+//                        User(username =  "1234",email = "admin@gmail.com", firstname = "AdminJA",lastname = "eiei",
+//                            password = "1234",enabled = 1, role = "O")
+//
+//                    InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+
+
+                for (i in 0 until sts.length()) {
+
+                    val jo = sts.getJSONObject(i)
+                    var username = jo.getString("username")
+                    var email = jo.getString("email")
+                    var firstname = jo.getString("firstname")
+                    var lastname = jo.getString("lastname")
+                    var password = jo.getString("passwd")
+                    var enabled = jo.getInt("enabled")
+                    var role = jo.getString("role")
+
+
+                    val user =
+                        User(username =  username,email = email, firstname = firstname,lastname = lastname,
+                            password = password,enabled = enabled, role = role,action_status = 1)
+
+                    InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+
+
+
+
+
+                }
+
+
+            },
+            Response.ErrorListener { response ->
+
+                Log.d("ErrorListener", response.toString())
+            })
+        queue.add(stringReq)
 
     }
 
@@ -377,6 +537,31 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
         }
 
         override fun onPostExecute(result: Token?) {
+            super.onPostExecute(result)
+            if (result != null) {
+                responseAsyncResponse.onResponse(true, call)
+            } else {
+                responseAsyncResponse.onResponse(false, call)
+            }
+        }
+
+
+
+    }
+
+
+
+    class InsertUserAsync(private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {
+        override fun doInBackground(vararg user: User?): User? {
+            return try {
+                userDao.insertAll(user[0]!!)
+                user[0]!!
+            } catch (ex: Exception) {
+                null
+            }
+        }
+
+        override fun onPostExecute(result: User?) {
             super.onPostExecute(result)
             if (result != null) {
                 responseAsyncResponse.onResponse(true, call)

@@ -103,7 +103,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         db = context?.let { ApplicationDatabase.getInstance(it) }
         arrayBalanceBefore = db?.balanceLogDao()?.getLastId()!!
-        (activity as MainActivity).openCamera()
+//        (activity as MainActivity).openCamera()
         (activity as MainActivity).sendData("p")
 
         for (item in arrayBalanceBefore){
@@ -164,7 +164,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             if (checkNetworkConnection()){
 
-                (activity as MainActivity).setupSurfaceHolder()
+//                (activity as MainActivity).setupSurfaceHolder()
+                (activity as MainActivity).syncDataLogToServer()
                 var id = (activity as MainActivity).userID()
                 Log.e("IDEIEI = ",id.toString())
 
@@ -244,7 +245,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             }else{
 
-                (activity as MainActivity).setupSurfaceHolder()
+//                (activity as MainActivity).setupSurfaceHolder()
 
                 log_id = 0
 
@@ -264,8 +265,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             }
 
 
-            (activity as MainActivity).closeCamera()
-//            fragmentManager?.popBackStack()
+//            (activity as MainActivity).closeCamera()
+            fragmentManager?.popBackStack()
 
 
         }
@@ -274,6 +275,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         openBtn.setOnClickListener {
 
             if (checkNetworkConnection()){
+
+                (activity as MainActivity).syncDataLogToServer()
 
                 var id = (activity as MainActivity).userID()
                 Log.e("IDEIEI = ",id.toString())
@@ -319,7 +322,10 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         Log.e("LOGID IS ==",logID.toString())
                         log_id =logID
                         timer.cancel()
-                        (activity as MainActivity).sendData("unlock".trim())
+
+
+
+
 //            fragmentManager?.popBackStack()
 
                         val sssss = SimpleDateFormat("MM/dd/yyyy")
@@ -342,6 +348,9 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                             OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
 
                         InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
+
+
+
 
 
 
@@ -373,7 +382,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             }else{
 
                 timer.cancel()
-                (activity as MainActivity).sendData("unlock".trim())
+
 //            fragmentManager?.popBackStack()
 
                 val sssss = SimpleDateFormat("MM/dd/yyyy")
@@ -526,7 +535,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         Log.e("LOGID IS ==",logID.toString())
                         log_id =logID
 
-                        (activity as MainActivity).sendData("unlock".trim())
+//                        (activity as MainActivity).sendData("unlock".trim())
 //            fragmentManager?.popBackStack()
 
                         val sssss = SimpleDateFormat("MM/dd/yyyy")
@@ -542,7 +551,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
-                        fragmentManager?.popBackStack()
+
 
 //            Toast.makeText(context, openId.toString(), Toast.LENGTH_SHORT).show()
 
@@ -579,7 +588,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                 InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
-                fragmentManager?.popBackStack()
+//                fragmentManager?.popBackStack()
 
 
             }
@@ -592,8 +601,11 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 
+
         }
 
+        (activity as MainActivity).sendData("unlock".trim())
+        fragmentManager?.popBackStack()
 
     }
     class InsertOpenAcion(private val openDao: OpenDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<OpenConsole, Void, OpenConsole>() {
@@ -669,9 +681,13 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             if (isSuccess) {
 //                Toast.makeText(context, "Successfully added", Toast.LENGTH_SHORT).show()
 //                test()
+
+
+
             } else {
 //                Toast.makeText(context, "Some error occur please try again later!!!", Toast.LENGTH_SHORT).show()
             }
+
         }else if (call == RoomConstants.INSERT_OPEN){
 
             if (isSuccess) {
@@ -701,6 +717,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
     fun test(){
 
+
+
         val sssss = SimpleDateFormat("MM/dd/yyyy")
         val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
 
@@ -716,9 +734,6 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         for (item in arrayBalanceStatus){
 
             var idTest = 0
-            var balanceBeforeTest = item.balance_before!!.toInt()
-            var actionTest = item.action!!
-            val dateTest = item.dated
             idTest = item.bid!!.toInt()
             balanceTest = item.balance!!.toInt()
             depositTest = item.deposit!!.toInt()
@@ -744,6 +759,12 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                 balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId,log_id = log_id)
 
         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+        (activity as MainActivity).sendData("unlock".trim())
+
+
+
+        closeData("close")
 
 
 //        fragmentManager?.popBackStack()
@@ -778,8 +799,5 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 //        }
 //    }
 
-    fun testImage(file : File){
 
-        Log.d("FileOpen = ","${file}")
-    }
 }

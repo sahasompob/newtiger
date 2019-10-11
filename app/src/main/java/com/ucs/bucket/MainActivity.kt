@@ -37,19 +37,21 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import android.widget.FrameLayout
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.ucs.bucket.Util.SessionSerial
+import com.ucs.bucket.db.db.entity.BalanceLog
+import org.json.JSONObject
 import java.io.*
+import java.util.*
 
 
-class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragment.OnInputSelected, SurfaceHolder.Callback, Camera.PictureCallback  {
+class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragment.OnInputSelected{
 
 
-    private var surfaceHolder: SurfaceHolder? = null
-    private var camera: Camera? = null
 
-    private var surfaceView: SurfaceView? = null
-
-    private val neededPermissions = arrayOf(CAMERA, WRITE_EXTERNAL_STORAGE)
     private var db: ApplicationDatabase? = null
     private var usbService: UsbService? = null
     private var display: TextView? = null
@@ -59,6 +61,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     private lateinit var arrayUser: List<User>
     lateinit var session : SessionManager
     lateinit var session2 : SessionSerial
+    private lateinit var arrayLog: List<BalanceLog>
 //    private lateinit var arrayUser: null!!
 
     var testId =""
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        workManager()
+//        workManager()
         session = SessionManager(applicationContext)
         session2 = SessionSerial(applicationContext)
         mHandler = MyHandler(this)
@@ -90,12 +93,14 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
         if (checkNetworkConnection()){
 
-            surfaceView = findViewById(R.id.surfaceView)
-            val result = checkPermission()
-            if (result) {
+            syncDataLogToServer()
 
-                setupSurfaceHolder()
-            }
+//            surfaceView = findViewById(R.id.surfaceView)
+//            val result = checkPermission()
+//            if (result) {
+//
+//                setupSurfaceHolder()
+//            }
 
             var username=intent.getStringExtra("username")
             var firstname=intent.getStringExtra("name")
@@ -134,12 +139,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
         }else{
 
-            surfaceView = findViewById(R.id.surfaceView)
-            val result = checkPermission()
-            if (result) {
 
-                setupSurfaceHolder()
-            }
 
             var username=intent.getStringExtra("username")
             var name=intent.getStringExtra("name")
@@ -269,6 +269,8 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 //        }
 
         val s = data.trim()
+        s.replace("\r","")
+        s.replace("\n","")
 
         if (s == "ready"){
 
@@ -279,7 +281,8 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
                 (fragment as OpenFragment).getData(data)
             }
 
-        }else {
+
+        }else if (s.contains("S")&& s.contains("E")) {
 
             val fragment = supportFragmentManager.findFragmentByTag("coin")
 
@@ -287,12 +290,20 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
                 (fragment as InsertCoinFragment).getCoin(data)
             }
+
+
+        }else{
+
+            Toast.makeText(this, "Data = " +  data.trim(), Toast.LENGTH_SHORT).show()
+
+
         }
     }
 
 
     fun sendData(data: String){
         Toast.makeText(this@MainActivity, data, Toast.LENGTH_SHORT).show()
+
         if(usbService!=null){
             usbService!!.write(data.toByteArray())
         }
@@ -407,30 +418,30 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     }
 
 
-    fun workManager() {
-        val flexMillis = (1 * 60 * 1000).toLong()
-        val componentName = ComponentName(this, ExampleJobService::class.java)
-        val info = JobInfo.Builder(123, componentName)
-            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-            .setPersisted(true)
-            .setPeriodic(flexMillis)
-            .build()
-
-        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        val resultCode = scheduler.schedule(info)
-        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d("MainActivity Test", "Job scheduled")
-
-
-//            val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-//            scheduler.cancel(123)
-//            Log.d("MainActivity Test", "Job cancelled")
-
-        } else {
-            Log.d("MainActivity Test", "Job scheduling failed")
-        }
-
-    }
+//    fun workManager() {
+//        val flexMillis = (1 * 60 * 1000).toLong()
+//        val componentName = ComponentName(this, ExampleJobService::class.java)
+//        val info = JobInfo.Builder(123, componentName)
+//            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+//            .setPersisted(true)
+//            .setPeriodic(flexMillis)
+//            .build()
+//
+//        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+//        val resultCode = scheduler.schedule(info)
+//        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+//            Log.d("MainActivity Test", "Job scheduled")
+//
+//
+////            val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+////            scheduler.cancel(123)
+////            Log.d("MainActivity Test", "Job cancelled")
+//
+//        } else {
+//            Log.d("MainActivity Test", "Job scheduling failed")
+//        }
+//
+//    }
 
 
 
@@ -441,237 +452,166 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     }
 
 
-    fun openCamera(){
+     fun syncDataLogToServer(){
 
-        val cameraLayout = findViewById<FrameLayout>(R.id.camera_preview)
-
-        cameraLayout.visibility = View.VISIBLE
-
-    }
-
-    fun closeCamera(){
-
-        val cameraLayout = findViewById<FrameLayout>(R.id.camera_preview)
-
-        cameraLayout.visibility = View.GONE
-
-    }
-
-    private fun checkPermission(): Boolean {
-        val currentAPIVersion = Build.VERSION.SDK_INT
-        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-            val permissionsNotGranted = ArrayList<String>()
-            for (permission in neededPermissions) {
-                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    permissionsNotGranted.add(permission)
-                }
-            }
-            if (permissionsNotGranted.size > 0) {
-                var shouldShowAlert = false
-                for (permission in permissionsNotGranted) {
-                    shouldShowAlert = ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
-                }
-
-                val arr = arrayOfNulls<String>(permissionsNotGranted.size)
-                val permissions = permissionsNotGranted.toArray(arr)
-                if (shouldShowAlert) {
-                    showPermissionAlert(permissions)
-                } else {
-                    requestPermissions(permissions)
-                }
-                return false
-            }
-        }
-        return true
-    }
+        Log.d("Sync Data = ", "Waiting")
+        db = ApplicationDatabase.getInstance(this)
+        arrayLog = db?.balanceLogDao()?.getLogOffline()!!
 
 
-    private fun showPermissionAlert(permissions: Array<String?>) {
-        val alertBuilder = AlertDialog.Builder(this)
-        alertBuilder.setCancelable(true)
-        alertBuilder.setTitle(R.string.permission_required)
-        alertBuilder.setMessage(R.string.permission_message)
-        alertBuilder.setPositiveButton(android.R.string.yes) { _, _ -> requestPermissions(permissions) }
-        val alert = alertBuilder.create()
-        alert.show()
-    }
+//        Log.d("Data = ", arrayLog.toString())
+
+        if (arrayLog.isEmpty()){
+
+
+            Log.d("Data = ","Array is Null")
+
+        }else{
+
+            for (item in arrayLog){
 
 
 
-    private fun requestPermissions(permissions: Array<String?>) {
-        ActivityCompat.requestPermissions(this@MainActivity, permissions, REQUEST_CODE)
-    }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_CODE -> {
-                for (result in grantResults) {
-                    if (result == PackageManager.PERMISSION_DENIED) {
-                        Toast.makeText(this@MainActivity, R.string.permission_warning, Toast.LENGTH_LONG).show()
-//                        setViewVisibility(R.id.showPermissionMsg, View.VISIBLE)
-                        return
+                var user_id = item.bid!!
+                var username = item.username!!.toString()
+                var deposit = item.deposit!!.toString()
+                var drop = item.drop!!.toString()
+                var balanceTotal = item.balance!!.toString()
+                var action_code = item.action!!.toString()
+                var detail_deposit = item.detail_deposit
+                var log_id = item.log_id!!.toString()
+
+
+
+                if (action_code.equals("CL")){
+
+                    android.os.Handler().postDelayed(
+                        {
+
+                            var storage = SessionSerial(applicationContext!!)
+
+                            var serial: HashMap<String, String> = storage.getUserDetails()
+
+                            var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+                            var veryfy_code:String = serial.get(SessionSerial.VERIFYCODE)!!
+
+
+
+                            val depositData = JSONObject()
+                            depositData.put("serial",serial_value)
+                            depositData.put("username",username)
+                            depositData.put("action_code",action_code)
+                            depositData.put("verification_code",veryfy_code)
+                            depositData.put("detail",detail_deposit)
+                            depositData.put("deposit",deposit)
+                            depositData.put("drop",drop)
+                            depositData.put("balance",balanceTotal)
+
+//                depositData.put("balance",balanceBefore + totalDeposit)
+
+
+                            val updateQueue = Volley.newRequestQueue(applicationContext)
+                            val url = "http://139.180.142.52/api/save/offline"
+                            val updateReq = object : JsonObjectRequest(
+                                Request.Method.POST, url, depositData,
+                                Response.Listener { response ->
+
+                                    Log.e("Success","OK")
+                                    var logID = response.getInt("log_id")
+
+
+
+                                    db?.balanceLogDao()?.updateLogID(logID,user_id)!!
+
+                                    Log.e("Update Log ID  = ","Success")
+
+
+                                },
+                                Response.ErrorListener { response ->
+
+                                    Log.e("Error",response.toString())
+                                }) {
+
+                            }
+                            updateQueue.add(updateReq)
+
+//                            Log.i("tag", "This'll run 300 milliseconds later")
+
+                        },
+                        2000
+                    )
+
+                }else{
+
+                    var storage = SessionSerial(applicationContext!!)
+
+                    var serial: HashMap<String, String> = storage.getUserDetails()
+
+                    var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+                    var veryfy_code:String = serial.get(SessionSerial.VERIFYCODE)!!
+
+
+
+                    val depositData = JSONObject()
+                    depositData.put("serial",serial_value)
+                    depositData.put("username",username)
+                    depositData.put("action_code",action_code)
+                    depositData.put("verification_code",veryfy_code)
+                    depositData.put("detail",detail_deposit)
+                    depositData.put("deposit",deposit)
+                    depositData.put("drop",drop)
+                    depositData.put("balance",balanceTotal)
+
+//                depositData.put("balance",balanceBefore + totalDeposit)
+
+
+                    val updateQueue = Volley.newRequestQueue(applicationContext)
+                    val url = "http://139.180.142.52/api/save/offline"
+                    val updateReq = object : JsonObjectRequest(
+                        Request.Method.POST, url, depositData,
+                        Response.Listener { response ->
+
+                            Log.e("Success","OK")
+                            var logID = response.getInt("log_id")
+
+
+
+                            db?.balanceLogDao()?.updateLogID(logID,user_id)!!
+
+                            Log.e("Update Log ID  = ","Success")
+
+
+                        },
+                        Response.ErrorListener { response ->
+
+                            Log.e("Error",response.toString())
+                        }) {
+
                     }
+                    updateQueue.add(updateReq)
                 }
 
-                setupSurfaceHolder()
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
 
 
-    private fun setViewVisibility(id: Int, visibility: Int) {
-        val view = findViewById<View>(id)
-        view!!.visibility = visibility
-    }
 
 
-     fun setupSurfaceHolder() {
-        surfaceHolder = surfaceView!!.holder
-        surfaceHolder!!.addCallback(this)
-        setBtnClick()
-    }
 
-    private fun setBtnClick() {
-        captureImage()
-    }
-
-    private fun captureImage() {
-        if (camera != null) {
-            camera!!.takePicture(null, null, this)
-        }
-    }
-
-    override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-        startCamera()
-    }
-
-    private fun startCamera() {
-        camera = Camera.open()
-        camera!!.setDisplayOrientation(90)
-
-        try {
-            camera!!.setPreviewDisplay(surfaceHolder)
-            camera!!.startPreview()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-    }
-
-    override fun surfaceChanged(surfaceHolder: SurfaceHolder, i: Int, i1: Int, i2: Int) {
-        resetCamera()
-    }
-
-
-    private fun resetCamera() {
-
-        if (surfaceHolder!!.surface == null) {
-            // Return if preview surface does not exist
-            return
-        }
-
-        // Stop if preview surface is already running.
-        camera!!.stopPreview()
-        try {
-            // Set preview display
-            camera!!.setPreviewDisplay(surfaceHolder)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        // Start the camera preview...
-        camera!!.startPreview()
-    }
-
-    override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
-        releaseCamera()
-    }
-
-    private fun releaseCamera() {
-        camera!!.stopPreview()
-        camera!!.release()
-        camera = null
-    }
-
-    override fun onPictureTaken(bytes: ByteArray, camera: Camera) {
-        saveImage(bytes)
-        resetCamera()
-    }
-
-
-    private fun saveImage(bytes: ByteArray) {
-
-        val outStream: FileOutputStream
-        var bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size);
-        try {
-
-            var bitmapFinal: Bitmap? = null
-            var bitmapFinal2: Bitmap? = null
-
-            val matrix = Matrix()
-            matrix.postRotate(90F)
-
-            val fileName = "TigerCashBox" + System.currentTimeMillis() + ".jpg"
-            val file = File(Environment.getExternalStorageDirectory(), fileName)
-            val bytes = ByteArrayOutputStream()
-
-            bitmapFinal = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),bmp.getHeight(), matrix, true);
-            bmp.recycle();
-            bmp=null
-
-            bitmapFinal2 = Bitmap.createScaledBitmap(bitmapFinal,250,250,true);
-            bitmapFinal.recycle();
-            bitmapFinal=null
-            bitmapFinal2.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-//
-            val fragment = supportFragmentManager.findFragmentByTag("open")
-
-
-            if(fragment!=null){
-
-                (fragment as OpenFragment).testImage(file)
 
             }
 
-            outStream = FileOutputStream(file)
-            outStream.write(bytes.toByteArray())
-            outStream.close()
-//            Toast.makeText(this@MainActivity, "Picture Saved: $file", Toast.LENGTH_LONG).show()
-            Log.d("File = ",bitmapFinal2.toString())
 
+            Log.d("Sync Data = ", "Complete")
 
-
-
-
-
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
         }
+
+
     }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    companion object {
-        const val REQUEST_CODE = 100
-    }
 
 
 

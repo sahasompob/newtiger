@@ -184,4 +184,7 @@ class MainFragment : Fragment() {
         return networkInfo != null && networkInfo.isConnected
     }
 
+
+
+
 }

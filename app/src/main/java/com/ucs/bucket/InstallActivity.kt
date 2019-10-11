@@ -96,6 +96,7 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 //
         var test = serialData.trim()
         var verifyCode = genVerificationCode(test)
+
         val serial= JSONObject()
         serial.put("serial",test)
         serial.put("verification_code",verifyCode)
@@ -177,6 +178,7 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
         return code
     }
+
 
     class InsertUserAsync(private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {
         override fun doInBackground(vararg user: User?): User? {

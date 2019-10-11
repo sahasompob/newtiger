@@ -1,11 +1,13 @@
 package com.ucs.bucket.fragment;
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -156,7 +158,8 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
         btn_cancle_coin = root.btn_cancle_coin
         name_user.text = arguments?.getString("name")!!
         user = arguments?.getString("user")!!
-        (activity as MainActivity).sendData("o$user")
+//        (activity as MainActivity).sendData("o$user")
+        (activity as MainActivity).sendData("o"+ name_user.text.toString())
 //        textSum.text = "${arguments?.getString("rank")}"
         textSum.text = "${arguments?.getString("rank")}"
 
@@ -179,160 +182,26 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
         btn.setOnClickListener {
 
+            val alertDialogBuilder = AlertDialog.Builder(context!!)
 
-            var detail_one = one_value.text.toString()
-            var detail_two = two_value.text.toString()
-            var detail_five = five_value.text.toString()
-            var detail_ten = ten_value.text.toString()
-            var detail_twenty = twenty_value.text.toString()
-            var detail_fifty = fifty_value.text.toString()
-            var detail_one_hunred = one_hunred_value.text.toString()
-            var detail_five_hunred = five_hunred_value.text.toString()
-            var detail_thousand = thousand_value.text.toString()
+            alertDialogBuilder.setTitle("คุณทำรายการฝากเงินเสร็จสิ้นแล้วหรือไม่ ?")
+            alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("ใช่"
+                ) { dialog, id ->
 
-            val detailDeposit= JSONObject()
-            detailDeposit.put("coin_1",detail_one)
-            detailDeposit.put("coin_2",detail_two)
-            detailDeposit.put("coin_5",detail_five)
-            detailDeposit.put("coin_10",detail_ten)
-            detailDeposit.put("bank_20",detail_twenty)
-            detailDeposit.put("bank_50",detail_fifty)
-            detailDeposit.put("bank_100",detail_one_hunred)
-            detailDeposit.put("bank_500",detail_five_hunred)
-            detailDeposit.put("bank_1000",detail_thousand)
-
-
-
-
-            val currentDate = SimpleDateFormat("MM/dd/yyyy")
-            val currentDateTime = SimpleDateFormat("MM/dd/yyyy HH:mm")
-//            log+="$user,${currentDate.format(Date())},${textSum.text};"
-//            storage.setLog(log)
-            fragmentManager?.popBackStack()
-
-
-
-            textSum.text.toString().trim()
-//            textMoney.text.toString()
-
-            var strDeposit:String = textSum.text.toString().replace(",","")
-
-            var deposit:Int = strDeposit.toInt()
-
-            var strDropMoney:String = money_errors_value.text.toString().replace(",","")
-
-            if (strDropMoney == "-"){
-
-                dMoney = 0
-
-            }else{
-
-                dMoney = strDropMoney.toInt()
-
-            }
-
-            var drop:Int = dMoney
-
-            var totalDeposit = deposit + drop
-            var test = "08/09/2019"
-
-
-
-
-            if (checkNetworkConnection()){
-
-
-                testID = arguments?.getString("id")!!
-                Log.d("testID = ",testID)
-
-                tokenUser = db?.tokenDao()?.getToken(testID.toInt())!!
-
-
-                var testtoken=""
-
-                for (item in tokenUser){
-
-                    testtoken = item.token!!
-
+                    saveData()
                 }
 
-                Log.d("tokenUser = ",testtoken)
+                .setNegativeButton("ไม่", object: DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, id:Int) {
 
-                var storage = SessionSerial(context!!)
-                var serial:HashMap<String,String> = storage.getUserDetails()
-                var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
-
-
-
-
-                val depositData = JSONObject()
-                depositData.put("serial",serial_value)
-                depositData.put("action_code","DE")
-                depositData.put("detail",detailDeposit.toString())
-                depositData.put("deposit",deposit)
-                depositData.put("drop",drop)
-                depositData.put("balance",balanceBefore + totalDeposit)
-
-//                depositData.put("balance",balanceBefore + totalDeposit)
-
-
-                val updateQueue = Volley.newRequestQueue(context)
-                val url = "http://139.180.142.52/api/save/event"
-                val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
-                    Response.Listener {response ->
-
-                        Log.e("Success","OK")
-                        var logID = response.getInt("log_id")
-                        Log.e("LOGID IS ==",logID.toString())
-
-                        log_id = logID
-                        val balance =
-                                BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
-                                        action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "0", open_id = 0,detail_deposit = detailDeposit.toString(),log_id = log_id)
-
-                        InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
-
-                    },
-                    Response.ErrorListener {response ->
-
-                        Log.e("Error",response.toString())
-                    }) {
-
-                    // override getHeader for pass session to service
-                    override fun getHeaders(): MutableMap<String, String> {
-
-                        val header = mutableMapOf<String, String>()
-                        // "Cookie" and "PHPSESSID=" + <session value> are default format
-                        header.put("Accept", "application/json")
-                        header.put("Authorization", "Bearer "+ testtoken)
-                        return header
+                        dialog.cancel()
                     }
-                }
-                updateQueue.add(updateReq)
+                })
 
-
-            }else{
-
-                log_id = 0
-
-                val balance =
-                    BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
-                        action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
-                        balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "1", open_id = 0,detail_deposit = detailDeposit.toString(),log_id = log_id)
-
-                InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
-
-                Toast.makeText(getActivity(),detailDeposit.toString(),Toast.LENGTH_SHORT).show();
-
-            }
-
-
-            (activity as MainActivity).sendData("c,"+"drop/${drop}"+",deposit/${deposit}"+",total/${totalDeposit}")
-//            (activity as MainActivity).sendData("c"+ "test")
-
-
-
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
 
         }
 
@@ -358,8 +227,29 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
         btn_cancle_coin.setOnClickListener {
 
+            val alertDialogBuilder = AlertDialog.Builder(context!!)
 
-            fragmentManager?.popBackStack()
+            alertDialogBuilder.setTitle("คุณต้องการออกจากการฝากเงินใช่หรือไม่ ?")
+            alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("ใช่"
+                ) { dialog, id ->
+
+                    fragmentManager?.popBackStack()
+                }
+
+                .setNegativeButton("ไม่", object: DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, id:Int) {
+
+                        dialog.cancel()
+                    }
+                })
+
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+
+
+
 
         }
 
@@ -439,6 +329,173 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
             }
         }
+
+
+    }
+
+
+    fun saveData(){
+
+
+        var detail_one = one_value.text.toString()
+        var detail_two = two_value.text.toString()
+        var detail_five = five_value.text.toString()
+        var detail_ten = ten_value.text.toString()
+        var detail_twenty = twenty_value.text.toString()
+        var detail_fifty = fifty_value.text.toString()
+        var detail_one_hunred = one_hunred_value.text.toString()
+        var detail_five_hunred = five_hunred_value.text.toString()
+        var detail_thousand = thousand_value.text.toString()
+
+        val detailDeposit= JSONObject()
+        detailDeposit.put("coin_1",detail_one)
+        detailDeposit.put("coin_2",detail_two)
+        detailDeposit.put("coin_5",detail_five)
+        detailDeposit.put("coin_10",detail_ten)
+        detailDeposit.put("bank_20",detail_twenty)
+        detailDeposit.put("bank_50",detail_fifty)
+        detailDeposit.put("bank_100",detail_one_hunred)
+        detailDeposit.put("bank_500",detail_five_hunred)
+        detailDeposit.put("bank_1000",detail_thousand)
+
+
+
+
+        val currentDate = SimpleDateFormat("MM/dd/yyyy")
+        val currentDateTime = SimpleDateFormat("MM/dd/yyyy HH:mm")
+//            log+="$user,${currentDate.format(Date())},${textSum.text};"
+//            storage.setLog(log)
+        fragmentManager?.popBackStack()
+
+
+
+        textSum.text.toString().trim()
+//            textMoney.text.toString()
+
+        var strDeposit:String = textSum.text.toString().replace(",","")
+
+        var deposit:Int = strDeposit.toInt()
+
+        var strDropMoney:String = money_errors_value.text.toString().replace(",","")
+
+        if (strDropMoney == "-"){
+
+            dMoney = 0
+
+        }else{
+
+            dMoney = strDropMoney.toInt()
+
+        }
+
+        var drop:Int = dMoney
+
+        var totalDeposit = deposit + drop
+        var test = "08/09/2019"
+
+
+
+
+        if (checkNetworkConnection()){
+
+            (activity as MainActivity).syncDataLogToServer()
+
+
+
+
+            testID = arguments?.getString("id")!!
+            Log.d("testID = ",testID)
+
+            tokenUser = db?.tokenDao()?.getToken(testID.toInt())!!
+
+
+            var testtoken=""
+
+            for (item in tokenUser){
+
+                testtoken = item.token!!
+
+            }
+
+            Log.d("tokenUser = ",testtoken)
+
+            var storage = SessionSerial(context!!)
+            var serial:HashMap<String,String> = storage.getUserDetails()
+            var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+
+
+
+
+            val depositData = JSONObject()
+            depositData.put("serial",serial_value)
+            depositData.put("action_code","DE")
+            depositData.put("detail",detailDeposit.toString())
+            depositData.put("deposit",deposit)
+            depositData.put("drop",drop)
+            depositData.put("balance",balanceBefore + totalDeposit)
+
+//                depositData.put("balance",balanceBefore + totalDeposit)
+
+
+            val updateQueue = Volley.newRequestQueue(context)
+            val url = "http://139.180.142.52/api/save/event"
+            val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
+                Response.Listener {response ->
+
+                    Log.e("Success","OK")
+                    var logID = response.getInt("log_id")
+                    Log.e("LOGID IS ==",logID.toString())
+
+                    log_id = logID
+                    val balance =
+                        BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
+                            action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
+                            balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "0", open_id = 0,detail_deposit = detailDeposit.toString(),log_id = log_id)
+
+                    InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+                },
+                Response.ErrorListener {response ->
+
+                    Log.e("Error",response.toString())
+                }) {
+
+                // override getHeader for pass session to service
+                override fun getHeaders(): MutableMap<String, String> {
+
+                    val header = mutableMapOf<String, String>()
+                    // "Cookie" and "PHPSESSID=" + <session value> are default format
+                    header.put("Accept", "application/json")
+                    header.put("Authorization", "Bearer "+ testtoken)
+                    return header
+                }
+            }
+            updateQueue.add(updateReq)
+
+
+        }else{
+
+            log_id = 0
+
+            val balance =
+                BalanceLog(username = user, dated = currentDate.format(Date()).trim(),datedtime = currentDateTime.format(Date()).trim(),
+                    action = "DE", deposit = deposit, drop = drop, toto_deposit = totalDeposit,
+                    balance_before = balanceBefore, balance = balanceBefore + totalDeposit, status = "N", sync = "1", open_id = 0,detail_deposit = detailDeposit.toString(),log_id = log_id)
+
+            InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+            Toast.makeText(getActivity(),detailDeposit.toString(),Toast.LENGTH_SHORT).show();
+
+        }
+
+        var testtime = SimpleDateFormat("ddMMyyyyHHmmss")
+
+        (activity as MainActivity).sendData("c"+ testtime.format(Date()).trim()+drop)
+
+//        (activity as MainActivity).sendData("c,"+"drop/${drop}"+",deposit/${deposit}"+",total/${totalDeposit}")
+//            (activity as MainActivity).sendData("c"+ "test")
+
+
 
 
     }
