@@ -6,6 +6,7 @@ import android.hardware.Camera
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.Log
@@ -59,6 +60,13 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
     private lateinit var arrayBalanceStatus: List<BalanceLog>
     private lateinit var tokenUser: List<Token>
     private lateinit var arrayOpenConsole: List<OpenConsole>
+    private lateinit var arrayOpenData: List<OpenConsole>
+    lateinit var nameBrach : TextView
+    lateinit var numberConsole : TextView
+
+    lateinit var countdownTimer2: CountDownTimer
+
+
 
     lateinit var camera : Camera
     lateinit var frameLayout: FrameLayout
@@ -82,10 +90,22 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 
+    var userName =""
+    var idUser =0
+    var openTimeConvert =""
+    var balanceTotalOP =0
+    var qtyDepositOP =""
+
+    var user2 = ""
+    var type=""
+    var name=""
+    var id=""
+
     companion object {
-        fun newInstance(type: String, str: String, nameData : String): OpenFragment {
+        fun newInstance(id:String,type: String, str: String, nameData : String): OpenFragment {
             var fragment = OpenFragment()
             var args = Bundle()
+            args.putString("id",id)
             args.putString("type",type)
             args.putString("user",str)
             args.putString("name",nameData)
@@ -103,8 +123,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         db = context?.let { ApplicationDatabase.getInstance(it) }
         arrayBalanceBefore = db?.balanceLogDao()?.getLastId()!!
-//        (activity as MainActivity).openCamera()
-        (activity as MainActivity).sendData("p")
+
+
 
         for (item in arrayBalanceBefore){
 
@@ -115,7 +135,15 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         }
 
-        frameLayout = root.camera_layout
+
+        Log.d("depositBefore = ",depositBefore.toString())
+        Log.d("dropBefore = ",dropBefore.toString())
+        Log.d("totaoDepositBefore = ",totaoDepositBefore.toString())
+        Log.d("balanceBefore = ",balanceBefore.toString())
+
+
+
+
         offline_btn = root.status_offline
         online_btn = root.status_online
         close_btn = root.close_btn
@@ -125,20 +153,24 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         cancelBtn =root.cancel_button
         openBtn =root.open_button
         default_button = root.default_button
-
+        nameBrach = root.name_branch_op
+        numberConsole = root.number_console_value_op
         name_user.text = arguments?.getString("name")!!
         user = arguments?.getString("user")!!
 
+        user2 = arguments?.getString("user")!!
+        name = arguments?.getString("name")!!
+        type = arguments?.getString("type")!!
+        id = arguments?.getString("id")!!
 
 
-        //        camera.
-        fun checkPersmission(): Boolean {
-            return (ContextCompat.checkSelfPermission(context!!, android.Manifest.permission.CAMERA) ==
-                    PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(context!!,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-        }
+        var storage = SessionSerial(context!!)
+        var serial: HashMap<String, String> = storage.getUserDetails()
+        nameBrach.text =serial.get(SessionSerial.BRANCHNAME)!!
+        numberConsole.text = serial.get(SessionSerial.NUMBERCONSOLE)
 
 
+        getData("ready") // CountDownTimer Working
 
         if(checkNetworkConnection()){
 
@@ -151,10 +183,6 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             online_btn.visibility = View.INVISIBLE
         }
 
-        var timer = Timer()
-        var time = SessionManager(context!!).getDelay()
-
-        text.text = "เหลือเวลาอีก ${time--} วินาที"
 
 
         cancelBtn.setOnClickListener {
@@ -183,7 +211,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 
-                var storage = SessionSerial(context!!)
+                var storage = SessionSerial(context!!) // Share references Serial Data
                 var serial:HashMap<String,String> = storage.getUserDetails()
                 var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
 
@@ -209,10 +237,8 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         Log.e("LOGID IS ==",logID.toString())
                         log_id = logID
 
-                        timer.cancel()
-
                         val sssss = SimpleDateFormat("MM/dd/yyyy")
-                        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+                        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
                         val balance =
                             BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
                                 action = "OF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
@@ -241,6 +267,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                 updateQueue.add(updateReq)
 
 
+                getData("finish") // Cancel CountDownTimer
 
 
             }else{
@@ -249,10 +276,10 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
                 log_id = 0
 
-                timer.cancel()
+
 
                 val sssss = SimpleDateFormat("MM/dd/yyyy")
-                val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+                val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
                 val balance =
                     BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
                         action = "OF", deposit = depositBefore, drop = dropBefore, toto_deposit = totaoDepositBefore,
@@ -266,7 +293,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 //            (activity as MainActivity).closeCamera()
-            fragmentManager?.popBackStack()
+
 
 
         }
@@ -277,6 +304,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
             if (checkNetworkConnection()){
 
                 (activity as MainActivity).syncDataLogToServer()
+
 
                 var id = (activity as MainActivity).userID()
                 Log.e("IDEIEI = ",id.toString())
@@ -294,7 +322,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                 Log.d("tokenUser = ",testtoken)
 
 
-                var storage = SessionSerial(context!!)
+                var storage = SessionSerial(context!!) // Share references Serial Data
 
                 var serial:HashMap<String,String> = storage.getUserDetails()
 
@@ -321,15 +349,13 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
                         var logID = response.getInt("log_id")
                         Log.e("LOGID IS ==",logID.toString())
                         log_id =logID
-                        timer.cancel()
-
 
 
 
 //            fragmentManager?.popBackStack()
 
                         val sssss = SimpleDateFormat("MM/dd/yyyy")
-                        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+                        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
 
 
 
@@ -339,13 +365,13 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
 
 //            arrayBalanceStatus = db?.balanceLogDao()?.getByStatus()!!
-                        arrayBalanceStatus = db?.balanceLogDao()?.getBeforeOpen()!!
+                        arrayBalanceStatus = db?.balanceLogDao()?.getDepositOpen()!!
 
                         var count = arrayBalanceStatus.size
 
                         val openAction =
 
-                            OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
+                            OpenConsole(open_time = sssss2.format(Date()).trim(),open_date = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
 
                         InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
 
@@ -381,34 +407,32 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
             }else{
 
-                timer.cancel()
 
-//            fragmentManager?.popBackStack()
-
-                val sssss = SimpleDateFormat("MM/dd/yyyy")
-                val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+               getData("finish") // Cancel CountDownTimer
 
 
+                val sssss = SimpleDateFormat("ddMMyyyyHHmmss")
+                val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
 
 
 
 
 
 
-//            arrayBalanceStatus = db?.balanceLogDao()?.getByStatus()!!
-                arrayBalanceStatus = db?.balanceLogDao()?.getBeforeOpen()!!
+
+
+                arrayBalanceStatus = db?.balanceLogDao()?.getDepositOpen()!!
 
                 var count = arrayBalanceStatus.size
 
+                Log.d("Deposit_Count",count.toString())
+
                 val openAction =
 
-                    OpenConsole(open_time = sssss.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
+                    OpenConsole(open_time = sssss2.format(Date()).trim(),deposit_count = count,balance_money = balanceBefore,user_open = user )
 
                 InsertOpenAcion(db!!.openDao(), RoomConstants.INSERT_OPEN, this).execute(openAction)
 
-
-
-//            Toast.makeText(context, openId.toString(), Toast.LENGTH_SHORT).show()
 
 
 
@@ -422,192 +446,64 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         op_btn.setOnClickListener {
 
-            getData("ready")
         }
 
         close_btn.setOnClickListener {
 
-            closeData("close")
         }
 
     }
 
 
-
+    // CountDownTimer Function
     fun getData(data : String){
 
-        Toast.makeText(context, data, Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, data, Toast.LENGTH_SHORT).show()
         if (data.trim().equals("ready")){
 
             var time = SessionManager(context!!).getDelay()
+//        var countDownLength = time.toLong()
+            var countDownLength = time*1000
 
-            text.text = "เหลือเวลาอีก ${time--} วินาที"
+            countdownTimer2 = object: CountDownTimer(countDownLength.toLong(), 1000) {
 
+                override fun onTick(millisUntilFinished: Long) {
 
-            var timer = Timer()
+                    text.text = "เหลือเวลาอีก : " + millisUntilFinished / 1000 + " วินาที"
+                }
 
-            timer.scheduleAtFixedRate( object : TimerTask(){
-                override fun run() {
-
-                    activity!!.runOnUiThread {
-                        text.text = "เหลือเวลาอีก ${time--} วินาที"
-
-                        if(time==0){
+                override fun onFinish() {
 
                             default_button.visibility = View.GONE
                             openBtn.visibility = View.VISIBLE
 
                             text.text = "กดปุ่มเปิดตู้"
-                            timer.cancel()
 
 
-                        }
-                    }
+
 
                 }
-
-            },1000,1000)
-
-        }else{
-
-
-
-        }
-
-
-    }
-
-
-    fun closeData(data : String){
-
-        val sssss = SimpleDateFormat("MM/dd/yyyy")
-        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
-
-
-
-        if (data.trim().equals("close")){
-
-            if (checkNetworkConnection()){
-
-                var id = (activity as MainActivity).userID()
-                Log.e("IDEIEI = ",id.toString())
-
-                tokenUser = db?.tokenDao()?.getToken(id)!!
-
-                var testtoken=""
-
-                for (item in tokenUser){
-
-                    testtoken = item.token!!
-
-                }
-
-                Log.d("tokenUser = ",testtoken)
-
-
-
-                var storage = SessionSerial(context!!)
-
-                var serial:HashMap<String,String> = storage.getUserDetails()
-
-                var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
-
-
-
-                val depositData = JSONObject()
-                depositData.put("serial",serial_value)
-                depositData.put("action_code","CL")
-                depositData.put("detail","")
-                depositData.put("deposit",0)
-                depositData.put("drop",0)
-                depositData.put("balance",0)
-
-//                depositData.put("balance",balanceBefore + totalDeposit)
-
-
-                val updateQueue = Volley.newRequestQueue(context)
-                val url = "http://139.180.142.52/api/save/event"
-                val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
-                    Response.Listener { response ->
-
-                        Log.e("Success","OK")
-                        var logID = response.getInt("log_id")
-                        Log.e("LOGID IS ==",logID.toString())
-                        log_id =logID
-
-//                        (activity as MainActivity).sendData("unlock".trim())
-//            fragmentManager?.popBackStack()
-
-                        val sssss = SimpleDateFormat("MM/dd/yyyy")
-                        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
-
-
-
-
-                        val balance =
-                            BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                                action = "CL", deposit = 0, drop = 0, toto_deposit = balanceBefore,
-                                balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId,log_id = log_id)
-
-                        InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
-
-
-
-//            Toast.makeText(context, openId.toString(), Toast.LENGTH_SHORT).show()
-
-
-
-                    },
-                    Response.ErrorListener { response ->
-
-                        Log.e("Error",response.toString())
-                    }) {
-
-                    // override getHeader for pass session to service
-                    override fun getHeaders(): MutableMap<String, String> {
-
-                        val header = mutableMapOf<String, String>()
-                        // "Cookie" and "PHPSESSID=" + <session value> are default format
-                        header.put("Accept", "application/json")
-                        header.put("Authorization", "Bearer "+ testtoken)
-                        return header
-                    }
-                }
-                updateQueue.add(updateReq)
-
-
-
-
-            }else{
-
-
-                val balance =
-                    BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
-                        action = "CL", deposit = 0, drop = 0, toto_deposit = balanceBefore,
-                        balance_before = balanceBefore, balance = 0, status = "-", sync = "N", open_id = openId,log_id = 0)
-
-                InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
-
-//                fragmentManager?.popBackStack()
-
-
             }
 
+            countdownTimer2.start()
 
 
+        }else if (data.equals("finish")){
 
 
-        }else{
-
-
-
+            countdownTimer2.onFinish() // Finish CountDownTimer
+            fragmentManager?.beginTransaction()
+                ?.replace(R.id.area_main,MainFragment.newInstance(id,type,user,name),"open")
+                ?.addToBackStack("open")
+                ?.commit()
 
         }
 
-        (activity as MainActivity).sendData("unlock".trim())
-        fragmentManager?.popBackStack()
 
     }
+
+
+
     class InsertOpenAcion(private val openDao: OpenDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<OpenConsole, Void, OpenConsole>() {
         override fun doInBackground(vararg openConsole: OpenConsole?): OpenConsole? {
             return try {
@@ -702,7 +598,7 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         } else if (call == RoomConstants.INSERT_OPF){
 
             if (isSuccess) {
-
+                getData("finish")
 //                Toast.makeText(context, "INSERT_OPF", Toast.LENGTH_SHORT).show()
 
             } else {
@@ -715,12 +611,13 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
     }
 
+    // Save Open Console Method
     fun test(){
 
 
 
         val sssss = SimpleDateFormat("MM/dd/yyyy")
-        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm")
+        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
 
         arrayOpenConsole = db?.openDao()?.getLastedId()!!
 
@@ -760,18 +657,198 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
 
         InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
 
-        (activity as MainActivity).sendData("unlock".trim())
 
 
 
-        closeData("close")
+
+        closeData("close",openId)
 
 
-//        fragmentManager?.popBackStack()
+    }
+
+
+    /// Save CL to Server And Sqlite
+
+    fun closeData(data : String, id_open : Int){
+
+        val sssss = SimpleDateFormat("MM/dd/yyyy")
+        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+
+
+
+        if (data.trim().equals("close")){
+
+            // Check Inter Before Save Data
+            if (checkNetworkConnection()){
+
+                var id = (activity as MainActivity).userID()
+                Log.e("IDEIEI = ",id.toString())
+
+                tokenUser = db?.tokenDao()?.getToken(id)!!
+
+                var testtoken=""
+
+                for (item in tokenUser){
+
+                    testtoken = item.token!!
+
+                }
+
+                Log.d("tokenUser = ",testtoken)
+
+
+
+                var storage = SessionSerial(context!!) // Share references Serial Data
+
+                var serial:HashMap<String,String> = storage.getUserDetails()
+
+                var serial_value:String = serial.get(SessionSerial.SERIAL_ID)!!
+
+
+
+                val depositData = JSONObject()
+                depositData.put("serial",serial_value)
+                depositData.put("action_code","CL")
+                depositData.put("detail","")
+                depositData.put("deposit",0)
+                depositData.put("drop",0)
+                depositData.put("balance",0)
+
+//                depositData.put("balance",balanceBefore + totalDeposit)
+
+
+                val updateQueue = Volley.newRequestQueue(context)
+                val url = "http://139.180.142.52/api/save/event"
+                val updateReq = object : JsonObjectRequest(Request.Method.POST, url, depositData,
+                    Response.Listener { response ->
+
+                        Log.e("Success","OK")
+                        var logID = response.getInt("log_id")
+                        Log.e("LOGID IS ==",logID.toString())
+                        log_id =logID
+
+//                        (activity as MainActivity).sendData("unlock".trim())
+//            fragmentManager?.popBackStack()
+
+                        val sssss = SimpleDateFormat("MM/dd/yyyy")
+                        val sssss2 = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+
+
+
+
+                        val balance =
+                            BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
+                                action = "CL", deposit = 0, drop = 0, toto_deposit = 0,
+                                balance_before = 0, balance = 0, status = "-", sync = "N", open_id = openId,log_id = log_id)
+
+                        InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+
+
+//            Toast.makeText(context, openId.toString(), Toast.LENGTH_SHORT).show()
+
+
+
+                    },
+                    Response.ErrorListener { response ->
+
+                        Log.e("Error",response.toString())
+                    }) {
+
+                    // override getHeader for pass session to service
+                    override fun getHeaders(): MutableMap<String, String> {
+
+                        val header = mutableMapOf<String, String>()
+                        // "Cookie" and "PHPSESSID=" + <session value> are default format
+                        header.put("Accept", "application/json")
+                        header.put("Authorization", "Bearer "+ testtoken)
+                        return header
+                    }
+                }
+                updateQueue.add(updateReq)
+
+
+
+
+            }else{
+
+
+                val balance =
+                    BalanceLog(username = user, dated = sssss.format(Date()).trim(),datedtime = sssss2.format(Date()).trim(),
+                        action = "CL", deposit = 0, drop = 0, toto_deposit = 0,
+                        balance_before = 0, balance = 0, status = "-", sync = "N", open_id = openId,log_id = 0)
+
+                InsertLogAsync(db!!.balanceLogDao(), RoomConstants.INSERT_USER, this).execute(balance)
+
+
+
+
+//                fragmentManager?.popBackStack()
+
+
+            }
+
+
+
+
+
+        }else{
+
+
+
+
+        }
+
+
+        db = ApplicationDatabase.getInstance(context!!)
+
+        arrayOpenData = db?.openDao()?.getOpenDataById(id_open)!!
+
+        var user_id : String = ""
+
+        var openTime = SimpleDateFormat("ddMMyyyyHHmmss")
+        var openTimeConvert=""
+
+        for (item in arrayOpenData){
+
+             idUser = item.oid!!.toInt()
+             var time = item.open_time!!
+             userName = item.user_open!!
+             balanceTotalOP = item.balance_money!!
+             qtyDepositOP = item.deposit_count!!.toString()
+             openTimeConvert = openTime.format(Date(time)).trim()
+
+        }
+
+
+        Log.d("Open_ID = ",idUser.toString())
+        Log.d("OpenTime = ",openTimeConvert)
+        Log.d("Open_user = ",userName)
+        Log.d("Open_balanceTotal = ",balanceTotalOP.toString())
+        Log.d("Open_qtyDeposit = ",qtyDepositOP)
+
+
+
+        var storage = SessionSerial(context!!)
+        var serial: HashMap<String, String> = storage.getUserDetails()
+        var branchName = serial.get(SessionSerial.NUMBERCONSOLE)
+
+
+
+
+        (activity as MainActivity).sendData("u"+openTimeConvert+userName+"#"+balanceTotalOP+"#"+qtyDepositOP+"#"+branchName) // Send Data Open Console To Arduino
+
+
+//        u#วันที่user#ผลรวมในรอบการฝาก#จำนวนรอบการฝาก
+
+        getData("finish")
+
+
     }
 
 
 
+    // Check Internet
 
     fun checkNetworkConnection(): Boolean {
 
@@ -780,24 +857,6 @@ class OpenFragment : Fragment(), AsyncResponseCallback {
         return networkInfo != null && networkInfo.isConnected
     }
 
-//    private fun checkCameraHardware(context: Context): Boolean {
-//        if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-//            // this device has a camera
-//            return true
-//        } else {
-//            // no camera on this device
-//            return false
-//        }
-//    }
-//
-//    fun getCameraInstance(): Camera? {
-//        return try {
-//            Camera.open() // attempt to get a Camera instance
-//        } catch (e: Exception) {
-//            // Camera is not available (in use or does not exist)
-//            null // returns null if camera is unavailable
-//        }
-//    }
 
 
 }

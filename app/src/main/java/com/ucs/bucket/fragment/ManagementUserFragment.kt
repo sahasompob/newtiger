@@ -9,46 +9,59 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import com.ucs.bucket.ManagmentUserActivity
 import com.ucs.bucket.R
 import com.ucs.bucket.UserListAdapter
+import com.ucs.bucket.Util.SessionSerial
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.UserDAO
 import com.ucs.bucket.db.db.entity.User
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_management_user.view.*
+import java.util.HashMap
 
 class ManagementUserFragment : Fragment(), AsyncResponseCallback {
     private var db: ApplicationDatabase? = null
     lateinit var adduser : Button
     lateinit var user_list : RecyclerView
-
+    lateinit var cancel_btn_mnu : Button
 
     lateinit var editeuser : Button
     private lateinit var userListAdapter: UserListAdapter
     private lateinit var arrayUser: List<User>
+
+    lateinit var nameBrach : TextView
+    lateinit var nameUser : TextView
+    lateinit var numberConsole : TextView
+
     var firstnameData = ""
     var usernameData = ""
-    var userId = 0
+    var roleData = ""
+    var userId = ""
 
 
 
     companion object {
 
-//        fun newInstance(type : String): ManagementUserFragment {
-//            var fragment = ManagementUserFragment()
-//            var args = Bundle()
-//            args.putString("type",type)
-//            fragment.arguments = args
-//            return fragment
-//        }
-        fun newInstance(): ManagementUserFragment {
+        fun newInstance(id: String,rank: String, str: String , nameData : String): ManagementUserFragment {
             var fragment = ManagementUserFragment()
             var args = Bundle()
+            args.putString("id",id)
+            args.putString("rank",rank)
+            args.putString("user",str)
+            args.putString("name",nameData)
             fragment.arguments = args
             return fragment
         }
+//        fun newInstance(): ManagementUserFragment {
+//            var fragment = ManagementUserFragment()
+//            var args = Bundle()
+//            fragment.arguments = args
+//            return fragment
+//        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -62,10 +75,25 @@ class ManagementUserFragment : Fragment(), AsyncResponseCallback {
         arrayUser = db?.userDao()?.getAll()!!
 
         user_list = root.user_list
+        nameUser = root.name_user_mnu
+        nameBrach = root.name_branch_mnu
+        numberConsole = root.number_console_value_mnu
+
+
+        var storage = SessionSerial(context!!)
+        var serial: HashMap<String, String> = storage.getUserDetails()
+        nameBrach.text =serial.get(SessionSerial.BRANCHNAME)!!
+        numberConsole.text = serial.get(SessionSerial.NUMBERCONSOLE)
+        nameUser.text = arguments?.getString("name")!!
 
         user_list.layoutManager = LinearLayoutManager(context)
         userListAdapter = UserListAdapter()
         userListAdapter.setUserList(arrayUser.toMutableList())
+
+         firstnameData = arguments?.getString("name")!!
+         usernameData = arguments?.getString("user")!!
+         roleData = arguments?.getString("rank")!!
+         userId = arguments?.getString("id")!!
 
         userListAdapter.onItemDeleteClick = { position ->
 
@@ -96,12 +124,20 @@ class ManagementUserFragment : Fragment(), AsyncResponseCallback {
 
         adduser = root.add_btn
         editeuser = root.edit_btn
+        cancel_btn_mnu = root.cancel_btn_mnu
 
+
+        cancel_btn_mnu.setOnClickListener {
+
+            (activity as ManagmentUserActivity).backPage()
+
+
+        }
 
         adduser.setOnClickListener {
 
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,AddUserFragment.newInstance(),"addUser")
+                ?.replace(R.id.area_main,AddUserFragment.newInstance(userId,roleData,usernameData,firstnameData),"addUser")
                 ?.addToBackStack("addUser")
                 ?.commit()
         }

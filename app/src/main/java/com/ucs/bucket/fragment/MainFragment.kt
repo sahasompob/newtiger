@@ -15,7 +15,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.ucs.bucket.*
 import com.ucs.bucket.Util.SessionManager
+import com.ucs.bucket.Util.SessionSerial
 import kotlinx.android.synthetic.main.fragment_main.view.*
+import java.util.HashMap
 
 class MainFragment : Fragment() {
     lateinit var deposit : CardView
@@ -28,6 +30,9 @@ class MainFragment : Fragment() {
     lateinit var logOut : CardView
 
     lateinit var nameUser : TextView
+    lateinit var nameBrach : TextView
+    lateinit var numberConsole : TextView
+
 
     lateinit var online_btn : Button
     lateinit var offline_btn : Button
@@ -73,6 +78,8 @@ class MainFragment : Fragment() {
         test_system = root.test_system
         logOut = root.log_out
         setting = root.img_setting
+        nameBrach= root.name_branch
+        numberConsole = root.number_console_value
 
         if(checkNetworkConnection()){
 
@@ -91,7 +98,11 @@ class MainFragment : Fragment() {
 
         var user_id = arguments?.getString("id")!!
 
-        var storage = SessionManager(context!!)
+
+        var storage = SessionSerial(context!!)
+        var serial: HashMap<String, String> = storage.getUserDetails()
+        nameBrach.text =serial.get(SessionSerial.BRANCHNAME)!!
+        numberConsole.text = serial.get(SessionSerial.NUMBERCONSOLE)
 
         deposit.setOnClickListener {
 
@@ -105,9 +116,15 @@ class MainFragment : Fragment() {
 
         openBox.setOnClickListener {
 
+//            fragmentManager?.beginTransaction()
+//                ?.replace(R.id.area_main,OpenFragment.newInstance(rank,str,nameData),"open")
+//                ?.addToBackStack("open")
+//                ?.commit()
+
+
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,OpenFragment.newInstance(rank,str,nameData),"open")
-                ?.addToBackStack("open")
+                ?.replace(R.id.area_main,BeforeOpenFragment.newInstance(user_id,rank,str,nameData),"bopen")
+                ?.addToBackStack("bopen")
                 ?.commit()
         }
 
@@ -115,6 +132,10 @@ class MainFragment : Fragment() {
 
             activity?.let{
                 val intent = Intent (it, ManagmentUserActivity::class.java)
+                intent.putExtra("username",str)
+                intent.putExtra("name",nameData)
+                intent.putExtra("role",rank)
+                intent.putExtra("user_id",user_id)
                 it.startActivity(intent)
             }
 
@@ -134,6 +155,10 @@ class MainFragment : Fragment() {
 
             activity?.let{
                 val intent = Intent (it, ReportActivity::class.java)
+                intent.putExtra("username",str)
+                intent.putExtra("name",nameData)
+                intent.putExtra("role",rank)
+                intent.putExtra("user_id",user_id.toString())
                 it.startActivity(intent)
             }
         }
@@ -151,7 +176,7 @@ class MainFragment : Fragment() {
         test_system.setOnClickListener {
 
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,SystemFragment.newInstance(),"system")
+                ?.replace(R.id.area_main,SystemFragment.newInstance(user_id,rank,str,nameData),"system")
                 ?.addToBackStack("system")
                 ?.commit()
 //            else username.error = "request admin"
@@ -174,7 +199,6 @@ class MainFragment : Fragment() {
 
 
 
-
     }
 
     fun checkNetworkConnection(): Boolean {
@@ -183,6 +207,7 @@ class MainFragment : Fragment() {
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
+
 
 
 

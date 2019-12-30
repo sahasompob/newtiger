@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/layout_popupAddTable"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="300dp"
               android:orientation="vertical"
               android:padding="5dip" >
     <LinearLayout
@@ -21,15 +21,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ใส่จำนวนงิน"
-                    android:textSize="30sp" />
+                    android:textSize="35sp" />
 
             <EditText
+                    android:layout_margin="10dp"
                     android:id="@+id/drop_mn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="20"
                     android:inputType="number"
-                    android:textSize="25sp" />
+                    android:textSize="35sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -51,7 +52,7 @@
                 android:background="@drawable/btn_red"
                 android:text="ยกเลิก"
                 android:layout_margin="10dp"
-                android:textSize="20sp" />
+                android:textSize="30sp" />
 
         <Button
                 android:id="@+id/done_btn"
@@ -61,7 +62,7 @@
                 android:background="@drawable/btn_green"
                 android:text="ตกลง"
                 android:layout_margin="10dp"
-                android:textSize="20sp" />
+                android:textSize="30sp" />
     </LinearLayout>
 
 </LinearLayout>

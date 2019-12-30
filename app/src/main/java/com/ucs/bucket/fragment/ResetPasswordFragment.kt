@@ -32,6 +32,7 @@ class ResetPasswordFragment : Fragment() {
     private lateinit var tokenUser: List<Token>
     lateinit var btn_save_pass : Button
     lateinit var edt_new_pass : EditText
+    lateinit var btn_cancel : Button
 var id = ""
     companion object {
 
@@ -56,8 +57,16 @@ var id = ""
         id = arguments?.getString("id")!!
 
 
-        btn_save_pass = root.btn_save_pass
+        btn_save_pass = root.btn_save_pass_reset
         edt_new_pass = root.edt_new_pass
+        btn_cancel = root.btn_cancle_reset
+
+
+        btn_cancel.setOnClickListener {
+
+            fragmentManager?.popBackStack()
+
+        }
 
 
         btn_save_pass.setOnClickListener {

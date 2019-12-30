@@ -27,16 +27,21 @@ public class SessionSerial {
         val  IS_LOGIN : String = "isLoggedIn"
         val  SERIAL_ID : String = "serial_id"
         val  VERIFYCODE : String = "verify_code"
+        val  BRANCHNAME : String = "branch_name"
+        val  NUMBERCONSOLE : String = "number_console"
 
 
     }
 
 
-    fun creatLoginSession(serial_id:String,verify_code:String){
+    fun creatDataSession(serial_id:String,verify_code:String, branch_name:String, number_console:String){
 
         editor.putBoolean(IS_LOGIN,true)
         editor.putString(SERIAL_ID,serial_id)
         editor.putString(VERIFYCODE,verify_code)
+        editor.putString(BRANCHNAME,branch_name)
+        editor.putString(NUMBERCONSOLE,number_console)
+
 
         editor.commit()
 //        Toast.makeText(con, username, Toast.LENGTH_SHORT).show()
@@ -58,16 +63,19 @@ public class SessionSerial {
 
     fun getUserDetails(): HashMap<String,String>{
 
-        var user: Map<String,String> = HashMap<String,String>()
+        var data: Map<String,String> = HashMap<String,String>()
 
-        (user as HashMap).put(SERIAL_ID,pref.getString(SERIAL_ID,null))
-        (user as HashMap).put(VERIFYCODE,pref.getString(VERIFYCODE,null))
+        (data as HashMap).put(SERIAL_ID,pref.getString(SERIAL_ID,null))
+        (data as HashMap).put(VERIFYCODE,pref.getString(VERIFYCODE,null))
+        (data as HashMap).put(BRANCHNAME,pref.getString(BRANCHNAME,null))
+        (data as HashMap).put(NUMBERCONSOLE,pref.getString(NUMBERCONSOLE,null))
 
 
-        return  user
+
+        return  data
     }
 
-    fun logOutUser(){
+    fun deleteSession(){
 
         editor.clear()
         editor.commit()

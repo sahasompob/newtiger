@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.ucs.bucket.R
+import com.ucs.bucket.Util.SessionSerial
 import com.ucs.bucket.appinterface.AsyncResponseCallback
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.dao.UserDAO
@@ -16,6 +17,7 @@ import com.ucs.bucket.db.db.entity.User
 import com.ucs.bucket.db.db.helper.RoomConstants
 import kotlinx.android.synthetic.main.fragment_edit_user.view.*
 import org.mindrot.jbcrypt.BCrypt
+import java.util.HashMap
 
 class EditUserFragment : Fragment(), AsyncResponseCallback {
 
@@ -32,13 +34,20 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
     var new_pass_data = ""
     var name_data = ""
     var edt_role = ""
-
     var role_text =""
 
     lateinit var edt_username: EditText
     lateinit var edt_name: EditText
     lateinit var edt_old_password: EditText
     lateinit var edt_new_password: EditText
+
+
+    lateinit var nameUser: TextView
+    lateinit var nameBranch: TextView
+    lateinit var numberConsole: TextView
+
+
+
 
     var userId = 0;
 
@@ -74,11 +83,15 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
         cancel_btn = root.cancel_btn
         edt_role_spinner = root.edt_role_spinner
 
+        nameUser = root.name_user_edit
+        nameBranch = root.name_branch_edit
+        numberConsole = root.number_console_value_edit
+
         edt_role_spinner.adapter = ArrayAdapter(
             context,
             R.layout.support_simple_spinner_dropdown_item,
             resources.getStringArray(R.array.role_list)
-        )
+        ) as SpinnerAdapter?
 
         edt_role_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -115,7 +128,15 @@ class EditUserFragment : Fragment(), AsyncResponseCallback {
         edt_name.setText(arguments?.getString("firstname")!!)
 
 
-        Toast.makeText(context, userId.toString(), Toast.LENGTH_SHORT).show()
+        nameUser.text = arguments?.getString("firstname")!!
+
+
+        var storage = SessionSerial(context!!)
+        var serial: HashMap<String, String> = storage.getUserDetails()
+        nameBranch.text =serial.get(SessionSerial.BRANCHNAME)!!
+        numberConsole.text = serial.get(SessionSerial.NUMBERCONSOLE)
+
+//        Toast.makeText(context, userId.toString(), Toast.LENGTH_SHORT).show()
 
 
         edit_btn.setOnClickListener {

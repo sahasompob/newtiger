@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.support.v7.widget.CardView
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
+import com.ucs.bucket.Util.SessionSerial
+import java.util.HashMap
 
 class ReportActivity : AppCompatActivity() {
 
@@ -17,6 +20,10 @@ class ReportActivity : AppCompatActivity() {
     private lateinit var back_page : CardView
     private lateinit var online_btn : Button
     private lateinit var offline_btn : Button
+    lateinit var nameBrach : TextView
+    lateinit var numberConsole : TextView
+    lateinit var nameUser : TextView
+
 
 
 
@@ -24,6 +31,10 @@ class ReportActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report)
 
+        var username=intent.getStringExtra("username")
+        var firstname=intent.getStringExtra("name")
+        var role=intent.getStringExtra("role")
+        var user_id=intent.getStringExtra("user_id")
 
         day_report = findViewById(R.id.day_report)
         open_report = findViewById(R.id.open_report)
@@ -31,6 +42,23 @@ class ReportActivity : AppCompatActivity() {
         deposit_report = findViewById(R.id.deposit_report)
         online_btn = findViewById(R.id.status_online)
         offline_btn = findViewById(R.id.status_offline)
+        nameBrach = findViewById(R.id.name_branch_rp)
+        numberConsole = findViewById(R.id.number_console_value_rp)
+        nameUser = findViewById(R.id.name_user_rp)
+
+
+
+        var storage = SessionSerial(applicationContext!!)
+        var serial: HashMap<String, String> = storage.getUserDetails()
+        nameBrach.text =serial.get(SessionSerial.BRANCHNAME)!!
+        numberConsole.text = serial.get(SessionSerial.NUMBERCONSOLE)
+
+        nameUser.text = firstname
+
+
+
+
+
 
         if(checkNetworkConnection()){
 

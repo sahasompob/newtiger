@@ -16,6 +16,9 @@ class OpenConsole(
         @ColumnInfo(name = "open_time")
         var open_time: String? = null,
 
+        @ColumnInfo(name = "open_date")
+        var open_date: String? = null,
+
         @ColumnInfo(name = "deposit_count")
         var deposit_count: Int? = null,
 

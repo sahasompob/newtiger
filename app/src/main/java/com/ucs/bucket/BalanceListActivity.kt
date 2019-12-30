@@ -77,7 +77,7 @@ class BalanceListActivity : BaseActivity(), AsyncResponseCallback, AdapterView.O
             getListStatus(valueStatus,currentDate.text.toString())
 
         }else if (listValue.equals("ยกเลิกการเปิดตู้")){
-            valueStatus = "OPF"
+            valueStatus = "OF"
             getListStatus(valueStatus,currentDate.text.toString())
 
 
@@ -133,7 +133,7 @@ class BalanceListActivity : BaseActivity(), AsyncResponseCallback, AdapterView.O
                     getListStatus(statusList,chooseDate)
 
                 }else if (spinnerList.equals("ยกเลิกการเปิดตู้")){
-                    statusList = "OPF"
+                    statusList = "OF"
                     getListStatus(statusList,chooseDate)
 
 
@@ -160,14 +160,14 @@ class BalanceListActivity : BaseActivity(), AsyncResponseCallback, AdapterView.O
         }
 
         previousButton.setOnClickListener {
-           currentTime.add(Calendar.DATE, 1 * -1)
+           currentTime.add(Calendar.DATE, 1)
             update()
 
         }
 
         nextButton.setOnClickListener {
 
-            currentTime.add(Calendar.DATE, 1 * 1)
+            currentTime.add(Calendar.DATE, 1)
             update()
 
         }
@@ -189,6 +189,8 @@ class BalanceListActivity : BaseActivity(), AsyncResponseCallback, AdapterView.O
         balanceListAdapter.onItemDeleteClick = { position ->
             DeleteUserAsync(db!!.balanceLogDao(), RoomConstants.DELETE_USER, this).execute(arrayUser[position])
         }
+
+
 
         arrayUser = db?.balanceLogDao()?.getAll(todayDate)!!
         balanceListAdapter.setUserList(arrayUser.toMutableList())

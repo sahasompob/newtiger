@@ -105,6 +105,15 @@ public class SessionManager {
         editor.apply()
     }
 
-    fun getDelay() : Int = getSharePre().getInt("delay",5)
+    fun setDelayKey(delayKey : Int){
+
+        editor.putInt("delayKey",delayKey)
+        editor.apply()
+    }
+
+    fun getDelay() : Int = getSharePre().getInt("delay",10)
+
+
+    fun getDelayInsertKey() : Int = getSharePre().getInt("delayKey",5)
 
 }

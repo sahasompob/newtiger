@@ -25,6 +25,7 @@ import android.content.ComponentName
 import android.util.Log
 import java.util.concurrent.TimeUnit
 import android.content.DialogInterface
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -40,9 +41,11 @@ import android.widget.FrameLayout
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.ucs.bucket.Util.SessionSerial
 import com.ucs.bucket.db.db.entity.BalanceLog
+import com.ucs.bucket.db.db.entity.Token
 import org.json.JSONObject
 import java.io.*
 import java.util.*
@@ -62,9 +65,14 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     lateinit var session : SessionManager
     lateinit var session2 : SessionSerial
     private lateinit var arrayLog: List<BalanceLog>
-//    private lateinit var arrayUser: null!!
+    private lateinit var arrayToken: List<Token>
+    lateinit var vesion_app : PackageInfo
+
 
     var testId =""
+    var tokentest = ""
+    var user_id = 0
+    var statusServer =""
 
     private val usbConnection = object : ServiceConnection {
         override fun onServiceConnected(arg0: ComponentName, arg1: IBinder) {
@@ -87,20 +95,12 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
         session2 = SessionSerial(applicationContext)
         mHandler = MyHandler(this)
         db = ApplicationDatabase.getInstance(this)
-//        arrayUser = db?.userDao()?.getAll()!!
 
 
 
         if (checkNetworkConnection()){
-
+            statusServer ="1"
             syncDataLogToServer()
-
-//            surfaceView = findViewById(R.id.surfaceView)
-//            val result = checkPermission()
-//            if (result) {
-//
-//                setupSurfaceHolder()
-//            }
 
             var username=intent.getStringExtra("username")
             var firstname=intent.getStringExtra("name")
@@ -110,11 +110,6 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
             testId = user_id
 
-//            supportFragmentManager.beginTransaction()
-//                .add(R.id.area_main,UserFragment.newInstance("Onwer",username,firstname),"main")
-//                .commit()
-
-//
             Log.d("Role = ",role)
             if (role.equals("O")){
 
@@ -139,7 +134,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
         }else{
 
-
+            statusServer ="2"
 
             var username=intent.getStringExtra("username")
             var name=intent.getStringExtra("name")
@@ -179,6 +174,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
 
 
+    // Get UserID
     fun userID(): Int {
 
         return testId.toInt()
@@ -227,8 +223,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
         super.onDestroy()
 //        session.logOutUser()
 
-        db = ApplicationDatabase.getInstance(this)
-        db?.tokenDao()?.deleteToken()!!
+        logoutToserver(statusServer)
 
     }
 
@@ -259,26 +254,29 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     }
 
 
+    // Recieve Data From Arduino
+
     fun onDataRecieve(data : String){
 
-//        val fragment = supportFragmentManager.findFragmentByTag("coin")
-//
-//        if(fragment!=null){
-//
-//            (fragment as InsertCoinFragment).getCoin(data)
-//        }
-
-        val s = data.trim()
+        var s = data.trim()
         s.replace("\r","")
         s.replace("\n","")
 
         if (s == "ready"){
 
-            val fragment = supportFragmentManager.findFragmentByTag("open")
+            Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
+
+
+//            val fragment = supportFragmentManager.findFragmentByTag("open")
+            val fragment = supportFragmentManager.findFragmentByTag("bopen")
 
             if(fragment!=null){
 
-                (fragment as OpenFragment).getData(data)
+//                (fragment as OpenFragment).getData(data)
+
+                (fragment as BeforeOpenFragment).insertKey("ready")
+
+
             }
 
 
@@ -292,7 +290,8 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
             }
 
 
-        }else{
+        }
+        else{
 
             Toast.makeText(this, "Data = " +  data.trim(), Toast.LENGTH_SHORT).show()
 
@@ -301,7 +300,9 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     }
 
 
+    // Send Data To Arduino
     fun sendData(data: String){
+
         Toast.makeText(this@MainActivity, data, Toast.LENGTH_SHORT).show()
 
         if(usbService!=null){
@@ -310,32 +311,47 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     }
 
 
+    // Click Logout Button
     fun closeApp(){
 
          val alertDialogBuilder = AlertDialog.Builder(this)
-                alertDialogBuilder.setTitle("Exit Application?")
                 alertDialogBuilder
-        .setMessage("Click yes to exit!")
+        .setMessage("คุณต้องการออกจากแอพพลิเคชั่นหรือไม่ ?")
         .setCancelable(false)
-        .setPositiveButton("Yes"
+        .setPositiveButton("ยืนยัน"
         ) { dialog, id ->
-            db = ApplicationDatabase.getInstance(this)
-            db?.tokenDao()?.deleteToken()!!
+
+           logoutToserver(statusServer)
+
             moveTaskToBack(true)
             android.os.Process.killProcess(android.os.Process.myPid())
             System.exit(1)
             finish()
         }
 
-        .setNegativeButton("No", object:DialogInterface.OnClickListener {
+        .setNegativeButton("ยกเลิก", object:DialogInterface.OnClickListener {
         override fun onClick(dialog:DialogInterface, id:Int) {
 
-        dialog.cancel()
+            dialog.cancel()
         }
         })
 
                 val alertDialog = alertDialogBuilder.create()
                 alertDialog.show()
+
+                alertDialog.window.setLayout(600,220)
+                alertDialog.window.attributes
+
+                var titleText = alertDialog.findViewById<TextView>(android.R.id.message)!!
+                titleText!!.setTextSize(28F)
+
+                var noBtn = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                noBtn.setTextSize(26F)
+                noBtn.setPadding(0,55,30,0)
+
+                var yesBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                yesBtn.setTextSize(26F)
+                yesBtn.setPadding(0,55,5,0)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -410,48 +426,23 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
         }
     }
 
-    fun checkNetworkConnection(): Boolean {
-
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
-    }
-
-
-//    fun workManager() {
-//        val flexMillis = (1 * 60 * 1000).toLong()
-//        val componentName = ComponentName(this, ExampleJobService::class.java)
-//        val info = JobInfo.Builder(123, componentName)
-//            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-//            .setPersisted(true)
-//            .setPeriodic(flexMillis)
-//            .build()
-//
-//        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-//        val resultCode = scheduler.schedule(info)
-//        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-//            Log.d("MainActivity Test", "Job scheduled")
-//
-//
-////            val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-////            scheduler.cancel(123)
-////            Log.d("MainActivity Test", "Job cancelled")
-//
-//        } else {
-//            Log.d("MainActivity Test", "Job scheduling failed")
-//        }
-//
-//    }
 
 
 
+    // Function use With Add Money Drop in Deposit Fragment
     override fun sendInput(input: String) {
         val fragment = supportFragmentManager.findFragmentByTag("coin")
         (fragment as InsertCoinFragment).displayReceivedData(input)
 
     }
 
+    fun getVersionApp(): String{
+        val manager = this.packageManager
+        val info = manager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
+        return info.versionName
+    }
 
+    // Sync Data Log To Server When Internet Connect
      fun syncDataLogToServer(){
 
         Log.d("Sync Data = ", "Waiting")
@@ -459,7 +450,6 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
         arrayLog = db?.balanceLogDao()?.getLogOffline()!!
 
 
-//        Log.d("Data = ", arrayLog.toString())
 
         if (arrayLog.isEmpty()){
 
@@ -486,8 +476,7 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
 
                 if (action_code.equals("CL")){
 
-                    android.os.Handler().postDelayed(
-                        {
+                    android.os.Handler().postDelayed({
 
                             var storage = SessionSerial(applicationContext!!)
 
@@ -508,7 +497,6 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
                             depositData.put("drop",drop)
                             depositData.put("balance",balanceTotal)
 
-//                depositData.put("balance",balanceBefore + totalDeposit)
 
 
                             val updateQueue = Volley.newRequestQueue(applicationContext)
@@ -536,7 +524,6 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
                             }
                             updateQueue.add(updateReq)
 
-//                            Log.i("tag", "This'll run 300 milliseconds later")
 
                         },
                         2000
@@ -563,7 +550,6 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
                     depositData.put("drop",drop)
                     depositData.put("balance",balanceTotal)
 
-//                depositData.put("balance",balanceBefore + totalDeposit)
 
 
                     val updateQueue = Volley.newRequestQueue(applicationContext)
@@ -609,6 +595,82 @@ class MainActivity : AppCompatActivity() , AsyncResponseCallback,DropMoneyFragme
     }
 
 
+    // Logout From Server
+    fun logoutToserver(serverStatus: String){
+
+        if (serverStatus.equals("1")){
+
+            db = ApplicationDatabase.getInstance(this)
+
+            arrayToken = db?.tokenDao()?.getToken(testId.toInt())!!
+
+
+            for (item in arrayToken){
+
+                user_id = item.user_id!!
+                tokentest = item.token!!
+
+
+            }
+
+            Log.d("user_id = ",user_id.toString())
+            Log.d("token = ",tokentest)
+
+            val updateQueue = Volley.newRequestQueue(applicationContext)
+            val url = "http://139.180.142.52/api/logout"
+            val updateReq = object : StringRequest(
+                Request.Method.POST, url,
+                Response.Listener { response ->
+
+                    Log.d("Logout Status Code = ",response.toString())
+
+
+                    db = ApplicationDatabase.getInstance(this)
+                    db?.tokenDao()?.deleteToken()!!
+
+                    Log.d("DeleteToken = ","Success")
+
+
+
+                },
+                Response.ErrorListener { response ->
+
+                    Log.e("Error",response.toString())
+                }) {
+
+                override fun getHeaders(): MutableMap<String, String> {
+
+                    val header = mutableMapOf<String, String>()
+                    // "Cookie" and "PHPSESSID=" + <session value> are default format
+                    header.put("Accept", "application/json")
+                    header.put("Authorization", "Bearer "+ tokentest)
+                    return header
+                }
+
+            }
+            updateQueue.add(updateReq)
+
+        }else{
+
+
+            Log.d("Server Offline = ","False")
+
+
+
+        }
+
+            Log.d("ไมทัน = ","")
+
+
+    }
+
+    // Check Internet
+    fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
 
 
 

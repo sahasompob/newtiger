@@ -3,6 +3,7 @@ package com.ucs.bucket
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.widget.Button
 import android.widget.Toast
 import com.ucs.bucket.db.db.ApplicationDatabase
 import com.ucs.bucket.db.db.entity.BalanceLog
@@ -14,9 +15,13 @@ class DetailOpenActivity : AppCompatActivity() {
     private var db: ApplicationDatabase? = null
     private lateinit var arrayUser: List<BalanceLog>
 
+    private lateinit var back_btn: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_open)
+
+        back_btn = findViewById(R.id.back_btn_detail)
 
         var open_id=intent.getStringExtra("openid")
 
@@ -32,6 +37,12 @@ class DetailOpenActivity : AppCompatActivity() {
         arrayUser = db?.balanceLogDao()?.loadByOpenId(openID)!!
         balanceListAdapter.setUserList(arrayUser.toMutableList())
         recyclerUserList.adapter = balanceListAdapter
+
+
+        back_btn.setOnClickListener {
+
+            finish()
+        }
 
     }
 }

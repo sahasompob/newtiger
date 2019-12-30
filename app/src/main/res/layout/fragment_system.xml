@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_main"
         tools:context=".MainActivity">
+
+
+   <RelativeLayout
+           android:layout_width="match_parent"
+           android:background="@color/yellow"
+           android:layout_height="160dp">
+
+   </RelativeLayout>
+
+
 
    <LinearLayout
            android:layout_width="match_parent"
@@ -39,12 +48,81 @@
                  android:textColor="@color/colorBlack"
                  android:textSize="40dp" />
 
+         <Button
+                 android:id="@+id/status_offline_st"
+                 android:layout_width="25dp"
+                 android:layout_height="25dp"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginTop="20dp"
+                 android:layout_marginRight="10dp"
+                 android:background="@drawable/offline_btn"
+         />
+
+         <Button
+                 android:id="@+id/status_online_st"
+                 android:layout_width="25dp"
+                 android:layout_height="25dp"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginTop="20dp"
+                 android:layout_marginRight="10dp"
+                 android:background="@drawable/online_btn"
+         />
+
+
+      </RelativeLayout>
+      <RelativeLayout
+              android:layout_marginTop="0dp"
+              android:layout_marginRight="20dp"
+              android:layout_marginLeft="20dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+         <TextView
+                 android:id="@+id/title_branch"
+                 android:textSize="30dp"
+                 android:textColor="@color/colorBlack"
+                 android:layout_width="wrap_content"
+                 android:text="@string/branch_text"
+                 android:layout_height="wrap_content" />
+
+         <TextView
+                 android:id="@+id/name_branch_system"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentTop="true"
+                 android:layout_marginStart="20dp"
+                 android:layout_toEndOf="@+id/title_branch"
+                 android:text="Tonla"
+                 android:textColor="@color/colorBlack"
+                 android:textSize="30dp" />
+
+         <TextView
+                 android:id="@+id/number_console_text"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginRight="150dp"
+                 android:text="ตู้ที่"
+                 android:textColor="@color/colorBlack"
+                 android:textSize="30dp" />
+
+
+         <TextView
+                 android:id="@+id/number_console_value_system"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginRight="90dp"
+                 android:text="5"
+                 android:textColor="@color/colorBlack"
+                 android:textSize="30dp" />
 
       </RelativeLayout>
 
 
+
       <LinearLayout
-              android:layout_marginTop="40dp"
+              android:layout_marginTop="90dp"
               android:gravity="center"
               android:orientation="horizontal"
               android:layout_width="match_parent"
@@ -66,9 +144,9 @@
                     android:layout_height="match_parent">
 
                <ImageView
-                       android:src="@drawable/wifi"
-                       android:layout_width="80dp"
-                       android:layout_height="80dp" />
+                       android:layout_width="85dp"
+                       android:layout_height="66dp"
+                       android:src="@drawable/wifi" />
 
                <TextView
                        android:layout_marginTop="12dp"
@@ -147,13 +225,10 @@
 
       <LinearLayout
               android:layout_marginTop="40dp"
-              android:layout_marginLeft="15dp"
-              android:gravity="left"
+              android:gravity="center"
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="190dp">
-
-
 
          <android.support.v7.widget.CardView
                  android:id="@+id/back_btn"
@@ -195,4 +270,4 @@
    </LinearLayout>
 
 
-</ScrollView>
+</RelativeLayout>

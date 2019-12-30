@@ -14,8 +14,15 @@ interface OpenDAO {
     @Query("SELECT * FROM open")
     fun getAll(): List<OpenConsole>
 
+    @Query("SELECT * FROM open  WHERE open_date = (:date)")
+    fun getByDate(date: String): List<OpenConsole>
+
+
     @Query("SELECT * FROM open ORDER BY oid DESC LIMIT 1")
     fun getLastedId(): List<OpenConsole>
+
+    @Query("SELECT * FROM open WHERE oid IN (:openID)")
+    fun getOpenDataById(openID: Int): List<OpenConsole>
 
 //    @Query("SELECT * FROM balance_log ORDER BY bid DESC LIMIT 1")
 //    fun getLastId(): List<BalanceLog>

@@ -77,6 +77,10 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
     lateinit var online_btn : Button
     lateinit var offline_btn : Button
 
+    lateinit var messageText : TextView
+
+    lateinit var nameBrach : TextView
+    lateinit var numberConsole : TextView
 
 
     var test = 0
@@ -148,7 +152,8 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
         btn_insert_drop = root.btn_insert_drop
         offline_btn = root.status_offline
         online_btn = root.status_online
-
+        nameBrach= root.name_branch_insert
+        numberConsole = root.number_console_value_insert
         name_user = root.name_user
 //        money_errors_txt = root.money_errors_value
         textMoney = root.test_money
@@ -158,13 +163,26 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
         btn_cancle_coin = root.btn_cancle_coin
         name_user.text = arguments?.getString("name")!!
         user = arguments?.getString("user")!!
-//        (activity as MainActivity).sendData("o$user")
-        (activity as MainActivity).sendData("o"+ name_user.text.toString())
-//        textSum.text = "${arguments?.getString("rank")}"
-        textSum.text = "${arguments?.getString("rank")}"
 
+
+        var storage = SessionSerial(context!!)
+        var serial: HashMap<String, String> = storage.getUserDetails()
+        nameBrach.text =serial.get(SessionSerial.BRANCHNAME)!!
+        numberConsole.text = serial.get(SessionSerial.NUMBERCONSOLE)
+
+//        (activity as MainActivity).sendData("o$user")
+
+
+
+
+        var branchName = serial.get(SessionSerial.BRANCHNAME)!!
+        (activity as MainActivity).sendData("o"+ user+branchName ) // Send o+user+branch to Arduino via sendData in MainActivity
+//        textSum.text = "${arguments?.getString("rank")}"
+//        textSum.text = "${arguments?.getString("rank")}"
+        textSum.text = "0"
 //        val storage = Storage(context!!)
 //        var log = storage.getLog()
+        
 
         if(checkNetworkConnection()){
 
@@ -184,24 +202,38 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
             val alertDialogBuilder = AlertDialog.Builder(context!!)
 
-            alertDialogBuilder.setTitle("คุณทำรายการฝากเงินเสร็จสิ้นแล้วหรือไม่ ?")
+            alertDialogBuilder.setMessage("คุณทำรายการฝากเงินเสร็จสิ้นแล้วหรือไม่ ?")
             alertDialogBuilder
                 .setCancelable(false)
-                .setPositiveButton("ใช่"
+                .setPositiveButton("ยืนยัน"
                 ) { dialog, id ->
 
                     saveData()
                 }
 
-                .setNegativeButton("ไม่", object: DialogInterface.OnClickListener {
+                .setNegativeButton("ยกเลิก", object: DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface, id:Int) {
 
                         dialog.cancel()
                     }
                 })
 
-            val alertDialog = alertDialogBuilder.create()
+            var alertDialog = alertDialogBuilder.create()
             alertDialog.show()
+
+            alertDialog.window.setLayout(600,220)
+            alertDialog.window.attributes
+
+            var titleText = alertDialog.findViewById<TextView>(android.R.id.message)!!
+            titleText!!.setTextSize(28F)
+
+            var noBtn = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            noBtn.setTextSize(26F)
+            noBtn.setPadding(0,55,30,0)
+
+            var yesBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            yesBtn.setTextSize(26F)
+            yesBtn.setPadding(0,55,5,0)
 
         }
 
@@ -225,29 +257,42 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 //            getCoin("\nS0 0 1 2 0 0 0 0 10E")
         }
 
+
         btn_cancle_coin.setOnClickListener {
-
             val alertDialogBuilder = AlertDialog.Builder(context!!)
-
-            alertDialogBuilder.setTitle("คุณต้องการออกจากการฝากเงินใช่หรือไม่ ?")
+            alertDialogBuilder.setMessage("คุณต้องการออกจากการฝากเงินใช่หรือไม่ ?")
             alertDialogBuilder
                 .setCancelable(false)
-                .setPositiveButton("ใช่"
+                .setPositiveButton("ยืนยัน"
                 ) { dialog, id ->
 
                     fragmentManager?.popBackStack()
                 }
 
-                .setNegativeButton("ไม่", object: DialogInterface.OnClickListener {
+                .setNegativeButton("ยกเลิก", object: DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface, id:Int) {
 
                         dialog.cancel()
                     }
                 })
 
-            val alertDialog = alertDialogBuilder.create()
-            alertDialog.show()
+            var alertDialog = alertDialogBuilder.create()
 
+            alertDialog.show()
+            alertDialog.window.setLayout(600,220)
+            alertDialog.window.attributes
+
+            var titleText = alertDialog.findViewById<TextView>(android.R.id.message)!!
+            titleText!!.setTextSize(28F)
+
+            var noBtn = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            noBtn.setTextSize(26F)
+            noBtn.setPadding(0,55,30,0)
+
+            var yesBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            yesBtn.setTextSize(26F)
+            yesBtn.setPadding(0,55,5
+                ,0)
 
 
 
@@ -255,6 +300,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
 
     }
+
 
     var mString = ""
     fun getCoin(data : String){
@@ -309,10 +355,28 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
                 thousand_value.text = count_coin[8].toString()
 
 
-                var total = sum
-                var totalSum = String.format("%,d", total)
-                textSum.text = "$totalSum"
-                money_total_txt.text ="$totalSum"
+
+
+
+                var droptest = money_errors_value.text.toString()
+                var dropInt =0
+                if (droptest.equals("-")){
+                    dropInt=0
+
+                    var total = sum+dropInt
+                    var totalSum = String.format("%,d", total)
+                    textSum.text = "$totalSum"
+                    money_total_txt.text ="$totalSum"
+
+
+                }else{
+                    dropInt = droptest.toInt()
+                    var total = sum+dropInt
+                    var totalSum = String.format("%,d", total)
+                    textSum.text = "$sum"
+                    money_total_txt.text ="$totalSum"
+
+                }
 
 
                 if (sum > 0){
@@ -362,7 +426,7 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
 
         val currentDate = SimpleDateFormat("MM/dd/yyyy")
-        val currentDateTime = SimpleDateFormat("MM/dd/yyyy HH:mm")
+        val currentDateTime = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
 //            log+="$user,${currentDate.format(Date())},${textSum.text};"
 //            storage.setLog(log)
         fragmentManager?.popBackStack()
@@ -490,10 +554,9 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
         var testtime = SimpleDateFormat("ddMMyyyyHHmmss")
 
-        (activity as MainActivity).sendData("c"+ testtime.format(Date()).trim()+drop)
+        // Send "c"+ testtime.format(Date()).trim()+drop to Arduino via sendData in MainActivity//Print
 
-//        (activity as MainActivity).sendData("c,"+"drop/${drop}"+",deposit/${deposit}"+",total/${totalDeposit}")
-//            (activity as MainActivity).sendData("c"+ "test")
+        (activity as MainActivity).sendData("c"+ testtime.format(Date()).trim()+drop)
 
 
 
@@ -554,6 +617,9 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
         return networkInfo != null && networkInfo.isConnected
     }
 
+
+    /// RecieveDataFrom MainActivity
+
     fun displayReceivedData(message: String) {
 
 
@@ -567,6 +633,10 @@ class InsertCoinFragment : Fragment(),AsyncResponseCallback{
 
         money_errors_value.text = "$dropMoneyInt2"
         money_total_txt.text = "$totalSum"
+
+
+        btn_cancle_coin.visibility = View.INVISIBLE
+        btn.visibility = View.VISIBLE
     }
 
 }

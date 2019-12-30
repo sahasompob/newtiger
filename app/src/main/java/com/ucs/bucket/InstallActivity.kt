@@ -1,5 +1,6 @@
 package com.ucs.bucket
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
@@ -25,16 +27,11 @@ import retrofit2.adapter.rxjava2.Result.response
 import java.util.*
 
 
-class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
+class InstallActivity : AppCompatActivity(),AsyncResponseCallback {
 
-    private var db: ApplicationDatabase? = null
-    private lateinit var arrayUser: List<User>
-    lateinit var submit_btn : Button
-    lateinit var serial_txt: EditText
-
-
-
+    // Check Data
     override fun onResponse(isSuccess: Boolean, call: String) {
+
         if (call == RoomConstants.INSERT_USER) {
             if (isSuccess) {
 
@@ -43,6 +40,22 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
             }
         }
     }
+
+    private var db: ApplicationDatabase? = null
+    lateinit var submit_btn : Button
+    lateinit var serial_btn : Button
+    lateinit var barcode_btn : ImageView
+
+
+//    override fun onResponse(isSuccess: Boolean, call: String) {
+//        if (call == RoomConstants.INSERT_USER) {
+//            if (isSuccess) {
+//
+//            } else {
+//
+//            }
+//        }
+//    }
 
     lateinit var session:SessionSerial
 
@@ -53,10 +66,13 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
         session = SessionSerial(applicationContext)
 
         submit_btn = findViewById(R.id.btn_submit_login) as Button
+        serial_btn = findViewById(R.id.serial_btn) as Button
         serial_txt = findViewById(R.id.edt_serial) as EditText
+        barcode_btn = findViewById(R.id.imgView_userIcon2) as ImageView
 
 
 
+        // Check Session Login
         if (session.isLoggedIn()){
 
 
@@ -65,6 +81,28 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(i)
             finish()
+        }
+
+//        barcode_btn.setOnClickListener {
+//
+//            val intent = Intent(this@InstallActivity, ScanActivity::class.java)
+////            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+//            intent.putExtra("SCAN_CAMERA_ID", 1);
+//            startActivity(intent)
+//
+//
+//
+//        }
+
+        serial_btn.setOnClickListener {
+
+            var stringSerial = "1nbY4Rxjbnwcn"
+            serial_txt!!.setText(stringSerial)
+            // your code to perform when the user clicks on the button
+
+
+
+
         }
 
 
@@ -85,15 +123,13 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
 
 
-
+    // Send Serial To Server
     fun sendSerial(){
 
 
-        var serialData:String = serial_txt.text.toString()
+        var serialData:String = serial_txt!!.text.toString()
 
-//
-//        Toast.makeText(this,serialData,Toast.LENGTH_SHORT).show();
-//
+
         var test = serialData.trim()
         var verifyCode = genVerificationCode(test)
 
@@ -103,30 +139,41 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
         val queue = Volley.newRequestQueue(this)
         val url = "http://139.180.142.52/api/get/users"
-        Toast.makeText(this,test,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,test,Toast.LENGTH_SHORT).show();
         val stringReq = JsonObjectRequest(
                 Request.Method.POST, url,serial,
 
                 Response.Listener<JSONObject> { response ->
 
-                    var sts: JSONArray? = null
-                    sts = response.getJSONArray("success")
+                    var data = response.getJSONObject("success")
+                    var dataShop = data.getJSONObject("datashop")
+                    var dataUser = data.getJSONArray("user")
 
-                    session.creatLoginSession(test,verifyCode)
-//                    db = ApplicationDatabase.getInstance(this)
-//                    arrayUser = db?.userDao()?.getAll()!!
+                    var nameShop = ""
+                    var numberBox = ""
+                    for (i in 0 until dataShop.length()) {
 
-                    db = ApplicationDatabase.getInstance(this)
-//                    val user =
-//                        User(username =  "1234",email = "admin@gmail.com", firstname = "AdminJA",lastname = "eiei",
-//                            password = "1234",enabled = 1, role = "O")
+                        nameShop = dataShop.getString("name")
+                        numberBox = dataShop.getString("box_id")
+
+                    }
+
+//                    Log.d("DataShop", dataUser.toString())
+
+                         Log.d("nameShop", nameShop)
+                         Log.d("numberBox", numberBox)
+
+//                    var sts: JSONArray? = null
+//                    sts = response.getJSONArray("success")
+
+
 //
-//                    InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+                    db = ApplicationDatabase.getInstance(this)
 
 
-                    for (i in 0 until sts.length()) {
+                    for (i in 0 until dataUser.length()) {
 
-                        val jo = sts.getJSONObject(i)
+                        val jo = dataUser.getJSONObject(i)
                         var username = jo.getString("username")
                         var email = jo.getString("email")
                         var firstname = jo.getString("firstname")
@@ -136,9 +183,12 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
                         var role = jo.getString("role")
 
 
+
+
                         val user =
                             User(username =  username,email = email, firstname = firstname,lastname = lastname,
                                 password = password,enabled = enabled, role = role,action_status = 1)
+//
 
                         InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
 
@@ -148,6 +198,7 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
                     }
 
+                    session.creatDataSession(test,verifyCode,nameShop,numberBox)
 
                     var i : Intent = Intent(applicationContext,LoginActivity::class.java)
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -165,6 +216,7 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
         queue.add(stringReq)
 
     }
+
 
     private fun genVerificationCode(serial: String): String {
         val r = Random()
@@ -201,5 +253,10 @@ class InstallActivity : AppCompatActivity(), AsyncResponseCallback {
 
 
 
+    }
+
+    companion object {
+
+        var serial_txt: EditText? = null
     }
 }

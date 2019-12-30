@@ -1,6 +1,8 @@
 package com.ucs.bucket.fragment;
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.CardView
@@ -14,7 +16,10 @@ import android.widget.Toast
 import com.ucs.bucket.ManagmentUserActivity
 import com.ucs.bucket.R
 import com.ucs.bucket.BalanceListActivity
+import com.ucs.bucket.MainActivity
+import com.ucs.bucket.Util.SessionSerial
 import kotlinx.android.synthetic.main.fragment_manager.view.*
+import java.util.HashMap
 
 class ManagerFragment : Fragment() {
     lateinit var deposit : CardView
@@ -25,6 +30,14 @@ class ManagerFragment : Fragment() {
     lateinit var setting : CardView
     lateinit var nameUser : TextView
     lateinit var test_system : CardView
+    lateinit var logout_btn : CardView
+
+    lateinit var online_btn : Button
+    lateinit var offline_btn : Button
+    lateinit var nameBrach : TextView
+    lateinit var numberConsole : TextView
+
+
     var rank = ""
     var str = ""
     var nameData = ""
@@ -63,6 +76,21 @@ class ManagerFragment : Fragment() {
         reset_pass = root.reset_pass_btn
 
         setting = root.img_setting
+        logout_btn = root.log_out_manager
+
+        offline_btn = root.manager_status_offline
+        online_btn = root.manager_status_online
+        nameBrach = root.name_branch_mn
+        numberConsole = root.number_console_value_mn
+
+        if(checkNetworkConnection()){
+
+            offline_btn.visibility = View.INVISIBLE
+
+        }else{
+
+            online_btn.visibility = View.INVISIBLE
+        }
 
         rank = arguments?.getString("rank")!!
         str = arguments?.getString("user")!!
@@ -70,7 +98,10 @@ class ManagerFragment : Fragment() {
         nameUser.text = arguments?.getString("name")!!
         id = arguments?.getString("id")!!
 
-
+        var storage = SessionSerial(context!!)
+        var serial: HashMap<String, String> = storage.getUserDetails()
+        nameBrach.text =serial.get(SessionSerial.BRANCHNAME)!!
+        numberConsole.text =serial.get(SessionSerial.NUMBERCONSOLE)!!
 
         deposit.setOnClickListener {
 
@@ -84,9 +115,14 @@ class ManagerFragment : Fragment() {
 
         openBox.setOnClickListener {
 
+//            fragmentManager?.beginTransaction()
+//                ?.replace(R.id.area_main,OpenFragment.newInstance(id,rank,str,nameData),"open")
+//                ?.addToBackStack("open")
+//                ?.commit()
+
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,OpenFragment.newInstance(rank,str,nameData),"open")
-                ?.addToBackStack("open")
+                ?.replace(R.id.area_main,BeforeOpenFragment.newInstance(id,rank,str,nameData),"bopen")
+                ?.addToBackStack("bopen")
                 ?.commit()
         }
 
@@ -122,14 +158,32 @@ class ManagerFragment : Fragment() {
         test_system.setOnClickListener {
 
             fragmentManager?.beginTransaction()
-                ?.replace(R.id.area_main,SystemFragment.newInstance(),"testSystem")
+                ?.replace(R.id.area_main,SystemFragment.newInstance(id,rank,str,nameData),"testSystem")
                 ?.addToBackStack("testSystem")
                 ?.commit()
 
         }
 
 
+        logout_btn.setOnClickListener {
+
+//            fragmentManager?.beginTransaction()
+//                ?.replace(R.id.area_main,InsertCoinFragment.newInstance(id,rank,str,nameData),"coin")
+//                ?.addToBackStack("coin")
+//                ?.commit()
+//
+//            Toast.makeText(context, rank, Toast.LENGTH_SHORT).show()
+
+            (activity as MainActivity).closeApp()
+        }
+
 
     }
 
+    fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
 }

@@ -8,72 +8,120 @@
         tools:context=".MainActivity">
 
 
-
     <RelativeLayout
-            android:id="@+id/layout_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/colorWhite">
-
-        <TextView
-                android:id="@+id/title_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:text="@string/hello_user"
-                android:textColor="@color/colorBlack"
-                android:textSize="18dp" />
-
-        <TextView
-                android:id="@+id/name_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/title_left"
-                android:layout_gravity="left"
-                android:layout_marginLeft="80dp"
-                android:layout_marginTop="0dp"
-                android:text="Cashier001"
-                android:textColor="@color/colorBlack"
-                android:textSize="18dp" />
-
-        <Button
-                android:id="@+id/status_offline"
-                android:layout_marginLeft="20dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_toEndOf="@+id/name_user"
-                android:layout_marginRight="10dp"
-                android:layout_marginStart="40dp"
-                android:background="@drawable/offline_btn"
-        />
-
-        <Button
-                android:id="@+id/status_online"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="10dp"
-                android:layout_toEndOf="@+id/name_user"
-                android:background="@drawable/online_btn"
-                android:layout_marginStart="40dp"/>
-
+            android:background="@color/yellow"
+            android:layout_height="160dp">
 
     </RelativeLayout>
 
-    <FrameLayout
-            android:id="@+id/camera_layout"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/btn_red"
-            android:layout_marginRight="200dp" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/navbar_op"
+            android:layout_height="160dp">
+        <RelativeLayout
+                android:layout_marginTop="32dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/title"
+                    android:textSize="40dp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_width="wrap_content"
+                    android:text="@string/hello_user"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:id="@+id/name_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/title"
+                    android:text="Tonla"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="40dp" />
+
+            <Button
+                    android:id="@+id/status_offline"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/offline_btn"
+            />
+
+            <Button
+                    android:id="@+id/status_online"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/online_btn"
+            />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/title_branch"
+                    android:textSize="30dp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_width="wrap_content"
+                    android:text="@string/branch_text"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:id="@+id/name_branch_op"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/title_branch"
+                    android:text="Tonla"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30dp" />
+
+            <TextView
+                    android:id="@+id/number_console_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="150dp"
+                    android:text="ตู้ที่"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30dp" />
+
+
+            <TextView
+                    android:id="@+id/number_console_value_op"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="90dp"
+                    android:text="5"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30dp" />
+
+        </RelativeLayout>
 
 
 
+    </LinearLayout>
 
 
 
@@ -82,94 +130,114 @@
 
             android:id="@+id/test2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/texture"
-            android:background="@color/colorWhite"
+            android:layout_height="600dp"
+            android:layout_margin="50dp"
+            android:layout_below="@+id/navbar_op"
             android:gravity="center">
-
-
 
 
         <RelativeLayout
-            android:id="@+id/table1"
-            android:layout_width="500dp"
-            android:layout_height="500dp"
-            android:background="@drawable/layout_border"
-            android:gravity="center">
-
-
-            <Button
-                android:id="@+id/open_button"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="37dp"
-                android:layout_marginStart="315dp"
-                android:background="@drawable/btn_green"
-                android:text="@string/open_app"
-                android:textSize="22dp"
-                android:visibility="invisible" />
-
-            <Button
-                android:id="@+id/default_button"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="37dp"
-                android:layout_marginStart="315dp"
-                android:background="@drawable/btn_grey"
-                android:text="@string/open_app"
-                android:textSize="22dp"
-                android:visibility="visible" />
-
-            <Button
-                android:id="@+id/cancel_button"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="38dp"
-                android:layout_marginStart="65dp"
-                android:background="@drawable/btn_red"
-                android:text="@string/cancel"
-                android:textSize="22dp" />
-
-            <TextView
-                android:id="@+id/waiting_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="55dp"
-                android:layout_marginTop="60dp"
-                android:text="@string/waiting"
-                android:textColor="@color/colorBlack"
-                android:textSize="30dp" />
+                android:id="@+id/table1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/layout_border"
+                android:gravity="center">
 
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_below="@+id/waiting_txt">
+
+                            android:id="@+id/text_open_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="490dp">
+
 
 
                 <TextView
-                    android:id="@+id/tv_open"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="0dp"
-                    android:gravity="center"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="50sp" />
+                        android:id="@+id/waiting_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="55dp"
+                        android:layout_marginTop="60dp"
+                        android:text="@string/waiting"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="35dp"/>
+
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_below="@+id/waiting_txt">
+
+
+                    <TextView
+                            android:id="@+id/tv_open"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="0dp"
+                            android:gravity="center"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="50sp"/>
+
+
+                </RelativeLayout>
 
 
             </RelativeLayout>
 
+            <LinearLayout
+                    android:layout_below="@+id/text_open_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp">
+
+                <Button
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:id="@+id/cancel_button"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/btn_red"
+                        android:text="@string/cancel"
+                        android:textSize="28dp"/>
+
+
+                <Button
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:id="@+id/default_button"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/btn_grey"
+                        android:text="@string/open_app"
+                        android:textSize="28dp"
+                        android:visibility="visible"/>
+
+
+
+
+                <Button
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:id="@+id/open_button"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/btn_green"
+                        android:text="@string/open_app"
+                        android:textSize="28dp"
+                        android:visibility="gone"/>
+
+
+            </LinearLayout>
+
+
+
+
+
 
         </RelativeLayout>
-
 
 
     </RelativeLayout>
@@ -193,7 +261,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="61dp"
             android:layout_marginEnd="336dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:text="Open"/>
 
 </RelativeLayout>

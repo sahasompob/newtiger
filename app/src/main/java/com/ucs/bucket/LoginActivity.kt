@@ -43,6 +43,7 @@ import org.mindrot.jbcrypt.BCrypt
 
 class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
+    // Checd Data
     override fun onResponse(isSuccess: Boolean, call: String) {
         if (call == RoomConstants.INSERT_USER) {
             if (isSuccess) {
@@ -59,6 +60,8 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     lateinit var username: EditText
     lateinit var password: EditText
     lateinit var btn_submit_login : Button
+    lateinit var offline_btn : Button
+    lateinit var online_btn : Button
     private lateinit var arrayUser: List<User>
     var usernameData = ""
     var nameData = ""
@@ -73,24 +76,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
         db = ApplicationDatabase.getInstance(this)
 
-        if (checkNetworkConnection()){
 
-
-            db?.userDao()?.deleteAllUser()!!
-
-
-            getNewDataUser()
-
-
-
-
-
-
-        }else{
-
-
-
-        }
 
         session = SessionSerial(applicationContext)
         session2 = SessionManager(applicationContext)
@@ -100,29 +86,25 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
         username = findViewById(R.id.edt_username_login) as EditText
         password = findViewById(R.id.edt_password_login) as EditText
         btn_submit_login = findViewById(R.id.btn_submit_login) as Button
+        offline_btn = findViewById(R.id.login_status_offline) as Button
+        online_btn = findViewById(R.id.login_status_online) as Button
 
 
 
-//        if (session.isLoggedIn()){
-//
-//            var i : Intent = Intent(applicationContext,MainActivity::class.java)
-//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            startActivity(i)
-//            finish()
-//        }
 
-//        var storage = SessionSerial(applicationContext)
-//
-//        var tokenTest:HashMap<String,String> = storage.getUserDetails()
-////        var username:String = user.get(SessionManager.USERNAME)!!
-////        var firstname:String = user.get(SessionManager.FIRSTNAME)!!
-//        var serial_value:String = tokenTest.get(SessionSerial.SERIAL_ID)!!
-//
-//        Toast.makeText(this,serial_value,Toast.LENGTH_SHORT).show();
+
+        // Check Internet
+        if(checkNetworkConnection()){
+
+            offline_btn.visibility = View.INVISIBLE
+
+        }else{
+
+            online_btn.visibility = View.INVISIBLE
+        }
+
 
         btn_submit_login.setOnClickListener {
-            // your code to perform when the user clicks on the button
 
 
 
@@ -183,15 +165,14 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
 
 
-//        supportFragmentManager.beginTransaction()
-//            .add(R.id.area_main, LoginFragment.newInstance(1),"main")
-//            .commit()
+
 
     }
 
+
+    // Login to Server
+
     fun loginToServer(){
-
-
 
 
         var serial: HashMap<String, String> = session.getUserDetails()
@@ -217,8 +198,10 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
             Request.Method.POST, url,userAndPass,
 
             Response.Listener<JSONObject> { response ->
+                //                                Log.d("userEiei",response.toString())
 
-//                                Log.d("userEiei",response.toString())
+                getNewDataUser()
+
 
                 var success = response.getJSONObject("success")
                 var token = success.getString("token")
@@ -260,6 +243,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
 
 
+
             },
             Response.ErrorListener {
                 //                textView!!.text = "That didn't work!"
@@ -272,11 +256,12 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
     }
 
+
+
+
+    // Login With Data in Sqlite
     fun loginWihtLocal(){
 
-
-
-//        creatOfflineUser()
 
 
         var usertext:String = username.text.toString()
@@ -300,6 +285,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                 "Loading. Please wait...", true
             )
 
+
             db = ApplicationDatabase.getInstance(this)
             arrayUser = db?.userDao()?.getUser(usertext)!!
 //            arrayUser = db?.userDao()?.getAll()!!
@@ -321,7 +307,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                     var name_value =item.firstname!!
                     var role_value = item.role!!
 
-                    var passcheck = BCrypt.checkpw(passtext.trim(),pass_value)
+                    var passcheck = BCrypt.checkpw("1234",pass_value)
 
 //                    Log.d("Result = ","Success")
 //                    Log.d("usernameData = ",username_value)
@@ -333,7 +319,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
 //             Log.d("usertext = ",usertext)
 
-                    if (usertext == username_value && passcheck == true){
+                    if (usertext == username_value && passcheck.equals(true)){
 
                         Log.d("Result = ","Success")
                         Log.d("usernameData = ",username_value)
@@ -342,17 +328,17 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                         Log.d("UserId = ",user_id.toString())
 
 
-                        var i : Intent = Intent(applicationContext,MainActivity::class.java)
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        i.putExtra("username",username_value)
-                        i.putExtra("name",name_value)
-                        i.putExtra("role",role_value)
-                        i.putExtra("user_id",user_id.toString())
-                        startActivity(i)
-                        finish()
+//                        var i : Intent = Intent(applicationContext,MainActivity::class.java)
+//                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                        i.putExtra("username",username_value)
+//                        i.putExtra("name",name_value)
+//                        i.putExtra("role",role_value)
+//                        i.putExtra("user_id",user_id.toString())
+//                        startActivity(i)
+//                        finish()
 
-//                        dialog.dismiss()
+                        dialog.dismiss()
 
 
                     }
@@ -383,47 +369,9 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
     }
 
-    fun creatOfflineUser(){
 
-//        db = ApplicationDatabase.getInstance(this)
-//        arrayUser = db?.userDao()?.getAll()!!
-//
-//        if (arrayUser.isEmpty()){
-//
-//            val user =
-//                User(username =  "1234", firstname = "admin",
-//                    password = "1234", role = "Admin")
-//            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
-//
-////            val user2 =
-////                User(username =  "1111", firstname = "User",
-////                    password = "1234", role = "User")
-////            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user2)
-////
-////
-////            val user3 =
-////                User(username =  "2222", firstname = "Manager",
-////                    password = "2222", role = "Manager")
-////            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user3)
-//
-//
-//        }else {
-//
-//            val user = User(username =  "1234",email = "gg@gmail.com", firstname = "admin",lastname = "eiei",
-//                    password = "1234",enabled = 1, role = "O")
-//            MainActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
-//        }
-
-    }
-
+    /// Get New User When Internet Connect
     fun getNewDataUser(){
-
-
-
-
-//
-//        Toast.makeText(this,serialData,Toast.LENGTH_SHORT).show();
-//
 
         var storage = SessionSerial(applicationContext!!)
 
@@ -445,23 +393,29 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
             Request.Method.POST, url,serial,
 
             Response.Listener<JSONObject> { response ->
-
-                var sts: JSONArray? = null
-                sts = response.getJSONArray("success")
-
+                var data = response.getJSONObject("success")
+                var dataShop = data.getJSONObject("datashop")
+                var dataUser = data.getJSONArray("user")
 
 
                 db = ApplicationDatabase.getInstance(this)
-//                    val user =
-//                        User(username =  "1234",email = "admin@gmail.com", firstname = "AdminJA",lastname = "eiei",
-//                            password = "1234",enabled = 1, role = "O")
-//
-//                    InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
+                db?.userDao()?.deleteAllUser()!!
+
+                var nameShop = ""
+                var numberBox = ""
+                for (i in 0 until dataShop.length()) {
+
+                    nameShop = dataShop.getString("name")
+                    numberBox = dataShop.getString("box_id")
+
+                }
 
 
-                for (i in 0 until sts.length()) {
 
-                    val jo = sts.getJSONObject(i)
+
+                for (i in 0 until dataUser.length()) {
+
+                    val jo = dataUser.getJSONObject(i)
                     var username = jo.getString("username")
                     var email = jo.getString("email")
                     var firstname = jo.getString("firstname")
@@ -483,6 +437,8 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
                 }
 
+                session.creatDataSession(serialKey,verifyCode,nameShop,numberBox)
+
 
             },
             Response.ErrorListener { response ->
@@ -494,36 +450,13 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
     }
 
 
+    // CheckInternet
     fun checkNetworkConnection(): Boolean {
 
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
-
-
-//    class InsertUserAsync(private val userDao: UserDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<User, Void, User>() {
-//        override fun doInBackground(vararg user: User?): User? {
-//            return try {
-//                userDao.insertAll(user[0]!!)
-//                user[0]!!
-//            } catch (ex: Exception) {
-//                null
-//            }
-//        }
-//
-//        override fun onPostExecute(result: User?) {
-//            super.onPostExecute(result)
-//            if (result != null) {
-//                responseAsyncResponse.onResponse(true, call)
-//            } else {
-//                responseAsyncResponse.onResponse(false, call)
-//            }
-//        }
-//
-//
-//
-//    }
 
 
     class InsertToken(private val tokenDAO: TokenDAO, private val call: String, private val responseAsyncResponse: AsyncResponseCallback) : AsyncTask<Token, Void, Token>() {

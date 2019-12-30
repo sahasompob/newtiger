@@ -4,9 +4,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <TextView
-            android:textSize="25sp"
+            android:textSize="40sp"
             android:textStyle="bold"
-            android:text="setting"
+            android:text="@string/menu_setting"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -34,12 +34,13 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="80dp">
+
         <TextView
                 android:id="@+id/setting_tv_delay"
                 android:layout_weight="0.5"
                 android:padding="5dp"
-                android:textSize="20sp"
+                android:textSize="35sp"
                 android:textColor="#505050"
                 android:text="Delay 5 sec"
                 android:layout_width="match_parent"
@@ -49,21 +50,102 @@
                 android:visibility="gone"
                 android:inputType="number"
                 android:layout_weight="1"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         <TextView
+                android:layout_marginRight="30dp"
                 android:id="@+id/setting_btn_tv_delay"
                 android:paddingRight="5dp"
                 android:gravity="end"
-                android:text="edit"
+                android:text="@string/edit"
                 android:layout_weight="1"
-                android:textSize="20sp"
+                android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
     </LinearLayout>
 
+
+    <View
+            android:layout_margin="5dp"
+            android:background="#909090"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        <TextView
+                android:id="@+id/setting_tv_delay_key"
+                android:layout_weight="0.5"
+                android:padding="5dp"
+                android:textSize="35sp"
+                android:textColor="#505050"
+                android:text="DelayKey 5 sec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <EditText
+                android:id="@+id/setting_edt_delay_key"
+                android:visibility="gone"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        <TextView
+                android:layout_marginRight="30dp"
+                android:id="@+id/setting_btn_tv_delay_key"
+                android:paddingRight="5dp"
+                android:gravity="end"
+                android:text="@string/edit"
+                android:layout_weight="1"
+                android:textSize="30sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+
+    <View
+            android:layout_margin="5dp"
+            android:background="#909090"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
+
+    <LinearLayout
+            android:id="@+id/version_name"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+        <TextView
+                android:layout_weight="0.5"
+                android:padding="5dp"
+                android:textSize="35sp"
+                android:textColor="#505050"
+                android:text="@string/version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        <TextView
+                android:layout_marginRight="30dp"
+                android:id="@+id/version_name_value"
+                android:paddingRight="5dp"
+                android:gravity="end"
+                android:text="88"
+                android:layout_weight="1"
+                android:textSize="30sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+
+    </LinearLayout>
     <View
             android:layout_margin="5dp"
             android:background="#909090"
@@ -74,11 +156,11 @@
             android:id="@+id/previous_page"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="80dp">
         <TextView
                 android:layout_weight="0.5"
                 android:padding="5dp"
-                android:textSize="20sp"
+                android:textSize="35sp"
                 android:textColor="#505050"
                 android:text="Back"
                 android:layout_width="match_parent"

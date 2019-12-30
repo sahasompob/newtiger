@@ -13,6 +13,8 @@ interface BalanceLogDao {
     @Query("SELECT * FROM balance_log WHERE dated = (:date)")
     fun getAll(date: String): List<BalanceLog>
 
+
+
     @Query("SELECT * FROM balance_log WHERE open_id = 0")
     fun getDeposit(): List<BalanceLog>
 
@@ -28,6 +30,9 @@ interface BalanceLogDao {
 
     @Query("SELECT * FROM balance_log WHERE open_id = 0")
     fun getBeforeOpen(): List<BalanceLog>
+
+    @Query("SELECT * FROM balance_log WHERE open_id = 0 AND `action` = 'DE'")
+    fun getDepositOpen(): List<BalanceLog>
 
     @Query("SELECT * FROM balance_log WHERE `action` IN (:actionStatus) AND `dated` = (:date)")
     fun getByAction(actionStatus: String,date: String): List<BalanceLog>

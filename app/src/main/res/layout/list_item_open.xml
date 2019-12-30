@@ -16,7 +16,7 @@
                 android:id="@+id/user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="35dp"
+                android:textSize="20dp"
                 android:gravity="center" />
     </TableRow>
 
@@ -29,7 +29,7 @@
                 android:id="@+id/datetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="35dp"
+                android:textSize="20dp"
                 android:gravity="center" />
     </TableRow>
 
@@ -42,7 +42,7 @@
                 android:id="@+id/balance_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="35dp"
+                android:textSize="20dp"
                 android:gravity="center" />
     </TableRow>
 

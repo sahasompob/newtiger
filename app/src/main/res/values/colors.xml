@@ -28,6 +28,7 @@
     <color name="transparent">#00000000</color>
     <color name="textColor">#6e6e6e</color>
     <color name="table">#fffcc1</color>
+    <color name="yellow">#ffc100</color>
     <color name="recycleColor">#A8D4F1</color>
     <color name="open">#FA977A</color>
 </resources>
