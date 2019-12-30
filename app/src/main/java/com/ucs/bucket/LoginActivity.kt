@@ -307,7 +307,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                     var name_value =item.firstname!!
                     var role_value = item.role!!
 
-                    var passcheck = BCrypt.checkpw("1234",pass_value)
+//                    var passcheck = BCrypt.checkpw("1234",pass_value)
 
 //                    Log.d("Result = ","Success")
 //                    Log.d("usernameData = ",username_value)
@@ -319,7 +319,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
 //             Log.d("usertext = ",usertext)
 
-                    if (usertext == username_value && passcheck.equals(true)){
+                    if (usertext == username_value && passtext == pass_value ){
 
                         Log.d("Result = ","Success")
                         Log.d("usernameData = ",username_value)
@@ -328,15 +328,15 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                         Log.d("UserId = ",user_id.toString())
 
 
-//                        var i : Intent = Intent(applicationContext,MainActivity::class.java)
-//                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        i.putExtra("username",username_value)
-//                        i.putExtra("name",name_value)
-//                        i.putExtra("role",role_value)
-//                        i.putExtra("user_id",user_id.toString())
-//                        startActivity(i)
-//                        finish()
+                        var i : Intent = Intent(applicationContext,MainActivity::class.java)
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        i.putExtra("username",username_value)
+                        i.putExtra("name",name_value)
+                        i.putExtra("role",role_value)
+                        i.putExtra("user_id",user_id.toString())
+                        startActivity(i)
+                        finish()
 
                         dialog.dismiss()
 

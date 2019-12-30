@@ -200,6 +200,8 @@ class InstallActivity : AppCompatActivity(),AsyncResponseCallback {
 
                     session.creatDataSession(test,verifyCode,nameShop,numberBox)
 
+                    createUserOffline()
+
                     var i : Intent = Intent(applicationContext,LoginActivity::class.java)
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -229,6 +231,17 @@ class InstallActivity : AppCompatActivity(),AsyncResponseCallback {
         }
 
         return code
+    }
+
+    private fun createUserOffline(){
+
+        db = ApplicationDatabase.getInstance(this)
+        val user =
+            User(username =  "9999",email = "admin@gmail.com", firstname = "Admin",lastname = "Admin",
+                password = "1234",enabled = 0, role = "O",action_status = 1)
+//
+
+        InstallActivity.InsertUserAsync(db!!.userDao(), RoomConstants.INSERT_USER, this).execute(user)
     }
 
 
