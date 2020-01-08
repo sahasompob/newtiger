@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.ucs.bucket.db.db.entity.BalanceLog
 import com.ucs.bucket.db.db.entity.User
 import kotlinx.android.synthetic.main.list_item_balance.view.*
@@ -62,7 +64,7 @@ class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
         }else{
-            
+
             itemView.sid.text = test.username
             itemView.startTime.text = test.datedtime.toString()
             itemView.status.text = test.action

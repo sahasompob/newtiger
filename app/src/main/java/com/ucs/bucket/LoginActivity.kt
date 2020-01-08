@@ -285,68 +285,68 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
                 "Loading. Please wait...", true
             )
 
-
-            db = ApplicationDatabase.getInstance(this)
-            arrayUser = db?.userDao()?.getUser(usertext)!!
-//            arrayUser = db?.userDao()?.getAll()!!
-
-            if (arrayUser.isEmpty()){
-
-                Toast.makeText(this, "Username ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง", Toast.LENGTH_SHORT).show()
-
-            }else{
+            if (usertext == "9999" && passtext == "1234" ){
 
 
 
 
-                for (item in arrayUser){
+                var i : Intent = Intent(applicationContext,MainActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                i.putExtra("username","9999")
+                i.putExtra("name","ADMIN")
+                i.putExtra("role","O")
+                i.putExtra("user_id","999")
+                startActivity(i)
+                finish()
 
-                    var user_id = item.uid
-                    var username_value = item.username!!.toString().trim()
-                    var pass_value= item.password!!.toString().trim()
-                    var name_value =item.firstname!!
-                    var role_value = item.role!!
-
-//                    var passcheck = BCrypt.checkpw("1234",pass_value)
-
-//                    Log.d("Result = ","Success")
-//                    Log.d("usernameData = ",username_value)
-//                    Log.d("name = ",name_value)
-//                    Log.d("role = ",role_value)
-//                    Log.d("UserId = ",user_id.toString())
-//                    Log.d("Password = ",pass_value)
-//                    Log.d("CheckPassword = ",passcheck.toString())
-
-//             Log.d("usertext = ",usertext)
-
-                    if (usertext == username_value && passtext == pass_value ){
-
-                        Log.d("Result = ","Success")
-                        Log.d("usernameData = ",username_value)
-                        Log.d("name = ",name_value)
-                        Log.d("role = ",role_value)
-                        Log.d("UserId = ",user_id.toString())
-
-
-                        var i : Intent = Intent(applicationContext,MainActivity::class.java)
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        i.putExtra("username",username_value)
-                        i.putExtra("name",name_value)
-                        i.putExtra("role",role_value)
-                        i.putExtra("user_id",user_id.toString())
-                        startActivity(i)
-                        finish()
-
-                        dialog.dismiss()
-
-
-                    }
-
-                }
+                dialog.dismiss()
 
 
             }
+
+
+//
+//            db = ApplicationDatabase.getInstance(this)
+//            arrayUser = db?.userDao()?.getUser(usertext)!!
+////            arrayUser = db?.userDao()?.getAll()!!
+//
+//            if (arrayUser.isEmpty()){
+//
+//                Toast.makeText(this, "Username ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง", Toast.LENGTH_SHORT).show()
+//
+//            }else{
+//
+//
+//
+//
+////
+////                for (item in arrayUser){
+////
+////                    var user_id = item.uid
+////                    var username_value = item.username!!.toString().trim()
+////                    var pass_value= item.password!!.toString().trim()
+////                    var name_value =item.firstname!!
+////                    var role_value = item.role!!
+////
+//////                    var passcheck = BCrypt.checkpw("1234",pass_value)
+////
+//////                    Log.d("Result = ","Success")
+//////                    Log.d("usernameData = ",username_value)
+//////                    Log.d("name = ",name_value)
+//////                    Log.d("role = ",role_value)
+//////                    Log.d("UserId = ",user_id.toString())
+//////                    Log.d("Password = ",pass_value)
+//////                    Log.d("CheckPassword = ",passcheck.toString())
+////
+//////             Log.d("usertext = ",usertext)
+////
+////
+////
+////                }
+//
+//
+//            }
 
 //            val dialog = ProgressDialog.show(
 //                this@LoginActivity, "กำลังเข้าสู่ระบบ",
