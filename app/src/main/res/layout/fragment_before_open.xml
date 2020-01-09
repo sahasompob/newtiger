@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/before_layout"
+        tools:context=".MainActivity">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/yellow"
+            android:layout_height="160dp">
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="300dp">
+        <RelativeLayout
+                android:layout_marginTop="32dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/title"
+                    android:textSize="40dp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_width="wrap_content"
+                    android:text="@string/hello_user"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:id="@+id/name_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/title"
+                    android:text="Tonla"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="40dp" />
+
+            <Button
+                    android:id="@+id/status_offline"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/offline_btn"
+            />
+
+            <Button
+                    android:id="@+id/status_online"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/online_btn"
+            />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/layout_branch"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/title_branch"
+                    android:textSize="30dp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_width="wrap_content"
+                    android:text="@string/branch_text"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:id="@+id/name_branch_bf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/title_branch"
+                    android:text="Tonla"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30dp" />
+
+            <TextView
+                    android:id="@+id/number_console_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="150dp"
+                    android:text="ตู้ที่"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30dp" />
+
+
+            <TextView
+                    android:id="@+id/number_console_value_bf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="90dp"
+                    android:text="5"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30dp" />
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+
+            android:id="@+id/test2asdasd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/texture"
+            android:gravity="center">
+
+
+        <RelativeLayout
+                android:id="@+id/table1"
+                android:layout_width="600dp"
+                android:layout_height="600dp"
+                android:background="@drawable/layout_border"
+                android:gravity="center">
+
+
+            <Button
+                    android:id="@+id/open_button"
+                    android:layout_width="120dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="315dp"
+                    android:layout_marginBottom="31dp"
+                    android:background="@drawable/btn_green"
+                    android:text="@string/open_app"
+                    android:textSize="22dp"
+                    android:visibility="invisible"/>
+
+            <Button
+                    android:id="@+id/default_buttonaaa"
+                    android:layout_width="120dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="315dp"
+                    android:layout_marginBottom="37dp"
+                    android:background="@drawable/btn_grey"
+                    android:text="@string/open_app"
+                    android:textSize="22dp"
+                    android:visibility="gone"/>
+
+
+            <TextView
+                    android:id="@+id/waiting_txt_before"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="60dp"
+                    android:text="@string/waiting"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30dp"
+                    android:visibility="gone"/>
+
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/waiting_txt">
+
+
+                <TextView
+                        android:id="@+id/tv_open_before"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:text="test"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="52sp"/>
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+    <Button
+            android:id="@+id/op_btn_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="61dp"
+            android:layout_marginEnd="336dp"
+            android:visibility="visible"
+            android:text="Open"/>
+
+</RelativeLayout>

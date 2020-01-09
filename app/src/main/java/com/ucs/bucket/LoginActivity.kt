@@ -269,6 +269,7 @@ class LoginActivity : AppCompatActivity(), AsyncResponseCallback {
 
 
 
+
         if (usertext.equals("")){
 
             Toast.makeText(this, "กรุณากรอก Username", Toast.LENGTH_SHORT).show()
